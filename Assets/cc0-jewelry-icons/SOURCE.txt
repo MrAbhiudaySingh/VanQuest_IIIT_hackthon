@@ -1,0 +1,4 @@
+CC0 Jewelry Icons collection (AntumDeluge), https://opengameart.org/content/cc0-jewelry-icons
+License: CC0 1.0 (as stated on the collection page)
+- jewelry-dcss_0: Dungeon Crawl Stone Soup tiles (CC0), source https://opengameart.org/node/12210
+- jewelry-homohikka_0: HomoHikka (CC0), source https://opengameart.org/node/115091

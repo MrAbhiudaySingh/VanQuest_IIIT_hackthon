@@ -1,0 +1,3 @@
+Top View Car Truck Sprites by gameguy, https://opengameart.org/content/top-view-car-truck-sprites
+License: CC0 1.0 (public domain) as stated on the page.
+Files: car-truck1_1.png (sedan) car-truck2_1.png (pickup) car-truck3.png (covered pickup/SUV) car-truck4.png (box truck) car-truck5.png (long truck)
