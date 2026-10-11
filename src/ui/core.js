@@ -6,6 +6,8 @@
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 export const newToken = () => 'tok-' + (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2) + Date.now());
 
+import { localizeHtml, tr, setDynamicNames } from '../i18n/i18n.js';
+
 const root = () => document.getElementById('ui');
 
 export class UI {
@@ -56,21 +58,22 @@ export class UI {
 
   render() {
     const p = this.panel;
+    setDynamicNames([this.game.state.character?.name]);   // the player's own name is never translated
     if (p.frame) {
       // keep the scroll position of every scrolling area across re-renders
       const fr = this.backdrop.querySelector('.frame-root');
       const keep = [...fr.querySelectorAll('[data-scroll]')].map(el => [el.dataset.scroll, el.scrollTop]);
-      fr.innerHTML = p.frame();
+      fr.innerHTML = localizeHtml(p.frame());
       for (const [k, top] of keep) { const el = fr.querySelector(`[data-scroll="${k}"]`); if (el) el.scrollTop = top; }
       return;
     }
     const modal = this.backdrop.querySelector('.modal');
     const scroll = modal.querySelector('.m-body')?.scrollTop ?? 0;
-    modal.innerHTML = `
+    modal.innerHTML = localizeHtml(`
       <div class="m-head"><div><h2>${esc(p.title)}</h2>${p.sub ? `<div class="sub">${p.sub}</div>` : ''}</div>
         <div class="spacer"></div>${p.headExtra?.() ?? ''}${p.locked ? '' : '<button class="m-close" data-a="close" aria-label="Close">X</button>'}</div>
       <div class="m-body">${p.render()}</div>
-      ${p.footer ? `<div class="m-foot">${p.footer()}</div>` : ''}`;
+      ${p.footer ? `<div class="m-foot">${p.footer()}</div>` : ''}`);
     const body = modal.querySelector('.m-body');
     if (body) body.scrollTop = scroll;
   }
@@ -85,7 +88,7 @@ export class UI {
   }
 
   toast(text, kind = 'info', ms = 4200) {
-    const t = Object.assign(document.createElement('div'), { className: `toast ${kind}`, textContent: text });
+    const t = Object.assign(document.createElement('div'), { className: `toast ${kind}`, textContent: tr(text) });
     this.toasts.append(t);
     while (this.toasts.children.length > 4) this.toasts.firstChild.remove();
     setTimeout(() => t.remove(), ms);

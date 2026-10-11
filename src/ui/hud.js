@@ -10,6 +10,7 @@ import { forecastFedDays } from '../sim/health.js';
 import { overview } from '../sim/networth.js';
 import { inr, fmtDate, fmtShortDate, nextMonthStart } from '../sim/util.js';
 import { esc } from './core.js';
+import { localizeHtml, onLangChange } from '../i18n/i18n.js';
 import { ageOn } from '../sim/character.js';
 import { pantryReport } from '../sim/health.js';
 
@@ -55,6 +56,9 @@ export class Hud {
       <button class="navbtn" data-a="news" data-testid="hud-news">NEWS <span class="key">N</span><span class="badge" data-testid="news-badge" hidden></span></button>
       <button class="navbtn retirement" data-a="retire" title="Retire this character (asks for confirmation)"><span class="ico" aria-hidden="true">⌂</span> RETIREMENT <span class="key">R</span></button>
       <button class="navbtn reset" data-a="reset" title="New character — this one stays saved" aria-label="Reset simulation: start a new character">↻</button></nav>`;
+    this.barTpl = this.bar.innerHTML;
+    this.bar.innerHTML = localizeHtml(this.barTpl);
+    onLangChange(() => { this.bar.innerHTML = localizeHtml(this.barTpl); this.render(); });
     const onClick = e => {
       const a = e.target.closest('[data-a]')?.dataset.a;
       if (!a) return;
@@ -94,7 +98,7 @@ export class Hud {
     const days = forecastFedDays(s, 30);
     const car = this.driving ? `<span style="color:var(--blue)">Driving ${esc(this.driving.name)}</span>` : v ? `${esc(VEHICLES[v.model].name)}<div class="muted">${v.arrears ? `<span class="neg">${inr(v.arrears)} unpaid</span>` : 'Parked'}</div>` : '<span class="muted">None</span>';
     const feed = s.feed.slice(-7).reverse().map(f => `<div><span class="d">${fmtShortDate(f.day)}</span><span class="${f.kind}">${esc(f.text)}${f.amount ? ` <b>${f.amount > 0 ? '+' : ''}${inr(f.amount)}</b>` : ''}</span></div>`).join('') || '<div class="muted">Nothing yet.</div>';
-    this.side.innerHTML = `
+    this.side.innerHTML = localizeHtml(`
       <div class="side-head"><span>${fmtDate(s.day)}</span><button data-a="collapse" title="Show/hide panel">${this.collapsed ? '▸' : '◂'}</button></div>
       ${s.character ? `<div class="row2"><span class="k">Age</span><span data-testid="hud-age">${ageOn(s)}${s.status === 'alive' ? '' : s.status === 'dead' ? ' · died' : ' · retired'}</span></div>` : ''}
       ${nextStep(s) ? `<div class="row2 next-step" data-testid="next-step"><span class="k">Next</span><span class="v">${nextStep(s)}</span></div>` : ''}
@@ -111,7 +115,7 @@ export class Hud {
         <div class="row2"><span class="k">Health</span><span data-testid="health">${s.health}/100</span></div>${bar(s.health, true)}
         <div class="row2"><span class="k">Food lasts</span><span class="${days < 3 ? 'neg' : ''}">${days >= 30 ? '30+ days' : `${days} day${days === 1 ? '' : 's'}`}</span></div></div>
       <div class="sec"><span class="k">Recent updates</span><div class="feed">${feed}</div></div>
-      <div class="sec muted" style="font-size:11px">WASD/arrows or click to walk · E interact · I · P · C · O · H · L life · N news · R retire · M map · Esc close</div>`;
+      <div class="sec muted" style="font-size:11px">WASD/arrows or click to walk · E interact · I · P · C · O · H · L life · N news · R retire · M map · Esc close</div>`);
   }
 
   setDriving(d) {
@@ -125,6 +129,6 @@ export class Hud {
   showPrompt(text, onClick) {
     this.onPrompt = onClick;
     this.prompt.style.display = text ? 'block' : 'none';
-    if (text) this.prompt.innerHTML = `<b>E</b> &nbsp;${esc(text)}`;
+    if (text) this.prompt.innerHTML = localizeHtml(`<b>E</b> &nbsp;${esc(text)}`);
   }
 }

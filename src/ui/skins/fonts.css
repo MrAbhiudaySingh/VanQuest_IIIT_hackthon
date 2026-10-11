@@ -3,3 +3,19 @@
 @font-face { font-family: 'Press Start 2P'; src: url('../../../Assets/fonts/PressStart2P-Regular.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/Silkscreen-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/Silkscreen-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+/* Round 9: Telugu glyphs inside every font family the designs use come from Noto Sans Telugu (SIL OFL 1.1,
+   Assets/fonts/). unicode-range keeps the pixel fonts for Latin text; a regular and a bold face per family. */
+@font-face { font-family: 'Press Start 2P'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Press Start 2P'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'KenneyMini'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'KenneyMini'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'VT323'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'VT323'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Inter'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Inter'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Georgia'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Georgia'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'VQ Telugu'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'VQ Telugu'; src: url('../../../Assets/fonts/NotoSansTelugu-Regular.ttf') format('truetype'); unicode-range: U+0C00-0C7F, U+200C-200D; font-weight: 700; font-display: swap; }

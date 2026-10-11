@@ -409,3 +409,10 @@
   .vq-agent .prop-main-info, .vq-agent .prop-actions { grid-column: 1 / -1; }
   .vq-agent .header-nav { flex-wrap: wrap; }
 }
+
+/* ---------- Round 9: language switch on the title screen ---------- */
+.vq-title .title-lang { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.vq-title .title-lang .pixel-btn { min-width: 130px; padding: 8px 14px; }
+.vq-title .title-lang .pixel-btn.on { outline: 3px solid #f5cf6b; outline-offset: 2px; }
+.vq-title .title-lang [lang="te"] .btn-text { font-family: 'VQ Telugu', sans-serif; font-size: 16px; }
+html[lang="te"] #ui { font-family: 'VQ Telugu', system-ui, 'Segoe UI', Roboto, sans-serif; }   /* Telugu glyphs only; Latin falls through */

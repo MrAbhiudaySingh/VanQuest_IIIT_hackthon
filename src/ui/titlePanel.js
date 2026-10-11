@@ -4,6 +4,7 @@
 // behind it. Entering continues the current character (a brand-new one starts with the introduction and
 // the goals quiz); "Characters" lists every character saved in this browser (Round 7).
 import { esc } from './core.js';
+import { LANGS, getLang, setLang, writePref } from '../i18n/i18n.js';
 import { playSelectSound, playHoverSound } from './skins/titleKit.js';
 
 const DIR = 'Assets/supplied-ui/vanguard%20(2)/vanguard/title%20screen/';
@@ -30,13 +31,15 @@ export class TitlePanel {
           ${ended ? `<p class="title-resume">${who}${s.status === 'dead' ? 'life ended' : 'retired'} — enter to see the final report, or choose another character</p>`
             : returning ? `<p class="title-resume">Continue — ${who}${esc(s.job.title)}, day ${s.day + 1}</p>` : `<p class="title-resume">A new life starts at 18${who ? ` — ${who.slice(0, -2)}` : ''}</p>`}
           <div class="action-wrapper"><button class="pixel-btn pixel-btn-exit title-chars" data-a="chars" data-testid="title-characters"><span class="btn-text">Characters</span></button></div>
+          <div class="title-lang" role="group" aria-label="Language" translate="no">${Object.entries(LANGS).map(([k, l]) => `<button class="pixel-btn pixel-btn-exit ${getLang() === k ? 'on' : ''}" data-a="lang" data-lang="${k}" lang="${k}" aria-pressed="${getLang() === k}" data-testid="lang-${k}"><span class="btn-text">${l}</span></button>`).join('')}</div>
           ${this.note ? `<p class="title-resume" data-testid="title-note">${esc(this.note)}</p>` : ''}
         </section>
         <footer class="bottom-bar"><button class="pixel-btn pixel-btn-exit" data-a="exit" aria-label="Exit Game"><span class="btn-icon">✖</span><span class="btn-text">EXIT</span></button></footer>
       </main></div>`;
   }
 
-  onAction(a) {
+  onAction(a, el) {
+    if (a === 'lang') { setLang(el.dataset.lang); writePref(el.dataset.lang); return; }
     if (a === 'start') { playSelectSound(); this.done?.(); return; }
     if (a === 'chars') { playSelectSound(); this.characters?.(); return; }
     if (a === 'exit') {

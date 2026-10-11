@@ -11,6 +11,7 @@ import { lifeSummary, CATEGORY_LABELS } from '../sim/summary.js';
 import { achievementDef } from '../sim/achievements.js';
 import { SUPPLIED_FOOTER } from '../data/achievements.js';
 import { inr, fmtDate } from '../sim/util.js';
+import { localizeHtml } from '../i18n/i18n.js';
 import { esc } from './core.js';
 
 const pctTxt = x => `${Math.round(x * 1000) / 10}%`;
@@ -197,7 +198,7 @@ export function installAchievementToasts(game) {
     zone.innerHTML = '';
     const node = document.createElement('div');
     node.className = 'toast'; node.dataset.testid = 'ach-toast';
-    node.innerHTML = `<div class="toast-icon">${a.icon}</div><div><div class="toast-kicker">Achievement unlocked · ${esc(a.rarity)}</div><h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p></div><div class="toast-right">+${a.xp} XP</div><button class="toast-close" aria-label="Close">×</button>`;
+    node.innerHTML = localizeHtml(`<div class="toast-icon">${a.icon}</div><div><div class="toast-kicker">Achievement unlocked · ${esc(a.rarity)}</div><h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p></div><div class="toast-right">+${a.xp} XP</div><button class="toast-close" aria-label="Close">×</button>`);
     zone.append(node);
     requestAnimationFrame(() => node.classList.add('show'));
     conf.innerHTML = Array.from({ length: 34 }, (_, i) => `<i class="particle" style="left:${(i * 37) % 100}%;animation-delay:${(i % 8) * 0.05}s;background:${['#f6c453', '#ef4444', '#78a9ff', '#57d6a0', '#d9a4ff'][i % 5]}"></i>`).join('');
