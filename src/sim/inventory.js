@@ -45,7 +45,7 @@ export function purchase(state, shopId, cart, token) {
   const memo = q.lines.map(l => `${l.qty}× ${ITEMS[l.id].name}`).join(', ');
   const paid = pay(state, { amount: q.total, category: 'purchase', memo, ref: token });
   if (!paid.ok) return paid;
-  paid.entry.shop = shopId;
+  for (const e of paid.entries) e.shop = shopId;    // both legs (cash and savings) say where the money went
   for (const l of q.lines) addItems(state, l.id, l.qty);
   return { ok: true, total: q.total, lines: q.lines };
 }

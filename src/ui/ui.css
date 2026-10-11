@@ -8,7 +8,7 @@
 }
 #ui { position: fixed; inset: 0; pointer-events: none; font-family: var(--body); color: var(--text); font-size: 14px; }
 #ui * { box-sizing: border-box; }
-#ui button { font: inherit; cursor: pointer; }
+:where(#ui) button { font: inherit; cursor: pointer; }   /* zero specificity: the supplied skins style their own buttons */
 
 /* ---------- top bar ---------- */
 .topbar { position: absolute; top: 8px; left: 8px; display: flex; gap: 6px; align-items: stretch; pointer-events: auto; flex-wrap: wrap; max-width: calc(80% - 24px); }

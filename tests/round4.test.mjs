@@ -7,7 +7,7 @@ import { newGame, loadGame, saveGame, migrate, SAVE_VERSION, OPENING_BALANCE } f
 import { balance, spendable } from '../src/sim/ledger.js';
 import { advanceDays, runDay, daysInNextYear } from '../src/sim/clock.js';
 import { deposit, withdraw, openFD, breakFD, fdMaturityValue, fdEarlyValue, fdAccruedValue } from '../src/sim/bank.js';
-import { emi, schedule, mortgageQuote, equityQuote, takeEquityLoan, prepay } from '../src/sim/loans.js';
+import { emi, schedule, mortgageQuote, equityQuote, takeEquityLoan, prepay, accruedInterest } from '../src/sim/loans.js';
 import { creditProfile } from '../src/sim/credit.js';
 import { buyProperty, sellProperty, moveIn, listForRent, buyCost, rentHome } from '../src/sim/property.js';
 import { propertyValue, marketIndex, marketPhase, askingPrice, market } from '../src/sim/housingMarket.js';
@@ -307,7 +307,11 @@ test('buying in a boom and selling in the slump that follows loses money; the re
   sellProperty(s, 'home_large', 'sold');
   const r = propertyReport(s, s.propertyHistory[0]);
   assert.ok(r.profit < 0, `lost money (${r.profit})`);
-  assert.equal(r.returned - r.invested, r.profit);
+  // Round 5 report: realised economic return, and the cash record agrees with it to the rupee
+  assert.equal(r.economic.realised, true);
+  assert.equal(r.economic.profit, r.profit);
+  assert.equal(r.cash.result, r.economic.profit, 'cash in/out (incl. the sale) = appreciation − costs − interest + net rent');
+  assert.equal(r.economic.appreciation, s.propertyHistory[0].sale.value - rec.price);
   assert.match(r.verdict, /lost/);
   assert.ok(r.drivers.find(x => x.key === 'costs').amount < 0);
 });
@@ -320,19 +324,26 @@ test('property report: invested/returned come from the ledger, financing costs i
   const rec = s.properties.home_apartment_plus, r = propertyReport(s, rec, 'home_apartment_plus');
   const deal = s.ledger.filter(e => e.deal === rec.uid && e.status === 'ok');
   const emis = deal.filter(e => e.category === 'emi').reduce((a, e) => a - e.amount, 0);
-  assert.equal(r.emis, emis);
-  assert.equal(r.rent, deal.filter(e => e.category === 'rent_income').reduce((a, e) => a + e.amount, 0));
-  assert.ok(r.financed && r.interest > 0 && r.fees > 0);
-  assert.equal(r.invested, r.down + r.fees + r.emis + r.prepaid + r.upkeep);
-  assert.equal(r.ifSold, Math.round(r.valueNow * 0.98) - r.owedNow);
-  assert.equal(r.down, rec.price + rec.duty - s.loans[0].principal, 'down payment + stamp duty');
+  const out = c => deal.filter(e => e.category === c && e.amount < 0).reduce((a, e) => a - e.amount, 0);
+  assert.equal(r.loans.emis, emis);
+  assert.equal(r.rental.rent, deal.filter(e => e.category === 'rent_income').reduce((a, e) => a + e.amount, 0));
+  assert.ok(r.financed && r.loans.interestPaid > 0 && r.purchase.loanFees > 0);
+  assert.equal(r.invested, r.purchase.down + r.purchase.loanFees + r.loans.emis + r.loans.prepaid + out('upkeep') + out('repair'));
+  const l = s.loans[0], payoff = l.balance + accruedInterest(l, s.day);
+  assert.equal(r.cash.exitEstimate, r.exit.value - Math.round(r.exit.value * 0.02) - (rec.arrears ?? 0) - r.rental.depositsHeld - payoff, 'estimated exit: value − fee − arrears − deposits − loan payoff');
+  assert.equal(r.purchase.down, rec.price + rec.duty - l.principal, 'down payment + stamp duty');
+  // principal repayments are cash out but not an economic cost; only interest is
+  assert.equal(r.economic.financing, l.interestPaid + l.interestCapitalised + l.lateFees + accruedInterest(l, s.day));
+  assert.ok(r.loans.principalRepaid > 0 && r.economic.financing < r.loans.emis);
+  assert.equal(r.economic.realised, false, 'a held property is an estimate');
+  assert.equal(r.cash.result, r.economic.profit);
 });
 
 test('cash purchase vs mortgage of the same home: financing costs show up in the report', () => {
   const run = financing => { const s = stock(raise(give(newGame(), 3000000), 120000)); buyProperty(s, 'home_starter', 'b', financing); rentHome(s, 'home_apartment', 'r'); for (let i = 0; i < 12; i++) toFirst(s); return propertyReport(s, s.properties.home_starter, 'home_starter'); };
   const cash = run(null), loan = run({ downPct: 0.2, years: 10 });
-  assert.equal(cash.interest, 0);
-  assert.ok(loan.interest > 0);
+  assert.equal(cash.loans.interestPaid, 0);
+  assert.ok(loan.loans.interestPaid > 0);
   assert.ok(loan.drivers.find(d => d.key === 'financing').amount < cash.drivers.find(d => d.key === 'financing').amount);
 });
 
@@ -392,13 +403,17 @@ test('a real Round 3 save migrates: money, homes, tenant, furniture, clothes, ca
   assert.equal(s.version, SAVE_VERSION);
   const money = st2 => st2.ledger.filter(e => e.status === 'ok').reduce((a, e) => a + e.amount, 0);
   assert.equal(money(s), money(old), 'same money');
-  for (const k of ['furniture', 'wardrobe', 'vehicles', 'pantry', 'education', 'groceryPlan', 'housing', 'brokerage', 'academy']) assert.deepEqual(s[k], old[k], k);
+  for (const k of ['furniture', 'wardrobe', 'vehicles', 'pantry', 'education', 'groceryPlan', 'brokerage']) assert.deepEqual(s[k], old[k], k);
+  // Round 5 adds fields without changing anything that was there (no money moves in the upgrade)
+  assert.deepEqual(s.housing, old.housing.kind === 'rent' ? { ...old.housing, uid: s.housing.uid, deposit: 0, arrears: 0 } : old.housing, 'housing (an owned home needs no tenancy fields)');
+  assert.deepEqual(s.academy, { ...old.academy, courses: {} }, 'academy');
   assert.deepEqual(Object.keys(s.properties), Object.keys(old.properties));
   assert.ok(s.properties.home_starter.uid, 'purchase records upgraded');
   assert.deepEqual([s.loans, s.bank.fds, s.propertyHistory], [[], [], []]);
   const rec = s.properties.home_apartment_plus;
   const report = propertyReport(s, rec, 'home_apartment_plus');
-  assert.ok(report.rent > 0, 'past tenant rent is attributed to the purchase');
+  assert.ok(report.rental.rent > 0, 'past tenant rent is attributed to the purchase');
+  assert.equal(rec.tenant.deposit, 0, 'a tenant from before deposits existed has a ₹0 deposit');
   assert.deepEqual(migrate(JSON.parse(JSON.stringify(s))), s, 'migrating twice is a no-op');
   stock(s); toFirst(s);
   assert.equal(new Set(s.ledger.filter(e => e.category === 'rent_income').map(e => e.ref)).size, s.ledger.filter(e => e.category === 'rent_income').length, 'no duplicate rent after migration');

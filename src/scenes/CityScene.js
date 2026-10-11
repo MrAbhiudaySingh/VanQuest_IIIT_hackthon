@@ -75,10 +75,10 @@ export class CityScene extends Phaser.Scene {
     this.createMinimap(w, h);
 
     // enableCapture=false so typing in UI inputs (W, A, S, D, E…) works normally
-    this.keys = this.input.keyboard.addKeys('W,A,S,D,UP,LEFT,DOWN,RIGHT,E,M,I,H,P,C,O', false);
+    this.keys = this.input.keyboard.addKeys('W,A,S,D,UP,LEFT,DOWN,RIGHT,E,M,I,H,P,C,O,L,N,R', false);
     this.keys.E.on('down', () => !ui.isOpen && this.interact());
     this.keys.M.on('down', () => !ui.isOpen && this.minimap.setVisible(!this.minimap.visible));
-    for (const [k, fn] of [['I', 'inventory'], ['H', 'history'], ['P', 'pantry'], ['C', 'wardrobe'], ['O', 'finances']]) this.keys[k].on('down', () => !ui.isOpen && router[fn]());
+    for (const [k, fn] of [['I', 'inventory'], ['H', 'history'], ['P', 'pantry'], ['C', 'wardrobe'], ['O', 'finances'], ['L', 'life'], ['N', 'news'], ['R', 'retire']]) this.keys[k].on('down', () => !ui.isOpen && router[fn]());
     this.ctrl = new PlayerController(this, this.player, this.nav, this.keys);
     this.input.on('pointerdown', p => this.onClick(p));
     this.events.on('path-blocked', () => ui.toast('Path blocked — try another spot.', 'warn', 2000));
@@ -163,7 +163,7 @@ export class CityScene extends Phaser.Scene {
   }
 
   interact(zone = this.activeZone) {
-    if (ui.isOpen || game.state.status === 'dead' || this.time.now < (this.readyAt ?? 0)) return;
+    if (ui.isOpen || game.state.status !== 'alive' || this.time.now < (this.readyAt ?? 0)) return;
     // getting in/out ignores a second toggle within 250 ms (a double keydown would undo it instantly)
     const toggle = fn => { if (this.time.now - (this.lastCarToggle ?? -1e9) < 250) return; this.lastCarToggle = this.time.now; fn(); };
     if (this.drive.driving) return toggle(() => this.exitCar());   // any interaction while driving = get out first
@@ -213,7 +213,7 @@ export class CityScene extends Phaser.Scene {
 
   // ---------------------------------------------------------------- click to move
   onClick(pointer) {
-    if (ui.isOpen || !pointer.leftButtonDown() || game.state.status === 'dead') return;
+    if (ui.isOpen || !pointer.leftButtonDown() || game.state.status !== 'alive') return;
     if (this.drive.driving) return ui.toast('You\'re driving — steer with WASD/arrows. Press E to get out and walk.', 'info', 2200);
     const mm = this.minimap;
     const inMini = mm.visible && pointer.x >= mm.x && pointer.x < mm.x + mm.width && pointer.y >= mm.y && pointer.y < mm.y + mm.height;
@@ -380,7 +380,7 @@ export class CityScene extends Phaser.Scene {
   // ---------------------------------------------------------------- loop
   update(_, dt) {
     dt = Math.min(dt, 50);
-    const dead = game.state.status === 'dead', locked = ui.isOpen || dead, driving = this.drive.driving;
+    const dead = game.state.status !== 'alive', locked = ui.isOpen || dead, driving = this.drive.driving;
     this.ctrl.update(dt, locked || driving);
     if (driving) {
       const v = activeVehicle(game.state);

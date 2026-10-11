@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANQUEST - Title Screen</title>
+  <!-- Google Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient / CRT Scanline & Vignette Overlay for retro game feel -->
+  <div class="screen-overlay"></div>
+  <div class="scanlines"></div>
+
+  <!-- Main Title Screen Container -->
+  <main class="title-screen-container">
+    <!-- Center Hero Group (Logo + Start Action) -->
+    <section class="hero-center-group">
+      <!-- Title / Game Logo -->
+      <div class="logo-wrapper">
+        <img 
+          src="./VANQUEST Pixel Arrow Logo.png" 
+          alt="VANQUEST Logo" 
+          class="game-logo"
+          id="gameLogo"
+        />
+        <div class="logo-glow"></div>
+      </div>
+
+      <!-- Main Action: Enter your journey -->
+      <div class="action-wrapper">
+        <button id="startButton" class="pixel-btn pixel-btn-primary" aria-label="Enter your journey">
+          <span class="btn-shine"></span>
+          <span class="btn-text">Enter your journey</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Bottom Right Controls / Exit -->
+    <footer class="bottom-bar">
+      <button id="exitButton" class="pixel-btn pixel-btn-exit" aria-label="Exit Game">
+        <span class="btn-icon">✖</span>
+        <span class="btn-text">EXIT</span>
+      </button>
+    </footer>
+  </main>
+
+  <!-- Interactive Audio Feedback (Synthesized Web Audio API) -->
+  <script src="script.js"></script>
+</body>
+</html>

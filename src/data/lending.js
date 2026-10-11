@@ -18,4 +18,12 @@ export const LENDING_RULES = {
   lateFee: 500,           // added to the loan balance for each missed EMI
   defaultAfter: 3,        // consecutive missed EMIs → default: the bank sells the collateral
   forcedSaleDiscount: 0.15,
+  enforcementCost: 0.02,  // the bank's legal & sale costs in a forced sale (of the sale price), charged to you
+  shortfallMonths: 24,    // a forced sale that doesn't clear the debt leaves the rest owed: repaid over 24 months at the old rate
 };
+
+// Rent you actually receive counts towards loan eligibility, conservatively:
+//   only properties with a tenant in place now; the average of the rent you actually received over
+//   the last 6 months (after the agent's fee); and only 75% of it (allowance for vacancy & repairs).
+//   Rent you might get from a vacant or listed property — or from the home you're buying — never counts.
+export const RENT_INCOME = { months: 6, allowance: 0.75 };

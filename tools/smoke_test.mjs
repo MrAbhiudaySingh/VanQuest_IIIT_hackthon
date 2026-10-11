@@ -173,7 +173,7 @@ try {
     await teleport(52 * 16 + 8, 6 * 16 + 8);           // FreshCart entrance
     await page.waitForTimeout(150);
     await page.click('.prompt-btn');                    // mouse on the interaction prompt
-    await page.waitForSelector('.backdrop .modal');
+    await page.waitForSelector('.backdrop .vq-store');  // Round 5: the supplied stall design
     await page.click('[data-a="c-inc"][data-id="eggs_12"]');
     await page.click('[data-a="c-inc"][data-id="eggs_12"]');
     await page.click('[data-a="review"]');
@@ -182,7 +182,7 @@ try {
     assert.equal(charges, 1, 'one charge');
     assert.equal(await wallet(), w0 - 2 * 84);
     assert.equal(await G(() => vq.game.state.pantry.eggs_12), 2);
-    assert.match(await page.textContent('.msg.ok'), /Purchased 2× Eggs/);
+    assert.match(await page.textContent('[data-testid=shop-say]'), /Purchased 2× Eggs/);
   });
 
   await step('shop: insufficient funds is refused with a message', async () => {
@@ -191,7 +191,7 @@ try {
     await page.click('[data-a="c-inc"][data-id="diamond_pendant"]');
     await page.click('[data-a="review"]');
     assert.equal(await page.isDisabled('[data-a="buy-confirm"]'), true);
-    assert.match(await page.textContent('.confirm'), /short/);
+    assert.match(await page.textContent('#confirm'), /short/);
     await closeUi();
     assert.equal(await G(() => vq.game.state.owned.diamond_pendant ?? 0), 0);
   });
@@ -200,8 +200,8 @@ try {
     await teleport(57 * 16, 10 * 16);
     const k = await G(() => { const s = game.scene.getScene('City').keepers.find(k => k.shop === 'market_clothing').sprite; return [s.x, s.y - 8]; });
     await clickWorld(k[0], k[1]);
-    await page.waitForSelector('.backdrop .modal', { timeout: 8000 });
-    assert.match(await page.textContent('.m-head h2'), /Thread & Co/);
+    await page.waitForSelector('.backdrop .vq-store', { timeout: 8000 });
+    assert.match(await page.textContent('.vq-store .stall-title'), /Thread & Co/);
     await closeUi();
   });
 
@@ -277,13 +277,16 @@ try {
     await closeUi();
   });
 
-  await step('academy: complete a lesson with feedback', async () => {
+  await step('academy: complete a course knowledge check with feedback', async () => {
+    // Round 5: the academy teaches the supplied courses; Course 1's check is marked by its answer key
     await G(() => vq.router.location('finance_academy'));
-    await page.click('[data-a="open"][data-id="scams"]');
-    for (const [q, o] of [[0, 1], [1, 2], [2, 1]]) await page.click(`[data-a="pick"][data-q="${q}"][data-o="${o}"]`);
+    await page.click('[data-a="open"][data-id="core01"]');
+    const key = await G(async () => (await import('./src/data/courses.js')).COURSES[0].check.questions.map(q => q.answer));
+    while (!/Knowledge check/.test(await page.textContent('[data-testid=lesson-title]'))) await page.click('[data-a="next"]');
+    for (const [q, o] of key.entries()) await page.click(`[data-a="pick"][data-q="${q}"][data-o="${o}"]`);
     await page.click('[data-a="submit"]');
-    assert.match(await page.textContent('.msg.ok'), /3\/3/);
-    assert.ok(await page.locator('.why').count() >= 3, 'explanations shown');
+    assert.match(await page.textContent('[data-testid=check-result]'), new RegExp(`${key.length}/${key.length} — PASSED`));
+    assert.equal(await page.locator('.lesson-flow .fb.pass').count(), key.length, 'feedback for every question');
     await closeUi();
   });
 

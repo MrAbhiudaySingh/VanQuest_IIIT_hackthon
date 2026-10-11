@@ -1,0 +1,36 @@
+// Financial glossary (Round 9): the one Telugu term used for each financial idea, everywhere. A unit test
+// checks that every catalogue entry whose English contains a term (as a whole word) uses its Telugu form.
+// `show` is how the term is introduced where it is explained (the academy glossary, the newspaper, the
+// rules pages): Telugu first, the familiar English term in brackets — the words students meet at a bank.
+export const GLOSSARY = [
+  { en: 'income', te: 'ఆదాయం', show: 'ఆదాయం (income)' },
+  { en: 'expense', te: 'ఖర్చు', show: 'ఖర్చు (expense)' },
+  { en: 'budget', te: 'బడ్జెట్', show: 'బడ్జెట్ (budget)' },
+  { en: 'savings', te: 'పొదుపు', show: 'పొదుపు (savings)' },
+  { en: 'compound interest', te: 'చక్రవడ్డీ', show: 'చక్రవడ్డీ (compound interest)' },
+  { en: 'interest', te: 'వడ్డీ', show: 'వడ్డీ (interest)' },
+  { en: 'investment', te: 'పెట్టుబడి', show: 'పెట్టుబడి (investment)' },
+  { en: 'return', te: 'రాబడి', show: 'రాబడి (return)' },
+  { en: 'risk', te: 'రిస్క్', show: 'రిస్క్ / నష్టభయం (risk)' },
+  { en: 'diversification', te: 'వైవిధ్య', show: 'వైవిధ్యీకరణ (diversification)' },
+  { en: 'debt', te: 'అప్పు', show: 'అప్పు (debt)' },
+  { en: 'loan', te: 'రుణ', show: 'రుణం (loan)' },
+  { en: 'EMI', te: 'EMI', show: 'EMI (నెలవారీ వాయిదా)' },
+  { en: 'inflation', te: 'ద్రవ్యోల్బణ', show: 'ద్రవ్యోల్బణం (inflation)' },
+  { en: 'fraud', te: 'మోస', show: 'మోసం (fraud)' },
+  { en: 'scam', te: 'మోస', show: 'మోసం / స్కామ్ (scam)' },
+  { en: 'net worth', te: 'నికర విలువ', show: 'నికర విలువ (net worth)' },
+  { en: 'financial resilience', te: 'ఆర్థిక స్థితిస్థాపకత', show: 'ఆర్థిక స్థితిస్థాపకత (financial resilience)' },
+  { en: 'fixed deposit', te: 'ఫిక్స్‌డ్ డిపాజిట్', show: 'ఫిక్స్‌డ్ డిపాజిట్ (FD)' },
+  { en: 'emergency fund', te: 'అత్యవసర నిధి', show: 'అత్యవసర నిధి (emergency fund)' },
+  { en: 'salary', te: 'జీతం', show: 'జీతం (salary)' },
+  { en: 'rent', te: 'అద్దె', show: 'అద్దె (rent)' },
+  { en: 'tenant', te: 'అద్దెదారు', show: 'అద్దెదారు (tenant)' },
+  { en: 'stamp duty', te: 'స్టాంప్ డ్యూటీ', show: 'స్టాంప్ డ్యూటీ (stamp duty)' },
+  { en: 'down payment', te: 'డౌన్ పేమెంట్', show: 'డౌన్ పేమెంట్ (down payment)' },
+  { en: 'portfolio', te: 'పోర్ట్‌ఫోలియో', show: 'పోర్ట్‌ఫోలియో (portfolio)' },
+  { en: 'fee', te: 'రుసుము', show: 'రుసుము (fee)' },
+  { en: 'goal', te: 'లక్ష్య', show: 'లక్ష్యం (goal)' },
+  { en: 'retirement', te: 'పదవీ విరమణ', show: 'పదవీ విరమణ (retirement)' },
+  { en: 'upkeep', te: 'నిర్వహణ', show: 'నిర్వహణ ఖర్చు (upkeep)' },
+];

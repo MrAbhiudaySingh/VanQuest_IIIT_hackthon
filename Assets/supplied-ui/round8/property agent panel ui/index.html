@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lakshmi Rao — Property Agent</title>
+  <meta name="description" content="Property Agent portal to rent, buy, and manage residential properties with live city-wide market analytics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="screen-container">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="home-avatar-btn" id="home-nav-btn" aria-label="Home">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </button>
+        <div class="agent-title-group">
+          <h1 id="agent-title">Lakshmi Rao — Property Agent</h1>
+          <p id="agent-subtitle">Renting or buying — let's look at what you can actually afford.</p>
+        </div>
+      </div>
+
+      <nav class="header-nav" id="header-nav-items">
+        <!-- Rendered dynamically -->
+      </nav>
+    </header>
+
+    <!-- Top Showcase Banner -->
+    <section class="banner-container" aria-label="Current Residence and Market Summary">
+      <img id="banner-backdrop" class="banner-backdrop" src="" alt="Housing district skyline">
+      
+      <div class="banner-content-overlay">
+        <!-- Left: Current Residence Info -->
+        <div class="current-residence-card" id="current-residence">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Right: Housing Market HUD -->
+        <div class="market-hud-overlay" id="market-hud">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter & Sort Bar -->
+    <section class="filter-sort-bar" aria-label="Filter properties">
+      <div class="category-pills" id="category-pills">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="sort-group">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select" class="sort-select">
+          <!-- Rendered dynamically -->
+        </select>
+      </div>
+    </section>
+
+    <!-- Properties Rows Container -->
+    <section class="properties-container" id="properties-list" aria-label="Properties list">
+      <!-- Rendered dynamically -->
+    </section>
+  </main>
+
+  <!-- Add Property Modal (For manually adding customized properties) -->
+  <div class="modal-overlay" id="add-prop-modal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Add New Property</h3>
+        <button class="modal-close-btn" onclick="window.PropertyApp.closeAddModal()">✕</button>
+      </div>
+
+      <form id="add-prop-form" class="modal-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="form-name">Property Name *</label>
+            <input type="text" id="form-name" required placeholder="e.g. Royal Palms 3B">
+          </div>
+          <div class="form-group">
+            <label for="form-subtype">Subtype / Description</label>
+            <input type="text" id="form-subtype" placeholder="e.g. Modern apartment · Excellent">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="form-category">Category *</label>
+            <select id="form-category">
+              <option value="budget">Budget</option>
+              <option value="well-connected">Well-connected</option>
+              <option value="family">Family Friendly</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-price">Asking Price *</label>
+            <input type="text" id="form-price" required placeholder="e.g. ₹25,00,000">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="form-rent">Market Rent *</label>
+            <input type="text" id="form-rent" required placeholder="e.g. ₹10,500/mo">
+          </div>
+          <div class="form-group">
+            <label for="form-upkeep">Owner Upkeep</label>
+            <input type="text" id="form-upkeep" placeholder="e.g. ₹1,500/mo">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="form-beds">Beds</label>
+            <input type="number" id="form-beds" min="1" max="10" value="3">
+          </div>
+          <div class="form-group">
+            <label for="form-baths">Baths</label>
+            <input type="number" id="form-baths" min="1" max="10" value="2">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="form-area">Area (sq ft)</label>
+            <input type="number" id="form-area" value="1100">
+          </div>
+          <div class="form-group">
+            <label for="form-tags">Tags (comma separated)</label>
+            <input type="text" id="form-tags" placeholder="e.g. Prime location, Gated">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-image">Image URL</label>
+          <input type="url" id="form-image" placeholder="https://images.unsplash.com/...">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="window.PropertyApp.closeAddModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Add Property</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="properties-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

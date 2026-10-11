@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANQUEST - Nidhi Bank</title>
+  <!-- Pure Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bank-overlay-body">
+
+  <!-- Ambient Grand Marble Bank Hall Background -->
+  <div class="ambient-hall-backdrop"></div>
+  <div class="ambient-vignette"></div>
+
+  <!-- Left Standing Velvet Stanchion & Banner -->
+  <aside class="hall-banner banner-left" aria-hidden="true">
+    <div class="banner-pillar-icon">
+      <svg viewBox="0 0 16 16" width="24" height="24" class="pixel-svg">
+        <path fill="#facc15" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+      </svg>
+    </div>
+    <div class="banner-motto">[BANNER_MOTTO_LEFT: SAVE • PLAN • GROW]</div>
+  </aside>
+
+  <!-- Right Standing Velvet Stanchion & A-Frame Board -->
+  <aside class="hall-banner banner-right" aria-hidden="true">
+    <div class="banner-pillar-icon">
+      <svg viewBox="0 0 16 16" width="24" height="24" class="pixel-svg">
+        <path fill="#facc15" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+      </svg>
+    </div>
+    <div class="banner-motto">[BANNER_MOTTO_RIGHT: SECURE • TODAY • BRIGHTER]</div>
+  </aside>
+
+  <!-- Left Bank Officer Desk Avatar (Mr. Desai) -->
+  <div class="bank-clerk-booth" aria-hidden="true">
+    <div class="clerk-sprite">
+      <!-- Pixel Clerk Avatar -->
+      <svg viewBox="0 0 24 24" width="48" height="48" class="pixel-svg">
+        <rect x="7" y="3" width="10" height="4" fill="#452718" />
+        <rect x="6" y="5" width="12" height="7" fill="#f8cca4" />
+        <rect x="8" y="7" width="2" height="2" fill="#1e1b18" />
+        <rect x="14" y="7" width="2" height="2" fill="#1e1b18" />
+        <rect x="10" y="10" width="4" height="1" fill="#c27d53" />
+        <rect x="5" y="12" width="14" height="8" fill="#ffffff" />
+        <rect x="9" y="12" width="6" height="8" fill="#1e3a8a" />
+        <rect x="11" y="12" width="2" height="8" fill="#dc2626" />
+      </svg>
+    </div>
+    <div class="clerk-desk-counter"></div>
+  </div>
+
+  <!-- Right Sidewalk Bank A-Frame Sign -->
+  <aside class="bank-aframe-sign" aria-hidden="true">
+    <div class="bank-sign-inner">
+      <svg viewBox="0 0 16 16" width="28" height="28" class="pixel-svg">
+        <path fill="#facc15" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+      </svg>
+      <div class="sign-inst-name">[BANK_NAME]</div>
+    </div>
+    <div class="sign-leg leg-l"></div>
+    <div class="sign-leg leg-r"></div>
+  </aside>
+
+  <!-- Grand Center Bank Entrance Plaque Arch -->
+  <div class="grand-entrance-plaque">
+    <div class="plaque-gold-rim">
+      <div class="plaque-inner">
+        <div class="plaque-pillar-emblem">
+          <svg viewBox="0 0 16 16" width="32" height="32" class="pixel-svg">
+            <path fill="#fef08a" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+          </svg>
+        </div>
+        <div class="plaque-text-block">
+          <h1 class="plaque-title" id="bankPlaqueTitle">[BANK_NAME]</h1>
+          <div class="plaque-slogan" id="bankPlaqueSlogan">[BANK_SLOGAN_TEXT]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Bank Interactive Console Window -->
+  <main class="bank-console-window" id="bankConsole" role="dialog" aria-labelledby="bankHeaderTitle">
+
+    <!-- Top Bank Header & Navigation Tabs -->
+    <header class="bank-console-header">
+      <div class="bank-header-profile">
+        <h2 class="bank-name-heading" id="bankHeaderTitle">[BANK_NAME]</h2>
+        <div class="bank-officer-quote-line">
+          <span class="officer-name" id="officerName">[OFFICER_NAME]</span>
+          <span class="officer-sep">•</span>
+          <span class="officer-role" id="officerRole">[OFFICER_ROLE]</span>
+          <span class="officer-dash">—</span>
+          <span class="officer-quote" id="officerQuote">"[OFFICER_QUOTE_DIALOGUE]"</span>
+        </div>
+      </div>
+
+      <div class="bank-header-right-nav">
+        <!-- Navigation Tabs: Accounts, Fixed deposits, Loans, Credit profile, Rules -->
+        <div class="bank-nav-cluster">
+          <div class="nav-row-top">
+            <button class="pixel-bank-tab active" data-tab="accounts">[TAB_ACCOUNTS]</button>
+            <button class="pixel-bank-tab" data-tab="deposits">[TAB_FIXED_DEPOSITS]</button>
+            <button class="pixel-bank-tab" data-tab="loans">[TAB_LOANS]</button>
+          </div>
+          <div class="nav-row-bottom">
+            <button class="pixel-bank-tab" data-tab="credit">[TAB_CREDIT_PROFILE]</button>
+            <button class="pixel-bank-tab" data-tab="rules">[TAB_RULES]</button>
+          </div>
+        </div>
+
+        <!-- Pixel Close Button -->
+        <button class="pixel-bank-close-btn" id="closeBankBtn" title="Close Bank Window" aria-label="Close Bank">
+          <span>✕</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 5 Ornate Classical Columns / Metric Arch Counters (5 Columns) -->
+    <section class="bank-pillars-grid" id="bankPillarsGrid" aria-label="Account Overview Counters">
+      <!-- Populated via bank.js with placeholder support -->
+    </section>
+
+    <!-- Notice / Banking Rules Banner -->
+    <section class="bank-info-ribbon" aria-label="Interest and Account Notice">
+      <p class="ribbon-text" id="ribbonNoticeText">
+        [DISCLOSURE_NOTICE: Interest is calculated on daily closing balance and compounded quarterly. Free withdrawals. Transactions utilize cash on hand prior to savings.]
+      </p>
+    </section>
+
+    <!-- Transaction Action Row: Input, Deposit, Withdraw -->
+    <section class="bank-action-controls-bar">
+      <!-- Cash Bill Badge / Input Container -->
+      <div class="action-amount-input-box">
+        <span class="cash-stack-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="22" height="22" class="pixel-svg">
+            <rect x="1" y="4" width="14" height="8" fill="#22c55e" />
+            <rect x="3" y="3" width="10" height="2" fill="#16a34a" />
+            <circle cx="8" cy="8" r="2.5" fill="#86efac" />
+          </svg>
+        </span>
+        <input 
+          type="number" 
+          id="transactAmountInput" 
+          class="pixel-amount-input" 
+          placeholder="[AMOUNT]" 
+          value="1000" 
+          min="1" 
+          step="50"
+          aria-label="Transaction Amount"
+        >
+      </div>
+
+      <!-- Deposit Button (Active Gold Brass Plaque) -->
+      <button class="pixel-btn-bank-deposit" id="depositBtn">
+        <span class="btn-icon">
+          <svg viewBox="0 0 16 16" width="16" height="16" class="pixel-svg">
+            <path fill="#1a120b" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+          </svg>
+        </span>
+        <span class="btn-caption">[BTN_DEPOSIT_CASH]</span>
+      </button>
+
+      <!-- Withdraw Button (Dark Slate Plaque) -->
+      <button class="pixel-btn-bank-withdraw" id="withdrawBtn">
+        <span class="btn-icon">
+          <svg viewBox="0 0 16 16" width="16" height="16" class="pixel-svg">
+            <path fill="#38bdf8" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+          </svg>
+        </span>
+        <span class="btn-caption">[BTN_WITHDRAW_CASH]</span>
+      </button>
+    </section>
+
+    <!-- Activity Ledger Log Viewport -->
+    <section class="bank-ledger-viewport" aria-label="Transaction Activity Log">
+      <div class="ledger-empty-state" id="ledgerEmptyState">
+        <span class="empty-pillar-icon">
+          <svg viewBox="0 0 16 16" width="20" height="20" class="pixel-svg">
+            <path fill="#54658a" d="M1 4h14v2H1V4zm2 2h2v6H3V6zm4 0h2v6H7V6zm4 0h2v6h-2V6zM1 12h14v2H1v-2zM8 1L2 4h12L8 1z"/>
+          </svg>
+        </span>
+        <span class="empty-state-text" id="emptyStateText">[EMPTY_ACTIVITY_LEDGER_MESSAGE: No savings activity yet.]</span>
+      </div>
+      <div class="ledger-history-list" id="ledgerHistoryList" style="display: none;"></div>
+    </section>
+
+    <!-- Bottom Footer Bar: Cash Wallet & Savings Balance -->
+    <footer class="bank-console-footer">
+      <!-- Cash in Wallet -->
+      <div class="footer-balance-chip chip-wallet">
+        <div class="chip-icon">
+          <!-- Leather Wallet SVG -->
+          <svg viewBox="0 0 16 16" width="22" height="22" class="pixel-svg">
+            <rect x="2" y="3" width="12" height="10" fill="#9a5829" />
+            <rect x="3" y="2" width="10" height="2" fill="#bc773c" />
+            <rect x="2" y="12" width="12" height="2" fill="#5c2e10" />
+            <rect x="9" y="6" width="5" height="4" fill="#693717" />
+            <circle cx="11.5" cy="8" r="1" fill="#facc15" />
+          </svg>
+        </div>
+        <span class="chip-label">[LABEL_CASH]:</span>
+        <span class="chip-currency">₹</span>
+        <span class="chip-value" id="footerCashVal">15,000</span>
+      </div>
+
+      <!-- Piggy Savings Balance -->
+      <div class="footer-balance-chip chip-savings">
+        <div class="chip-icon">
+          <!-- Pink Piggy Bank SVG -->
+          <svg viewBox="0 0 16 16" width="22" height="22" class="pixel-svg">
+            <circle cx="8" cy="8" r="6" fill="#f472b6" />
+            <circle cx="6" cy="6" r="1" fill="#000000" />
+            <rect x="13" y="7" width="2" height="2" fill="#db2777" />
+            <rect x="5" y="13" width="2" height="2" fill="#db2777" />
+            <rect x="9" y="13" width="2" height="2" fill="#db2777" />
+            <rect x="7" y="3" width="3" height="1" fill="#be185d" />
+          </svg>
+        </div>
+        <span class="chip-label">[LABEL_SAVINGS]:</span>
+        <span class="chip-currency">₹</span>
+        <span class="chip-value" id="footerSavingsVal">0</span>
+      </div>
+    </footer>
+
+    <!-- Pixel Notification Toast -->
+    <div class="pixel-toast" id="pixelToast" aria-live="polite"></div>
+  </main>
+
+  <script src="bank.js"></script>
+</body>
+</html>

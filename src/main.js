@@ -18,3 +18,11 @@ window.game = router.phaser = new Phaser.Game({
   physics: { default: 'arcade', arcade: { debug: false } },
   scene: [CityScene, HudScene, HomeScene],
 });
+
+// The supplied title screen opens over the loading game. ?play skips it (and onboarding — used by the
+// automated tests); ?enter goes straight into the current character (after switching or starting one).
+const { installAchievementToasts } = await import('./ui/reportPanels.js');
+installAchievementToasts(router.game);
+const params = new URLSearchParams(location.search);
+if (params.has('enter')) { history.replaceState(null, '', location.pathname); router.enter(); }
+else if (!params.has('play')) router.title();

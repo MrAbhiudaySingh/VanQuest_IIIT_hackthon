@@ -1,17 +1,18 @@
-// Tiny static server for the end-to-end tests (serves the project root on a free port).
+// Server for the end-to-end tests: the game's own server (server/serve.mjs) on a free port, so the
+// tests exercise the same static files and AI endpoints the player uses. By default the model is an
+// offline stub (the tests never depend on a running model); a suite can pass its own `llm` to script
+// model answers.
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
+import { createApp } from '../server/serve.mjs';
 
-const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.tmj': 'application/json', '.png': 'image/png', '.ttf': 'font/ttf' };
+export const OFFLINE_LLM = {
+  status: async () => ({ available: false, reason: 'disabled_in_tests', model: 'none', runtime: 'stub' }),
+  json: async () => ({ ok: false, reason: 'unavailable', attempts: 0, ms: 0 }),
+};
 
-export function serve() {
-  const server = createServer(async (req, res) => {
-    const path = normalize(join(ROOT, decodeURIComponent(req.url.split('?')[0]).replace(/\/$/, '/index.html')));
-    let body;
-    try { body = await readFile(path); } catch { return res.writeHead(404).end(); }
-    res.writeHead(200, { 'content-type': TYPES[extname(path)] ?? 'application/octet-stream' }).end(body);
-  }).listen(0);
-  return { server, url: `http://localhost:${server.address().port}/` };
+export function serve({ llm = OFFLINE_LLM } = {}) {
+  const server = createServer(createApp({ llm })).listen(0);
+  // `url` skips the title screen (?play) so the gameplay suites start in the city; `base` shows it
+  const base = `http://localhost:${server.address().port}/`;
+  return { server, url: `${base}?play`, base };
 }

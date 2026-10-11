@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANQUEST - Lecture UI Overlay Template</title>
+  <!-- Pure Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="lecture-overlay-body">
+  <!-- Interactive Lecture UI Root Modal / Overlay -->
+  <div class="lecture-overlay-container" id="lectureUI">
+    
+    <!-- Left Half: Big Blank Lesson Information & Theory Box -->
+    <section class="pixel-panel lecture-panel-left" aria-label="Lesson Content Panel">
+      
+      <!-- Top Left Header: Region, Title & Navigation Arrows -->
+      <header class="panel-header left-header">
+        <div class="lesson-tag-row">
+          <div class="pixel-tag-icon">
+            <span class="pixel-icon-box"></span>
+          </div>
+          <span class="pixel-label region-label" id="regionLabel">[REGION_CATEGORY_LABEL]</span>
+        </div>
+
+        <div class="title-nav-row">
+          <h1 class="pixel-heading lesson-title" id="lessonTitle">[LESSON_TITLE_HEADING]</h1>
+          
+          <!-- Square Pixel Navigation Arrows -->
+          <nav class="lesson-nav-arrows" aria-label="Lesson Navigation">
+            <button class="pixel-nav-btn" id="prevLessonBtn" title="Previous Lesson" aria-label="Previous Lesson">
+              &lt;
+            </button>
+            <span class="pixel-counter" id="lessonCounter">[INDEX / TOTAL]</span>
+            <button class="pixel-nav-btn" id="nextLessonBtn" title="Next Lesson" aria-label="Next Lesson">
+              &gt;
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Lesson Body Placeholder Area -->
+      <article class="panel-body left-body-content" id="lessonBodyContent">
+        <!-- Lesson Intro / Narrative Placeholder -->
+        <div class="placeholder-text-box">
+          <p class="pixel-body-text" id="lessonIntro">
+            [LESSON_DESCRIPTION_TEXT: Explanatory paragraph, rules, and core educational concepts will be injected here.]
+          </p>
+        </div>
+
+        <!-- Big Blank Lesson Content / Illustration Canvas Box -->
+        <div class="pixel-content-canvas" id="lessonConceptCard">
+          <div class="canvas-header-bar">
+            <span class="canvas-title" id="conceptTitle">[LESSON_MAIN_INTERACTIVE_OR_VISUAL_BOX]</span>
+          </div>
+
+          <!-- Blank Content Box with Placeholder Wireframe Grid -->
+          <div class="canvas-body-placeholder">
+            <div class="wireframe-rect">
+              <span class="wireframe-label">[PRIMARY_VISUAL_OR_DIAGRAM_PLACEHOLDER]</span>
+            </div>
+            
+            <div class="wireframe-legend-grid">
+              <div class="wireframe-legend-item">
+                <span class="square-bullet swatch-a"></span>
+                <span class="wireframe-sublabel">[DATA_METRIC_01: VALUE]</span>
+              </div>
+              <div class="wireframe-legend-item">
+                <span class="square-bullet swatch-b"></span>
+                <span class="wireframe-sublabel">[DATA_METRIC_02: VALUE]</span>
+              </div>
+              <div class="wireframe-legend-item">
+                <span class="square-bullet swatch-c"></span>
+                <span class="wireframe-sublabel">[DATA_METRIC_03: VALUE]</span>
+              </div>
+              <div class="wireframe-legend-item">
+                <span class="square-bullet swatch-d"></span>
+                <span class="wireframe-sublabel">[DATA_METRIC_04: VALUE]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Takeaway / Tip Cards Placeholder Row -->
+        <footer class="lesson-tips-row">
+          <div class="pixel-tip-card">
+            <span class="pixel-badge-sq">01</span>
+            <div class="tip-content">
+              <span class="tip-title">[TAKEAWAY_TITLE_01]</span>
+              <p class="tip-sub">[SUMMARY_POINT_01]</p>
+            </div>
+          </div>
+          <div class="pixel-tip-card">
+            <span class="pixel-badge-sq">02</span>
+            <div class="tip-content">
+              <span class="tip-title">[TAKEAWAY_TITLE_02]</span>
+              <p class="tip-sub">[SUMMARY_POINT_02]</p>
+            </div>
+          </div>
+          <div class="pixel-tip-card">
+            <span class="pixel-badge-sq">03</span>
+            <div class="tip-content">
+              <span class="tip-title">[TAKEAWAY_TITLE_03]</span>
+              <p class="tip-sub">[SUMMARY_POINT_03]</p>
+            </div>
+          </div>
+        </footer>
+      </article>
+    </section>
+
+
+    <!-- Right Half: Top Advisor Section + Bottom Interactive Answer / Challenge Section -->
+    <section class="lecture-panel-right-column">
+      
+      <!-- Top Right: Advisor Persona Box -->
+      <section class="pixel-panel advisor-box" aria-label="Advisor Persona">
+        <div class="advisor-portrait-frame">
+          <img src="advisor.svg" alt="Advisor Portrait" class="advisor-avatar-img" />
+        </div>
+        
+        <div class="advisor-dialogue-frame">
+          <div class="advisor-badge-bar">
+            <span class="advisor-role-tag">[ADVISOR_NAME / ROLE]</span>
+          </div>
+          <p class="advisor-dialogue-text" id="advisorSpeech">
+            "[ADVISOR_HINT_OR_GUIDANCE_DIALOGUE: Contextual tips and feedback tailored to this challenge will appear here.]"
+          </p>
+        </div>
+      </section>
+
+      <!-- Right Half Main Box: The Answer / Challenge Box -->
+      <section class="pixel-panel lecture-panel-answer" aria-label="Answer and Challenge Panel">
+        
+        <!-- Challenge Header Banner -->
+        <header class="challenge-header">
+          <div class="challenge-meta">
+            <span class="pixel-tag challenge-pill">[CHALLENGE_BADGE]</span>
+            <h2 class="pixel-heading challenge-title">[CHALLENGE_TITLE]</h2>
+            <p class="challenge-subtitle">
+              [CHALLENGE_INSTRUCTIONS_AND_SCENARIO_PROMPT]
+            </p>
+          </div>
+
+          <div class="allocation-total-badge">
+            <div class="badge-content">
+              <span class="badge-num" id="totalToAllocate">[TARGET_VALUE]</span>
+              <span class="badge-lbl">[TARGET_LABEL]</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Interactive Sliders / Inputs List (Square Pixel Themed) -->
+        <div class="sliders-list">
+          <!-- Row 1 -->
+          <div class="slider-row">
+            <div class="row-label-group">
+              <span class="slider-pixel-indicator indicator-a"></span>
+              <span class="slider-name">[INPUT_VARIABLE_01]</span>
+            </div>
+            <div class="slider-input-track">
+              <input type="range" min="0" max="100" step="5" value="35" class="square-pixel-slider" id="slider1" />
+            </div>
+            <span class="row-value-pill" id="val1">[VAL_01]</span>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="slider-row">
+            <div class="row-label-group">
+              <span class="slider-pixel-indicator indicator-b"></span>
+              <span class="slider-name">[INPUT_VARIABLE_02]</span>
+            </div>
+            <div class="slider-input-track">
+              <input type="range" min="0" max="100" step="5" value="25" class="square-pixel-slider" id="slider2" />
+            </div>
+            <span class="row-value-pill" id="val2">[VAL_02]</span>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="slider-row">
+            <div class="row-label-group">
+              <span class="slider-pixel-indicator indicator-c"></span>
+              <span class="slider-name">[INPUT_VARIABLE_03]</span>
+            </div>
+            <div class="slider-input-track">
+              <input type="range" min="0" max="100" step="5" value="40" class="square-pixel-slider" id="slider3" />
+            </div>
+            <span class="row-value-pill" id="val3">[VAL_03]</span>
+          </div>
+        </div>
+
+        <!-- Summary / Progress Status Bar -->
+        <div class="allocation-tracker-block">
+          <div class="tracker-status-line">
+            <span class="tracker-ratio" id="allocationStatusText">[STATUS_METRIC_RATIO]</span>
+            <span class="tracker-check-badge" id="allocationCheck">[STATUS_STATE]</span>
+          </div>
+          
+          <div class="square-progress-track">
+            <div class="track-segment seg-1" id="fill1" style="width: 35%;"></div>
+            <div class="track-segment seg-2" id="fill2" style="width: 25%;"></div>
+            <div class="track-segment seg-3" id="fill3" style="width: 40%;"></div>
+          </div>
+        </div>
+
+        <!-- Submit / Action Button (Vibrant Red Pixel Bevel & Emboss) -->
+        <div class="answer-action-block">
+          <button class="pixel-btn-action" id="lockInBtn">
+            <span class="btn-bracket">[</span>
+            <span class="btn-caption">[SUBMIT_ACTION_BUTTON_LABEL]</span>
+            <span class="btn-bracket">]</span>
+          </button>
+          
+          <p class="action-footnote">
+            [ACTION_FOOTNOTE_OR_WARNING_TEXT]
+          </p>
+        </div>
+
+      </section>
+    </section>
+
+  </div>
+
+  <script src="lecture.js"></script>
+</body>
+</html>

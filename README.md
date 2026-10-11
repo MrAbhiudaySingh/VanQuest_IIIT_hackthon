@@ -1,16 +1,32 @@
-# VanQuest — financial-life simulator (Round 4)
+# VanQuest — financial-life simulator (Round 8)
 
-A compact top-down Indian city (68×50 tiles, 16 px) for Grade 11–12 students. You work, bank, rent or buy a home (with or without a home loan), shop, eat, dress, drive, study, invest virtual money, meet scammers, and live with the consequences. Built with **Phaser 3.90**, an editable **Tiled** map, and a plain-JS simulation core (`src/sim/`, no UI code) that is unit-tested in Node. All prices are in Indian rupees (₹) and are fictional prototype values.
+A compact top-down Indian city (68×50 tiles, 16 px) for Grade 11–12 students. You work, bank, rent or buy a home (with or without a home loan), let property to tenants, shop, eat, dress, drive, study the four VanQuest Core Courses, invest virtual money, meet scammers, and live with the consequences.
+
+It's built with:
+- **Phaser 3.90**
+- an editable **Tiled** map
+- a plain-JS simulation core (`src/sim/`, no UI code) that is unit-tested in Node.
+
+All prices are in Indian rupees (₹) and are fictional prototype values.
+
+> **Educational simulation only.** VanQuest uses fictional money and fictional products. It is not real trading, not a real bank and not personalised financial advice — the academy's practice and its AI coach teach habits and trade-offs, they don't recommend real investments.
 
 ## Run it
 
 ```bash
 cd VanQuest
-python -m http.server 8765      # or: npm start
+npm start                       # node server/serve.mjs — the game + the local AI service on http://localhost:8765
 # open http://localhost:8765
 ```
 
-There is no build step. The game saves to your browser (`localStorage`, key `vanquest.save.v1`). Round 2 and Round 3 saves are upgraded automatically (save version 3). The **⟲** button starts a new game.
+- **`npm start`** serves the game and a small local AI service (see [Local AI](#local-ai-qwen-via-ollama)). It binds to `127.0.0.1` only.
+- **Fully offline:** `npm run start:static` (or `python -m http.server 8765`) still works — every exercise, Vikram's offers and every report then use the game's built-in content.
+
+- **No build step.**
+- **Saving:** the game saves to your browser (`localStorage`). The character you are playing is in `vanquest.save.v1` (the same key as every earlier round); other characters are kept under `vanquest.char.<id>`, listed in `vanquest.profiles.v1`. See [Characters](#characters-local-profiles).
+- **Old saves:** saves from Rounds 2–6 are upgraded automatically to save version 5; the original is first copied to `vanquest.save.v1.backup-v<n>`.
+- **New character:** **⟲**, or **Characters → New character** on the title screen. The current character is kept, never erased.
+- **Offline:** the pixel fonts used by the supplied designs ship with the game, so no network is needed.
 
 ## Controls
 
@@ -18,290 +34,923 @@ There is no build step. The game saves to your browser (`localStorage`, key `van
 |---|---|
 | Walk | WASD / arrows, or **click** anywhere (on the minimap too) |
 | Interact | **E**, or click the prompt. Clicking a person or your parked car walks you there first. |
-| Get in / out of your car | **E** next to it, or click it. While driving, E always gets you out first. |
+| Get in / out of your car | **E** next to it, or click it. |
 | Drive | WASD / arrows: the car turns toward the direction you press and speeds up. Release to slow down; press the opposite way to brake. |
-| Inventory · Pantry · Wardrobe · **Finances** · History | **I** · **P** · **C** · **O** · **H** (or the top-bar buttons) |
+| Inventory · Pantry · Wardrobe · Finances · History | **I** · **P** · **C** · **O** · **H** (or the top-bar buttons) |
 | Arrange furniture | **F** inside your home or a vacant property you own |
-| Minimap / close menu | **M** / **Esc** |
-| Pass time | **Next day ▸**, **To 1st ▸▸**, **Skip 1 year** (asks for confirmation first). Time also passes at 1 in-game day per 20 s while you walk around the city. It stops in menus, inside buildings, and after the run ends. |
+| Your life (age, goals, **RETIRE**, guide) · Newspaper | **L** · **N** (or the top-bar **Life** / **News** buttons; News shows a red count of unread issues) |
+| Retire (asks for confirmation first) | **R** (or the top-bar **RETIREMENT** button) |
+| Minimap / close menu | **M** / **Esc** (or a screen's own ✕ / CLOSE button) |
+| Pass time | **Next day ▸**, **To 1st ▸▸**, **Skip 1 year** (asks first). Time also passes at 1 in-game day per 20 s while you walk around the city. |
 
-## How to try the Round 4 features
+## Round 8: main-screen buttons, Summit Financial, the property agent and academy covers
 
-1. **Bank:** **Nidhi Bank** is the cream building with a gold awning right of Summit Tower. Talk to Mr. Desai, or use the door.
-   - Deposit or withdraw cash.
-   - Open a fixed deposit (FD) from your savings.
-   - On the **Loans** tab, borrow against a property you own.
-   - The **Credit profile** tab shows exactly why your score is what it is.
-2. **Home loan:** at Lakshmi's agency (below Elm Court), press **Buy…** and choose **Home loan**. Pick a down payment and a term. You'll see the EMI, total interest, fees, the money needed up front and your EMI-to-salary ratio. If you're not eligible, it tells you why and what would help.
-3. **Performance:** the agency's **Performance** tab reports every purchase you've made: money in, money back, profit, return on cash, and what drove the result.
-4. **Finances (O):** total assets, total liabilities and net worth, plus where your money came from (salary, rent, interest, loans, sales) and where it went.
-5. **Market:** the agency shows the current housing-market phase and the last year's movement. Asking prices sit above or below each home's estimated value.
-6. **Art:** the electronics and jewellery shops now show product art. The sedan, pickup, SUV and executive drive as top-down sprites that rotate as you steer. Two-way traffic runs on the avenues and Main Street and stops at red lights.
+Round 8 is presentation only. Four supplied folders (copied unchanged to `Assets/supplied-ui/round8/`) now dress screens that already existed. Every number, rule and action still comes from `src/sim/` and `src/data/`. No financial rule changed, and nothing contacts an external service.
 
-## Game rules (also explained in the in-game menus)
+| Supplied folder | Used for | Code |
+|---|---|---|
+| `main screen buttons/` (`index.html`, `README.txt`) | the HUD navigation bar ("Pixel + Glass Navigation") | `src/ui/hud.js`, `skins/nav.css` |
+| `summit financial/` (`index.html`, `style.css`, `desk.js`) | the Summit Practice Trading Desk | `src/ui/tradingPanel.js`, `skins/desk.css` |
+| `property agent panel ui/` (`index.html`, `styles.css`, `app.js`, `properties-data.js`) | Lakshmi Rao's property agency | `src/ui/propertyPanel.js`, `skins/agent.css` |
+| `Imgs for finintial acadamy/` (4 JPEGs) | the cover of each core course | `src/data/academyImages.js`, `src/ui/academyPanel.js` |
+
+The supplied stylesheets are scoped by `tools/scope_supplied_css.py`, which also drops their Google Fonts `@import` because the fonts ship locally. Layout fixes needed to host them in the game live in `skins/glue.css`.
+
+### Main-screen buttons
+The supplied buttons, in the supplied colours and font, perform the same actions as before:
+- NEXT DAY, TO 1ST and SKIP 1 YEAR
+- INVENTORY (I), PANTRY (P), WARDROBE (C), FINANCES (O) and HISTORY (H)
+- ↻ (new character, after a confirmation)
+
+Changes:
+- **RETIREMENT (R)** is in the design. It opens the existing retirement confirmation (`RetirePanel`, the same one the Life panel uses). **R** is a new key for it.
+- **LIFE (L)** and **NEWS (N, with the unread badge)** have no supplied button. They keep the base button style.
+- **Disabled state:** after a life ends, every button except Life and News is disabled. They already did nothing in that state.
+- **Hover, press and the dashed keyboard focus ring** come from the design.
+- **Not added:** a "selected" state. The open panel covers the bar, so the state would never be visible.
+
+### Summit Financial (the trading desk)
+- **Faithful to the design:** the header and tabs, the SIMULATION notice, the five KPI cards, the asset table with 30-day sparklines, the order box (price badge, 30-day chart, Buy/Sell, quantity, feedback line, review button), Move money, the empty states and the risk-guide cards.
+- **One source of truth:** the desk shows all six fictional assets, including CoinNova. Prices, P/L, fees and trades are `sim/market.js` and the ledger, for the save's in-game date. The notice says "Prices as of <date>".
+- **Design parts not used:**
+  - The demo's live ticking prices, random volume figure and sound effects.
+  - The "live" pulse dot.
+  - VOL, because the game has no volume data. The chart box shows the 30-day high, low and risk level instead.
+- **Opening or redrawing the desk changes nothing.** It doesn't advance time, recalculate or call the model. A test compares the whole save before and after.
+- **Market bulletin**, under the asset list:
+  - It repeats the latest monthly issue of *The VanQuest Ledger* (`sim/newspaper.js`), so the desk and the paper describe the same month.
+  - The local model's wording is shown only if that issue already stored a validated version. It is labelled **AI WORDING · CHECKED**; otherwise **SIMULATION DATA**.
+  - The model is asked once per issue, from the newspaper (N), never from the desk. With the model offline, the game's own text is shown.
+- **Active vs proposed:** an **ACTIVE** line states the rules in force (₹10 per trade, prices from the game's fixed random walk plus recorded simulated events). It also says that no proposed changes are in force.
+- **Proposal activation is still off.** `src/ai/proposals.js` keeps `ACTIVATION_ENABLED = false` and nothing in `src/sim/` imports it, so no proposal is generated, shown as active or applied.
+- **Missing activation work (not done this round):**
+  - a server task that asks Qwen for a parameter proposal
+  - an approval step
+  - a call to `activate()` inside the clock's month-start step
+  - every rate reader (`bank`, `loans`, `housingMarket`, `market`) switched to `paramsOn(day)`
+  - a parameter-history field in the save
+
+### Property agent
+- **What's shown:** the supplied header (home button = close, Properties / Yours / Performance / Rules tabs), the "You live at" banner with the city-wide housing-market box, category pills, sort, and property rows (asking price vs estimate, market rent, owner upkeep, Rent / Buy…). The figures are the same calculations as before: `buyCost`, `marketRent`, `indexHistory`, `hoodChange`.
+- **Mapping:**
+  - Category pills map to the neighbourhoods: Budget → budget, Well-connected → central, Family Friendly → family, Premium → premium.
+  - Sorting: market rent (the design's default), or asking price in either direction.
+  - "View House Details →" appears when you own your home and opens Yours.
+- **Unchanged:** the Yours, Performance and Rules content, and the buy, rent and sell confirmations, re-themed for the cream design. All actions (`data-a`) and rules are unchanged.
+- **In the design but not implemented** (no game data or rule behind them):
+  - property photos: the mock-up hot-links Unsplash; the banner is a plain gradient instead
+  - beds, baths and area
+  - favourites (♥)
+  - "+ Add Property" and its form, which would create homes the game has no rules for
+  - the "Area" sort option
+  - the mock-up's example prices, which are never used
+
+### Academy course covers (`src/data/academyImages.js`)
+| File (as supplied) | Size | Course | Shown on |
+|---|---|---|---|
+| `planning and budgeting.jpeg` | 1254×1254 JPEG, RGB | core01 Planning & Budgeting | lesson 1, Course overview |
+| `saveing and manageing money.jpeg` | 1254×1254 JPEG, RGB | core02 Saving & Managing Money | lesson 1, Course overview |
+| `understanding investing.jpeg` | 1254×1254 JPEG, RGB | core03 Understanding Investing | lesson 1, Course Overview |
+| `finantial safty and consumer protection.jpeg` | 1254×1254 JPEG, RGB | core04 Financial Safety & Consumer Protection | lesson 1, Course Overview |
+
+- **Mapping:** each filename names a course, and each image is printed "CORE COURSE 0N" with that course's title, so no mapping was ambiguous. Each cover appears once, above the overview text.
+- **Display:**
+  - The image is at most 340 px wide and keeps its square shape, scaling down on narrow screens.
+  - It loads lazily, with written alt text.
+  - If the file is missing, a caption replaces it and the lesson works as usual.
+- **Unchanged:** the course text, order, answer guides, checks, glossary and progress.
+- **Note:** the investing cover's laptop shows real index names (NIFTY 50, S&P 500, NASDAQ) as decoration. The game's own market data is still fictional.
+
+## Round 7: the whole life — characters, goals, newspaper, retirement and the final report
+
+The main game now has a beginning and an end:
+
+**Title → new character / continue → first apartment → introduction → goals quiz → open world → monthly newspaper → retirement or death → final life report and achievements.**
+
+### Try it
+1. `npm start`, open `http://localhost:8765` (no `?play`). On a fresh browser, **Enter your journey** starts a new character: you appear **inside the Elm Court flat** (the cheapest rented home, as before) with a short introduction (2 pages; time is paused while it is open). **Continue → your goals** opens the supplied goals quiz.
+2. Play normally. On every 1st a newspaper issue appears (**N**, red badge). Achievements pop up as you earn them. **L** shows your age, goals, achievements and **RETIRE**.
+3. Choose a goal the game can measure (e.g. *Own a car or vehicle*). Buy a car at Roadstar Motors → **L → RETIRE…** becomes available → tick *I understand* → **Confirm retirement** → the final report.
+4. Or let the clock reach your 60th birthday (1 July 2068), or die of hunger: both also end the life with the report.
+5. **Characters** (title screen) lists every character on this browser, with their status, net worth and, for finished lives, the final report.
+
+### Characters (local profiles)
+- VanQuest has no server accounts, so a "login" is a **local profile**: a character name (optional, 1–24 characters, no real name, email or password) and a save **in this browser on this device**. It is **not** a secure or cross-device account; anyone using the browser can open it, and clearing browser data deletes it.
+- **Enter your journey** continues the current character. Characters can be created, resumed and switched; a finished life stays in the list and its report can be reopened read-only.
+- Identity (id, name, summary) lives in the index `vanquest.profiles.v1`, separate from each character's financial save.
+- Switching or creating **archives the current character first**, then fills the play slot, then updates the index, so an interruption can duplicate a save but never lose one. Creating a character never deletes another. If storage is full, nothing changes and the game says so. A finished life that no longer fits is kept as its final report.
+
+### Introduction and the goals quiz
+- The introduction is shown **once**, to a brand-new character only, and can be reopened from **L → Reopen the guide**. Returning players and upgraded saves are never sent through onboarding again (the side panel shows a **Next** hint instead, e.g. *Record your goals (L)*).
+- **The quiz is the supplied one** (`Assets/supplied-ui/journey/index.html`, from `VanQuest_Financial_Journey_Frontend.zip`): its 10 questions, wording, order, options, symbols, slider, notes, review page and design (`skins/journey.css`, scoped by `tools/scope_supplied_css.py`). The data was extracted into `src/data/goalsQuiz.js`, and a unit test compares it to the HTML.
+- **What we added:**
+  - Each question needs an answer or the supplied **Skip for now**.
+  - **Save & exit** keeps the answers as a draft (resume from **L**).
+  - **Finish setup** records the goals once (a confirmation token makes double clicks and retries harmless).
+- **The goal structure is only what the questionnaire supports.**
+  - **Q1 (main goal) with Q2 (target age)** is the goal that is measured.
+    - *Save for higher education* means graduating from Ashford College.
+    - *Own a car* means buying one.
+    - *Become financially independent* uses the game's rule: cash, savings, FDs and investments worth **25 × a year of essential costs**.
+    - *Travel*, *business*, *family*, *build long-term wealth* (no target amount in the quiz) and *something else* can't be measured by the game. The player confirms these themselves, with a dated record (**L → Confirm goal achieved**). The AI never decides.
+  - **Q3–Q10** are recorded as preferences (priority, risk preference, timing…) and give the report context. No target amounts are invented.
+- **The first submission is the immutable original.** "Revise my goals" adds a **dated revision** with the age at the time; the original stays. Manual retirement uses the latest goal; the report compares the life with all of them.
+
+### How a life ends (`src/sim/lifeEnd.js`)
+| Ending | When | Order of events |
+|---|---|---|
+| **Death** | health reaches 0 (the existing hunger/health rules — nothing new is invented) | the clock stops that day; the report is built from the record up to that day |
+| **Retirement at 60** | the 60th birthday (every character is 18 on game day 0, born 1 July 2008 → **1 July 2068**, day 15341) | on the birthday morning, **before** that day's events: June is closed (life record + newspaper), then the life ends. July's salary, rent, EMIs and interest are **not** processed. |
+| **Manual retirement** | **L → RETIRE…**, only when the current goal is achieved (measured) or confirmed by the player | a confirmation screen shows the following, then asks for an *I understand* tick and **Confirm retirement** (Cancel changes nothing): age, finances, goal status, ongoing obligations (loans, tenancy, tenants, FDs, grocery plan), and a warning |
+
+- **Once ended, nothing can change the character:** `Game.act` refuses every action (purchases, transfers, trades, movement, time). The newspaper and the report stay readable.
+- `finalizeLife` is **idempotent and atomic**: a second call, a double click, a retry or a reload returns the same report.
+- A save loaded in a terminal state without a report (e.g. an older save that had died) is finalised once on load.
+
+### The clock, Round 7 additions
+Before anything else on the 1st: **0a.** close last month — its life record (`lifeLog.js`) and its newspaper issue. **0b.** On the 60th birthday, retire right there. After step 10: any achievements the record now supports. Achievements earned by an action (e.g. turning down a scam) pop up immediately.
+
+### The monthly life record (`src/sim/lifeLog.js`)
+One record per finished month, built only from what the game recorded:
+- earned income (salary, tenant rent, interest)
+- spending: essential (rent, grocery plan, EMIs, upkeep, repairs, car costs, loan fees, food), lifestyle (other shops, fuel), education
+- surplus and failed payments
+- cash, FDs, investments, property, debt, net worth
+- months of essentials held in accessible money; the financial-independence ratio
+- health, days unfed or hungry
+- housing, job, investment mix, furniture at home
+
+Asset purchases, loan prepayments, tips, transfers and deposits are **not** consumption.
+
+### The final life evaluation (`src/sim/lifeReport.js`)
+A separate evaluation of the **main game's actual life** (not the academy practice). The deterministic code computes every number, score and finding, each with **evidence ids** pointing at real records:
+- ledger `L…`, trades `T…`, events `E…`, months `M2027-03`, Vikram encounters `enc…`, FDs `fd…`, loans `ln…`, properties `P-…`, goals `G-…`
+
+Score weights: A investing 15 · B budgeting 20 · C saving 20 · D risk 15 · E quality of life 20 · F goals 10. Weights are renormalised over the criteria that could be assessed. Ratings: Excellent ≥ 85, Strong ≥ 70, Developing ≥ 55, Struggling ≥ 40, Needs support.
+
+- **A. Investments.** Categories:
+  - each asset type on the trading desk (index fund, bond fund, individual stocks, crypto token)
+  - fixed deposits (penalties for early closing)
+  - property (economic return from `propertyReport.js`)
+  - money put into Vikram's offers
+
+  For each category: own money put in, **realised** P&L (sales, matured FDs, settled tips) and **unrealised** P&L (still held at the end) kept apart and never double-counted, fees, return on capital and per year, risk level, and whether there is enough history.
+  - **Rankings use return relative to capital and time**, never the biggest rupee gain; *best / worst / strongest decisions / unnecessary risk / too little history* are listed separately.
+  - Behaviour is judged from prices known at the time: selling at a loss after a ≥ 10% fall, buying during falls, round trips under 30 days, concentration (> 60% in one stock/token), and one-outcome luck. Not investing at all is "not assessed", not penalised.
+- **B. Money management.** Income by type; essential, lifestyle and education shares; months spent within income; failed payments (rent, EMIs, plan, upkeep, car); loans, interest, late fees, repayments; strongest and weakest 12-month stretches (single months for short lives).
+  - When essentials take ≥ 85% of income the life is marked **constrained** and judged against the resources actually available. A low income is not a mistake.
+  - Going hungry while holding money counts against budgeting.
+- **C. Saving and resilience.** Savings rate (target 20%, or 5% when constrained); months with ≥ 3 months of essentials in reach; accessible money at the end; FDs held to maturity vs broken; withdrawals; interest earned; repairs paid or failed. Accessible cash, locked FDs, investments, property and debt are shown separately: net worth is not liquidity.
+- **D. Risk.** Every Vikram decision, judged by the decision, not the outcome:
+  - scams and misleading offers turned down
+  - money lost to them
+  - commitments made without checking risks or investigating, and lucky wins from them (named as luck)
+  - researched commitments that still lost (named as a reasonable decision with a bad outcome)
+
+  Also: high-risk share of investing, forced sales, evictions.
+- **E. Quality of life.** Days unfed or hungry, lowest and average health, months without a home, evictions, months owning your home, stress months, graduation, promotions, salary path, death.
+  - **Neglect** (≥ 30 unfed days, ≥ 3 homeless months, or health < 40) **caps the overall score at 62**. Death from malnutrition caps it at 45.
+  - With substantial wealth (≥ ₹10 lakh and ≥ 10 years of average earnings) plus neglect, the report says: *"You accumulated substantial wealth, but repeatedly sacrificed your basic needs to do it… Money should support a life, not replace one."*
+- **F. Goals.** Each record (the original and every revision) is marked achieved, partly achieved (in progress or late), not achieved, replaced by a revision, or not judged (unmeasurable and unconfirmed). The report also shows the stated first priority next to the matching score, and names trade-offs (a goal reached while neglecting basic needs).
+- **G. Areas to grow.** The weakest criteria under 70, with the specific weaknesses and evidence, and a concrete suggestion. Also the strengths (≥ 75).
+- **Limitations are stated, not guessed:** too few recorded months, no investments, little risk to judge, unmeasurable goals, and an upgraded save's unrecorded months.
+
+### The AI's part (local `qwen3:8b`, no cloud)
+- **Two new fixed tasks** in `server/tasks.mjs`:
+  - `life_report`: summary, one section per criterion with evidence ids, and improvements
+  - `newspaper`: headline, lead, one paragraph per asset, a safety note
+- The model gets compact, already-calculated facts. Its answer is validated on the server and again in the browser (`src/ai/validate.js`):
+  - **every evidence id must exist**, and every section with evidence must cite some
+  - **₹ amounts must be ₹ amounts from the facts, and % values must be percentages from the facts** (a number with another meaning is refused)
+  - the rating may only be named as the calculated one
+  - events the record doesn't contain (scams, evictions, loans, cars, deaths…) can't be mentioned
+  - newspaper text must match each asset's direction, may not give a reason that no recorded event supports, and may not predict or command ("will rise", "buy now", "guaranteed"…)
+- **Up to 3 attempts.** Then the report uses the game's own wording (`src/ai/narratives.js`), which always validates. The report works fully without Ollama.
+- **The AI's text is labelled** as AI interpretation, separately from the *Verified from your record* findings. It is stored **once**: reopening a report or an issue never asks the model again and never changes it. AI output can't change a score, an achievement, the state or the history.
+- **Checked live with the real `qwen3:8b`** (a scripted 7-year life with a scam turned down, a hype token, stocks and a death from hunger):
+  - Early runs were rejected by the validators: "saved 70% of your income" when that wasn't the figure, "Better-than-expected earnings" with no event, a wrong rating word, "debt" with no loans. They fell back, and those checks were then sharpened.
+  - Final run: the life report validated on the first attempt in 30 s, the newspaper in 13 s.
+  - One attribution slip still got through: the CoinNova loss of ₹1,486 was called "the total result". The amount is real, but its meaning was wrong. This is why AI text is always labelled and advisory.
+
+### Achievements (`src/sim/achievements.js`)
+- **The catalogue is the supplied one** (`Assets/supplied-ui/achievements/`, from `VanQuest_Achievement_Popups_Frontend.zip`): 43 names, descriptions, icons, rarities, XP and groups, extracted unchanged by `tools/extract_achievements.py`. The pop-up toast with confetti and the trophy cards use its design (`skins/achievements.css`).
+- **Each achievement the game can verify has a deterministic rule over the record.** Examples:
+  - *First Stack*: savings reach ₹1,000
+  - *Rainy Day Ready* / *Emergency Legend*: 3 / 6 months of essentials in reach
+  - *Diversification Station*: 3+ kinds of investment, no stock/token above 60%
+  - *Debt Slayer*: a loan repaid in full, never missing an EMI
+  - *Lucky Isn't a Strategy*: you passed on a risky tip that happened to rise
+- **Nine supplied achievements describe things this game doesn't record** (practice-scenario scores, a business, travel, a retirement-plan tool, reviewing budget screens, advising other characters). They are listed as **untracked**, with the reason, and never unlock.
+- **Four VanQuest additions**, marked as such: *Steady Saver*, *Balanced Life*, *Financially Independent*, *Promise Kept*.
+- **Unlocks are stored once per id**, with the day and evidence, and frozen into the final report. Reckless behaviour isn't rewarded for a lucky profit; the hidden "warning" badges are the supplied ones.
+
+### The newspaper (`src/sim/newspaper.js`)
+*The VanQuest Ledger*, created **once per month on the 1st** from a snapshot of the simulated world. Nothing is re-simulated to write it, and an issue never changes after it is created. It covers:
+- each fictional asset's start/end price, % change and range: the same prices you trade at
+- the housing index and phase
+- Nidhi Bank's rates (fixed, so "unchanged")
+- price moves caused by world events
+- a rotating safety lesson built from the scam warning signs
+- for each asset, a risk question to ask before deciding
+
+**The game doesn't model inflation**, so the paper never mentions it. Every issue says it is educational, not advice, and that past performance doesn't guarantee future returns. Back issues stay readable (also after a life ends). The model may reword an issue once.
+
+### Save migration (save v5)
+- v4 → v5 adds `character`, `onboarding`, `goals`, `lifeLog`, `newspaper`, `achievements` and `life`. Nothing existing changes. The pre-upgrade save is kept as `vanquest.save.v1.backup-v<n>`.
+- **An upgraded character** gets the game's age rule (18 on day 0), is marked `legacy`, isn't sent through onboarding, has no goals invented, and starts its monthly record on the upgrade day.
+- **Its report says so:** months before the upgrade are judged only from the ledger, which every save already kept in full.
+
+## Round 6: the Practice Lab, Practice Life and the local AI
+
+### How to try it
+
+1. **Open a course** at the Compound Financial Academy (or the home computer → Academy).
+   - **Left:** the lesson, in one full-height scrolling column (readable mixed-case pixel font, tables scroll sideways, key-term cards wrap instead of clipping). **MARK AS READ** sits under the lesson with the reading-progress bar. Activity notes and Course 3's Topic 11 allocation sliders are in the left column too.
+   - **Right — PRACTICE LAB:** an interactive exercise for the lesson that's open (every one of the 42 lessons has one; see `src/practice/catalog.js`). Each runs the full cycle: situation → facts and constraints → inspect → decide → the isolated simulation applies it → numbers → what went well / could improve → **RETRY THIS SCENARIO** (same seed) or **NEW SCENARIO** → the attempt is recorded.
+   - The footer shows the three kinds of progress separately: **READ x/n · PRACTICE x/n · CHECK**. The course cards show reading and practice separately too.
+2. **The five exercises** (fictional money, nothing touches your game):
+   - **A Budget a month** (Course 1) — allocate income + opening cash across essential bills (with due dates), food, flexible spending, a goal and an emergency fund. Over-allocation is refused ("money can't be created"). After you commit, a surprise cost arrives and you choose how to cover it; then the month plays day by day (bills on their due dates, late fees if the cash isn't there yet).
+   - **B Where should the money live?** (Course 2) — split a lump sum between cash, a savings account and a fixed deposit (locked; breaking early costs the bank's 1% penalty, using the game's real FD and savings rates). The months play out with an emergency and a planned purchase; the result table shows accessible and locked money in separate columns, the interest, penalties and borrowing costs, the value after inflation, and the same months under simple alternative plans.
+   - **C Build and hold a portfolio** (Course 3) — allocate 100,000 fictional credits across five fictional asset types (expected return, swings, fees, liquidity shown), live through a seeded market path, and choose **hold / rebalance / sell** at the market fall. You see the path, fees, the biggest fall, and the same mix on 200 other seeded paths (worst, 10%, median, 90%, best) — *a higher expected return is not a guaranteed better outcome*. Optional: explain your choice and get rubric feedback from the local AI (advisory, never scored).
+   - **D Vikram has an offer** (Course 4) — one encounter: inspect evidence (investigate, request documents, verify the provider, compare terms, ask more), then accept, reject or report. Feedback shows the true classification, every piece of evidence (which you saw, which you missed), the consequence, whether it suited your situation, and what to do next time.
+   - **E Practice Life** (button on the course cards or the lab footer) — twelve fictional months combining income, rent and bills, food, leisure, an emergency reserve, a goal, an index fund and single-company shares, debt at 4% a month, three surprise costs, a festival bonus, a market fall and three Vikram encounters. Health, stress and quality of life respond to your choices. The year ends with the **whole-life report** (below). It's saved, so you can leave and come back; **REPLAY THE SAME LIFE** re-runs the same seed.
+
+### Isolation from the live game
+
+Practice is separated in the code, not just in the UI:
+
+- **Own state, own key.** All practice data lives in `localStorage["vanquest.practice.v1"]` (`src/practice/store.js`), never in the game save (`vanquest.save.v1`).
+- **No route to the live game.** Practice modules (`src/practice/*`, `src/ui/practiceLab.js`) import only pure helpers (`sim/finmath.js`, `data/banking.js`). None of them can reach `sim/state`, `ledger`, `clock`, `game`, `property`, `loans`, `inventory`, `health`, `vehicles`, `career`, `bank` or `market`; a test checks the whole import graph. The lab is never handed the game object.
+- **Time is frozen.** Game time doesn't pass while any screen is open, so practising never advances the clock, rent, EMIs, interest, tenants, groceries or vehicles.
+- **Reading the course never changes the save.** Rendering now uses a read-only course record (`readRecord`); only MARK AS READ, notes and the knowledge check write to the game.
+- **Versioned practice save.** It's versioned (`PRACTICE_VERSION = 1`) and upgraded by `migrate()` without discarding data. Practice data from a newer build, or data that can't be read, is loaded read-only and never overwritten.
+- **Tested both ways.** One test loads the real Round 4 fixture save, plays every lesson's exercise and a whole practice life against the same storage, and checks the save and the in-memory state are byte-for-byte unchanged. The browser test does the same in Chromium.
+
+### Who decides what: deterministic code vs the model
+
+| The game's code (deterministic, seeded, tested) | The local model (optional) |
+|---|---|
+| Every balance, price, rate, fee, interest and return; budget feasibility; the market paths; Vikram's category, provider, amounts, terms, evidence and outcome rules; valid actions; scores and ratings; persistence and isolation | The **wording** of Vikram's pitch, the scene and his reactions; a **coach's note** explaining an exercise result; **rubric feedback** on written reasoning; the **coach's summary** paragraph of the life report |
+
+- **Every model answer is validated before it's shown** — on the server and again in the browser (`server/tasks.mjs`, `src/practice/vikram.js`, `src/ai/validate.js`).
+- **What fails validation:**
+  - **Amounts in the wrong place.** The pitch may quote only amounts written in the offer itself; each reaction may quote only the offer's amounts and its own evidence. A real amount can't be given a new meaning: in testing, the model turned one year of SIP payments into "after five years you'll have ₹X", and this rule catches that.
+  - **Promised results for uncertain offers.** Market-linked or variable offers must not claim what you'll end up with.
+  - **"Guaranteed / no-risk" language** for a genuine offer. Honest disclaimers such as "returns are not guaranteed" are allowed.
+  - **Links, emails or phone numbers.**
+  - **Explanations with numbers that aren't in the results.**
+  - **A report summary that names a different rating** from the calculated one.
+  - **Rubric feedback that quotes words the player didn't write.**
+- **What happens on failure:** the model is retried with the exact errors (bounded), then the game silently keeps its built-in text.
+- **Model wording is applied only before you act.** The game applies it only if you haven't started inspecting or deciding. It never changes facts, and it's never applied twice (fingerprint duplicate check).
+
+### Vikram's encounters (`src/practice/vikram.js`)
+
+- **Three classes:** *scam / dangerous* (plantation doubler, bank-KYC OTP impersonation, UPI "refund" request, advance-fee scholarship/job/lottery, trading-tips group), *legitimate* (bank recurring deposit, index-fund SIP, health insurance), and *moderate-risk* (a relative's food stall, one small company's shares, P2P lending).
+- **Weighted, not scripted:** `VIKRAM_CONFIG.weights` (default 40 / 30 / 30) controls the mix. There's no fixed sequence.
+- **Seeded and versioned:** amounts, providers, terms, dialogue and scenes vary within bounds. Each encounter stores its seed and `VIKRAM_VERSION`, so it can be reproduced exactly.
+- **Never a secret sure thing:** every moderate-risk offer has at least one losing outcome.
+- **Fixed once generated:** the facts are set at generation. Inspecting only reveals them, and nothing can be revealed after the decision.
+- **Judged on reasonableness:** outcome and score come from the scenario's own rules and your situation. Declining a genuine offer that suited you scores 62–70; accepting it 82–100. Accepting an affordable, checked moderate risk scores up to 100; accepting one you couldn't afford to lose scores 25–30 even if it paid off. Reporting a genuine business scores 30.
+
+### Scoring (documented rules)
+
+**Exercises (0–100 each).** Every point and its reason is shown on screen.
+
+- **Budget:**
+  - essential bills paid: 25
+  - enough food: 10
+  - no late fees: 10
+  - surprise covered without borrowing: 15
+  - emergency fund vs a starter target: 15
+  - goal on track: 15
+  - flexible spending ≤ 20% of income: 10
+- **Saving:**
+  - emergency paid without borrowing: 30 (15 if it forced an early FD break)
+  - planned purchase on time: 25
+  - interest vs the best plan that never borrowed: 20
+  - lowest accessible balance vs one month of essentials: 15
+  - no large idle cash: 10
+- **Investing** (scores the process, never the ending balance):
+  - risk matches the horizon: 25
+  - diversification: 25 (halved when > 25% rides on one company or the hyped token)
+  - fees: 15
+  - reaction to the fall: 20 (selling = 0)
+  - avoided hype: 15
+  - The luck comparison is shown separately. An all-in bet on the hyped token that happened to soar still scores about 20.
+- **Safety:** see Vikram above.
+
+**Practice-life report** (`src/practice/evaluate.js`): ten categories, 0–100 each.
+
+- **The categories:**
+  1. budgeting
+  2. essential expenses
+  3. emergency preparedness
+  4. saving and goal progress
+  5. investing (process: no panic selling, single-company ≤ 30%, not investing on a thin reserve)
+  6. risk assessment
+  7. scam detection and verification
+  8. debt and obligations
+  9. health and essential needs
+  10. quality-of-life balance
+- **Overall** is the average of the ten.
+- **Wealth isn't enough:**
+  - if health & needs < 50, the overall is capped at 55
+  - if essentials < 50, the overall is capped at 60
+  - so a player who gets richer by skipping meals can't rate well
+- **Poverty isn't penalised:** every category is measured against the player's own income and costs, and the balance itself is never scored. A careful player on the lowest income (₹12,000) rates **Strong**. A player who grew their net worth by ₹1.5 lakh while eating half of what they needed rates **Struggling**.
+- **Ratings:** Excellent ≥ 85, Strong ≥ 70, Developing ≥ 55, Struggling ≥ 40, otherwise Needs support.
+- **The report shows:**
+  - the overall score and rating, and each category score
+  - the actual numbers for the year
+  - best decisions and costly mistakes (each taken from a recorded month or encounter)
+  - budgeting and investing strengths and weaknesses, with a luck note
+  - every risky offer and every scam, with what you checked
+  - essential needs and quality of life
+  - three priorities and one replay challenge
+- **Reproducible:** the same finished run always gives the same report.
+- **The AI coach** adds one labelled paragraph. It's validated: only the report's numbers, only the calculated rating. It can't change any score.
+
+### Local AI: Qwen via Ollama
+
+**What was found on this machine (Oct 2026):**
+
+- **Runtime:** Ollama **0.15.4**, running in WSL as the `ollama serve` system service, at **`http://127.0.0.1:11434`**. No authentication.
+- **Installed Qwen models:** `qwen3:8b` (8.2B, Q4_K_M), `qwen3-vl:8b`, `qwen2.5:7b-instruct`. **No model named Qwen3.5 is installed**: not in Ollama, and LM Studio's model folder is empty. Nothing was downloaded or changed.
+- **The game uses `qwen3:8b`,** the newest text Qwen installed (your other local projects use the same model). If you do have a Qwen3.5 build elsewhere, point the game at it with `VANQUEST_LLM_MODEL` / `VANQUEST_LLM_URL`.
+- **Capabilities** (from `/api/show`): completion, tools, thinking. Context length 40,960 tokens; the game uses `num_ctx` 4096.
+- **Structured output:** schema-constrained via Ollama's `format` field.
+- **Thinking:** off (`think: false`).
+- **Measured speed:** a minimal structured request takes about 1 s once the model is loaded (first load about 5–30 s). Vikram's lines take about 5 s each; in a 12-encounter run, all 12 passed validation (1 needed a retry).
+- **Reachable from the game:** the game's Node server, in the same WSL environment, reaches it directly. The browser never contacts it.
+
+**Starting / connecting** — nothing to install:
+
+```bash
+ollama list                 # qwen3:8b should be listed
+npm run ai:check            # shows the config, whether the runtime answers, and runs one tiny structured request
+npm start                   # the console says "AI: qwen3:8b via ollama 0.15.4 — connected" (or why not)
+```
+
+If Ollama isn't running: `sudo systemctl start ollama` (or `ollama serve`).
+
+**Configuration** lives only in `server/config.mjs`, set by environment variables or an optional, uncommitted `vanquest.ai.json` in the project root:
+
+| Variable | Default | |
+|---|---|---|
+| `VANQUEST_LLM_URL` | `http://127.0.0.1:11434` | Ollama base URL |
+| `VANQUEST_LLM_MODEL` | `qwen3:8b` | any model listed by `ollama list` |
+| `VANQUEST_LLM_TIMEOUT` | `90000` ms | per request |
+| `VANQUEST_LLM_RETRIES` | `2` | extra attempts after a failure (max 4) |
+| `VANQUEST_LLM_API_KEY` | — | only if a runtime needs one; environment only, never sent to the browser, logged or saved |
+| `VANQUEST_PORT` | `8765` | |
+
+**How it's wired:**
+
+- **Browser → server:** the browser calls only `GET /api/ai/status` and `POST /api/ai/task/<name>`, for four fixed tasks: `vikram_narrative`, `explain`, `reasoning`, `life_feedback`. It sends structured facts, never a prompt.
+- **Server limits:** the server (`server/serve.mjs`) limits input size (6 KB), queues requests (at most 4 waiting) and refuses to serve `server/`, `tests/`, `node_modules/` and `vanquest.ai.json`.
+- **The adapter** (`server/llm.mjs`) provides timeouts, bounded retries that tell the model what was wrong, response size limits and plain failure reasons (`unavailable`, `timeout`, `http_*`, `bad_json`, `too_large`, `invalid`, `busy`).
+- **Diagnostics:** `[ai] ok|fail …` lines in the server console.
+
+**When the model is unavailable:** everything still works. The lab header says *AI: OFFLINE — BUILT-IN CONTENT*. Vikram uses the built-in seeded wording, and there's simply no coach note or AI feedback; every score, number and report is identical either way.
+
+### Future Financial District: parameter proposals (not active)
+
+`src/ai/proposals.js` defines the only path an AI component may ever use to suggest live financial parameters (savings/FD/mortgage/loan rates, a property price index, market drift, fees). The path has four separate, immutable stages:
+
+1. **Proposal** — the model's suggestion; untrusted data.
+2. **Candidate** — `validate()`: known keys only, finite numbers inside configured bounds, and no change bigger than `maxStep` at once.
+3. **Approved** — `approve()`: explicit approval, effective on a future month boundary taken from the game clock.
+4. **History** — append-only parameter periods, so past statements can always be recomputed (`paramsOn(day)`).
+
+`ACTIVATION_ENABLED = false`, so `activate()` refuses, and nothing in `src/sim/` imports the module (a test checks both). In Round 6, no model output can change any live rate, price, fee, eligibility rule, balance or ledger entry.
+
+**How a later Financial District would use it:**
+
+1. ask the model for a proposal
+2. show the validated candidate in the district
+3. approve it
+4. activate it inside the clock's month-start step, recording the history
+
+The existing deterministic code (`finmath`, `loans`, `bank`, `housingMarket`) keeps doing all the calculations; it would only read the active parameter set for the day.
+
+## How to try the Round 5 features
+
+1. **Shops:** every shop opens in the supplied **wooden market stall** design. The shops are:
+   - FreshCart (grocery)
+   - Corner store (general)
+   - Thread & Co. (clothing)
+   - Voltline (electronics)
+   - Jewellery
+   - Hearth Home & Furniture (walk in, then talk to Farah)
+
+   Use **+/−** on a shelf, then **REVIEW PURCHASE**. FreshCart has a **MONTHLY PLAN** tab for the grocery plan.
+2. **Academy:** the Compound Financial Academy opens the supplied **Available courses** screen.
+   - **Inside a course:** the two-column **lecture** screen has the lesson on the left and the advisor and the Practice Lab on the right (Round 6). Use **< >** to move between lessons, **MARK AS READ** to record reading progress, and **REVEAL ANSWER GUIDE** in activities.
+   - **End pages:** each course ends with its **Knowledge check**, its **Glossary** and an **About** page (objectives, teacher notes, sources).
+3. **Tenancies:** at Lakshmi's agency, renting now asks for a 2-month deposit. Buy a home and **Rent it out** to get:
+   - a tenant who pays a deposit, which you hold for them
+   - rent on time, late or missed
+   - move-outs, with deposit deductions and repairs
+4. **Selling:** **Sell…** shows the whole calculation before you confirm:
+   - market value
+   - the 2% fee
+   - unpaid bills
+   - the tenant's deposit
+   - the loan payoff, including interest since the last EMI
+   - what comes to you, or what you'd have to pay
+5. **Performance:** each purchase gets a report with two halves, **Economic return** and **Cash flow — your pocket**. It's labelled *estimate* while you hold the property and *realised* once it's sold.
+6. **Loans:** home-loan quotes now show your **eligible income** (salary + counted rent) and your **essential bills**. The bank's Loans tab shows each loan's payoff today and offers **Pay off**.
+
+## The supplied UI and course material (Round 5)
+
+All of `C:\Users\mrabh\Downloads\New folder (6)` is copied unchanged into **`Assets/supplied-ui/`**:
+
+| Supplied | What it is | Used? |
+|---|---|---|
+| `Store/Store/` (index.html, store.js, style.css) | the "cozy stall" store template | **Yes — every shop** |
+| `vanguard (2)/vanguard/course cards/` | the "Available courses" screen | **Yes — academy home** |
+| `vanguard (2)/vanguard/lecture ui/` (+ `advisor.svg`) | the two-column lecture screen | **Yes — every lesson, check and glossary** |
+| `VanQuest_Core_Course_01…04.docx` | the four course documents | **Yes — the only course content** |
+| `part 2/Bank/Bank/` (identical to `Bank/Bank/`) | the Nidhi Bank hall + console | **Yes — the bank** |
+| `part 2/Vikram/` (+ `vikram.svg`; identical to `vanguard/scammer/`) | the street-encounter dialogue | **Yes — Vikram's encounters** |
+| `vanguard (2)/vanguard/title screen/` (2 PNGs) | title screen + logo | **Yes — shown when the game loads** |
+
+**How the designs are reused (not re-drawn):**
+- **Stylesheets:** `tools/scope_supplied_css.py` copies each supplied stylesheet into `src/ui/skins/` and only prefixes its selectors (`.vq-store`, `.vq-courses`, `.vq-lecture`, `.vq-bank`, `.vq-scam`, `.vq-title`); `@keyframes` are copied as they are, and relative image URLs are re-pointed at the same files in `Assets/supplied-ui/`, so they can't restyle the rest of the game. Every declaration is identical to the original, and the tool checks that. Re-run it after you edit a design.
+- **Markup:** the store, course-card and lecture screens use the templates' own markup, class names and structure, with real game data in place of the placeholders.
+- **Store helpers:** `src/ui/skins/storeKit.js` is copied from `store.js`: the shelf decor SVGs, the six shelf decor pairs, the retro click/purchase sounds and the cart/wallet/basket icons.
+- **Bank helpers:** `src/ui/skins/bankKit.js` is copied from `bank.js` and `index.html`: the sound, the five pillar-counter props, the counter order and the template's 11 inline pixel icons.
+- **Portraits:** `advisor.svg` and `vikram.svg` are served from `art/ui/`.
+- **Title screen:** its campus background and logo load straight from `Assets/supplied-ui/`, and its hover and select sounds are copied from `script.js` into `src/ui/skins/titleKit.js`.
+- **Fonts:** Press Start 2P and Silkscreen (SIL OFL 1.1, licences in `Assets/fonts/`) are served locally instead of from Google Fonts.
+- **Glue CSS:** `src/ui/skins/glue.css` adds only what the templates don't draw:
+  - full-screen hosting inside the game
+  - the grocery-plan tabs and the purchase confirmation
+  - shopkeeper replies in the dialogue bar
+  - lesson text, questions and notes boxes
+  - disabled-button states
+  - letting columns shrink for long text, which the placeholders never had
+
+**Adaptations, and why:**
+- **Wallet badge:** it reads **CASH + SAVINGS** rather than WALLET, because purchases are paid from cash and then savings.
+- **Steppers:** the template's 6-slot shelf grid scrolls for shops with more items, and **+** refuses past an item's ownership limit.
+- **Close buttons** close the screen and return to the game.
+- **Lecture nav:** a **COURSES** button was added to its navigation, since the template had no way back.
+- **Tip cards:** the template's three "takeaway" cards show **glossary terms that appear in the lesson**, with the course's own definitions. The documents have no per-lesson takeaways and I didn't invent any.
+- **Sliders:** the template's three allocation sliders are used where the course itself has that activity: Course 3, Topic 11, "Building a Hypothetical Portfolio", with the example's three categories. It's ungraded, because the course says to score reasoning, not the mix.
+- **Thumbnails:** course-card thumbnails show the course number, lesson count and question count; no thumbnail art was supplied.
+- **Advisor text:** the advisor's speech is short UI guidance and feedback, not course content.
+- **Title screen:**
+  - **When it shows:** it covers the game while it loads. Esc and the game's keys do nothing behind it, and the clock waits.
+  - **ENTER YOUR JOURNEY** continues your save, or starts a new game if there isn't one. A returning player also sees a "Continue" line with their job and day, which the template doesn't have.
+  - **EXIT** asks "Are you sure you want to quit?", as the template does. Browsers don't let a page close its own tab, so if the tab stays open it says your progress is saved and to close the tab.
+  - **Skipping it:** add `?play` to the address. The gameplay test suites do this; the title screen has its own test.
+- **Bank:**
+  - **Accounts tab:** the template's own layout: the hall (plaque, banners, clerk, sign), the five pillar counters (cash, savings, rate, interest accrued, interest earned), the notice ribbon, the deposit/withdraw bar, the activity log and the cash/savings chips. All values are real.
+  - **Other tabs:** the template names Fixed deposits, Loans, Credit profile and Rules but doesn't draw them, so their existing content appears inside the console, restyled with the template's colours.
+  - **Confirmations:** every action keeps its one-time confirmation, shown as a gold-rimmed box in the template's style.
+  - **Messages:** these use the template's toast.
+- **Vikram:**
+  - **Layout:** the pitch card, inquiry cards, the three question buttons, the offer block (name, cash + savings, amount, commit / no thanks), the portrait and the close button.
+  - **Answers:** they're hidden until you ask, rather than the template's always-visible cards that just highlight, because asking is the lesson.
+  - **Risk label:** the template's "risk status" slot always reads **NOT GUARANTEED**; it never says "scam", which would give the answer away.
+  - **Closing** walks away (declines) without spending anything.
+  - **States the template has no design for** (the commit confirmation and the outcome/debrief) reuse its offer-block styles.
+
+**Course content: `tools/import_courses.py` → `src/data/courses.js`**
+- **Source of truth:** the importer reads the four .docx files, which stay authoritative. It copies every paragraph, list, table, question and answer **verbatim**. It assigns structure from the documents' own heading styles and **stops with an error** if a document doesn't match, rather than guessing.
+
+| Course | Lessons | Knowledge check | Glossary |
+|---|---|---|---|
+| 01 Planning & Budgeting | 8 (overview, 6 topics, Budget Day activity) | 6 multiple choice + answer key | 12 |
+| 02 Saving & Managing Money | 9 (overview, 7 topics, Manage-the-month exercise) | 8 multiple choice + answer key | 14 |
+| 03 Understanding Investing | 14 (overview, safety rule, 11 topics, Rohan case study) | 10 open questions + model answers | 18 |
+| 04 Financial Safety & Consumer Protection | 11 (overview, Pause-Verify-Act rule, 8 topics, scholarship case study) | 10 open questions + model answers | 12 |
+
+- **Nothing left out:** objectives, facilitator/game-design notes, sources, the end-of-course reflections and each course's header (track, level, time) are on each course's **About** page. Activity answer guides and inline "Suggested answer" / "Answer guide" paragraphs stay hidden until revealed.
+- **Gaps in the source material (reported, not filled in):**
+  - Courses 1–2's multiple-choice questions come with an **answer key but no per-question explanations**. Feedback therefore states the correct option from the key.
+  - Courses 3–4's knowledge checks are **open questions with model answers and no options**. They can't be auto-marked without AI, so the player writes an answer, reveals the model answer and marks themselves. `setOpenMarker` in `sim/academy.js` is the hook for an AI marker later.
+  - The documents contain **no images**.
+- **Retired lessons:** the seven lessons I wrote in earlier rounds duplicated these topics and were not supplied material, so they were removed (`src/data/lessons.js`). Progress on them stays in saves (`state.academy.lessons`) and is shown as an "earlier record" on the course screen and next to the course that covers each topic.
+
+**Course rules (`src/sim/academy.js`):**
+- **Completing a course:** a course is complete when every lesson is studied **and** its knowledge check is passed (67%).
+- **What's recorded:** attempts, best score, notes and the Course 3 allocation, all in the single progress record `state.academy.courses`, saved with the game.
+- **AI-ready:** `setCheckProvider` / `setOpenMarker` let an adaptive or AI layer plug in later. No AI is used now.
+
+## Game rules
 
 ### Money and accounts (`src/sim/ledger.js`)
-- **One ledger** records every rupee. Balances are calculated from it, so the HUD, history, reports and net worth always agree.
+- **One ledger** records every rupee. Balances are calculated from it, so the HUD, shops, history, reports and net worth always agree.
 - **Accounts:**
-  - **Cash** (`wallet`): where your salary arrives.
-  - **Savings** (`bank`): earns interest.
-  - **Fixed deposits** (`fd`): locked money.
-  - **Trading desk** (`brokerage`).
-- **Moving money** between accounts is a transfer; it never creates or destroys money.
-- **Paying:** bills, purchases, rent and EMIs are paid from cash first, then from savings, like a debit card. If cash + savings can't cover something, nothing is charged; the failed attempt is recorded at ₹0 and you're never pushed below zero.
-- **No double charges:** every confirmation carries a one-time token, and every recurring charge has a monthly key.
+  - **Cash** (`wallet`)
+  - **Savings** (`bank`)
+  - **Fixed deposits** (`fd`)
+  - **Trading desk** (`brokerage`)
+- **Moving money** between accounts is a transfer. Bills and purchases are paid from cash first, then savings, all-or-nothing.
+- **Failed attempts** are recorded at ₹0.
+- **No double charges:** every confirmation has a one-time token, and every recurring charge has a monthly key.
+- **Deposits are not income or spending:** a deposit you pay a landlord is an asset (owed back to you); a deposit a tenant pays you is a liability (owed back to them).
 
 ### The clock (`src/sim/clock.js`)
-Each in-game day runs once, in a fixed order, and every step is safe to repeat (re-running a date changes nothing):
+Each day runs once, in this order. Every step is safe to repeat; replaying a date changes nothing.
 
-- **On the 1st of every month:**
-  1. career progress
+- **On the 1st:**
+  1. career
   2. salary
-  3. savings interest (on 1 Jan, 1 Apr, 1 Jul and 1 Oct)
-  4. tenants pay you
+  3. savings interest (quarterly)
+  4. **your tenants:** move in (deposit + first rent), pay on time, say they'll pay late, miss, or leave (deposit settled, repairs)
   5. your rent
-  6. property upkeep
-  7. **loan EMIs**
-  8. car insurance and servicing
+  6. upkeep, occasional repairs, overdue tenant-deposit refunds
+  7. loan EMIs (a 3rd missed EMI in a row means a forced sale)
+  8. car costs
   9. grocery plan
+  10. **record each owned property's value**
+- **Round 7, before step 1 on the 1st:** close last month (life record + newspaper); on the 60th birthday, retire here, before any of that day's events. **After step 10:** achievements.
 - **Every day:**
-  10. FDs that mature today pay out
-  11. hunger and health
-  12. your household eats
-  13. tipster offers settle
-  14. savings interest accrues on the day's closing balance
-  15. low-food warning
+  11. matured FDs pay out
+  12. **late rent arrives (the 15th)**
+  13. hunger and health
+  14. the household eats
+  15. tipster outcomes
+  16. savings interest accrues
+  17. low-food warning
 
-**Skip 1 year** runs this loop for twelve calendar months. It stops early on the day you die.
+**Skip 1 year** runs this loop for every day of the year; it never jumps straight to a later balance.
 
-### Savings and fixed deposits (`src/sim/bank.js`, `src/data/banking.js`)
-- **Savings account:** 3.5% a year, worked out on **each day's closing balance** (balance × 3.5% ÷ 365). Interest is credited **quarterly** (1 Jan, 1 Apr, 1 Jul, 1 Oct), so it compounds four times a year. No fees, no minimum balance, free withdrawals. The interest credited so far and the interest accrued but not yet paid are both shown.
-- **Fixed deposits:** paid for from savings, minimum ₹5,000.
+### Loan eligibility with rental income (`src/sim/credit.js`, `src/sim/loans.js`)
+- **Eligible monthly income** = salary + **75% of the average rent you actually received over the last 6 months** (after the agent's fee).
+  - **What counts:** rent only from properties with a tenant now.
+  - **What never counts:** empty or listed properties, the home you're buying, loan money, sale money, deposits, or one-off transfers. Taking a loan therefore can't make it more affordable.
+- **Rules**, each failed one shown with a reason and a tip:
+  - all EMIs (existing + new) ≤ **50%** of eligible income
+  - eligible income − all EMIs − **essential bills** (upkeep on everything you'd own, car costs, active grocery plan) ≥ 0
+  - **no eligible income at all** refuses the loan
+  - down payment within the **loan-to-value cap**: 90% up to ₹30 lakh, 80% up to ₹75 lakh, 75% above
+  - money up front ≥ down payment + stamp duty + 0.5% fee
+  - credit tier not "Very poor"
+- **Home-equity loans** use the same affordability rules. Their limit is 60% of value **minus every loan already secured on the property**, so the same equity can't be borrowed twice.
 
-  | Term | Rate |
-  |---|---|
-  | 6 months | 6.00% |
-  | 1 year | 6.75% |
-  | 2 years | 7.00% |
-  | 3 years | 7.25% |
+### Loans (`src/sim/loans.js`)
+- **Fixed rate:** a loan keeps the rate it was given, even if your credit profile later changes what the bank offers.
+- **EMI** = P·r(1+r)ⁿ/((1+r)ⁿ−1); a zero-rate loan pays P/n.
+- **True amortisation:** the final EMI clears any rounding, so balances never go negative.
+- **Missed EMI:** that month's interest (tracked as *interest capitalised*) and a ₹500 late fee are added to the balance, and the missed instalment moves to the end of the term.
+- **Early repayment:**
+  - **Part-prepayment** lowers the balance; the EMI stays the same and the loan ends sooner.
+  - **Paying off** costs the balance **plus interest since the last EMI** (balance × rate × days ÷ 365).
+  - A prepayment that covers the balance but not that interest is refused with the exact payoff amount.
+- **Tracked per loan:** interest paid, interest capitalised, late fees and principal repaid.
 
-  - **Value at maturity** = P × (1 + r/4)^quarters, with quarterly compounding.
-  - **At maturity:** the principal and interest are paid back into savings, once.
-  - **Closing early:** you earn (rate − 1%) for the time actually held: quarterly compounding for completed quarters, plus simple interest for the extra days. You never get back less than you put in.
-  - **Locked money:** money in an FD isn't spendable.
+### Selling a property with a loan (`src/sim/property.js`)
+1. **Net proceeds:** market value − 2% fee − unpaid upkeep/repairs − any tenant's deposit (returned to them).
+2. **Payoff:** every loan on the property is repaid, mortgage first, at its payoff (balance + accrued interest).
+3. **Your share:** anything left is credited to you. If the net doesn't cover the loans, you must pay the difference from cash/savings, or the sale is refused and nothing changes.
+4. **Once only:** loans are closed and can't be charged or settled again. Ownership, access, the tenancy and furniture (to storage) all update.
 
-### Home loans and home-equity loans (`src/sim/loans.js`, `src/data/lending.js`)
-- **One loan engine runs both.** Rates are fixed for the whole term.
-- **EMI** = P·r(1+r)ⁿ / ((1+r)ⁿ − 1), where r = yearly rate ÷ 12 and n = months. A zero-rate loan pays P ÷ n.
-- **True amortisation:** each month's interest = the balance still owed × r, and the rest of the EMI repays principal. The final EMI clears any rounding. The schedule and the monthly processing use identical maths (tested).
-- **Home loan (taken when you buy):**
-  - **Rate:** base 8.5%, adjusted by your credit tier.
-  - **Term:** 5, 10, 15 or 20 years.
-  - **Down payment:** 10%, 20%, 30% or 50%.
-  - **Loan-to-value cap:** the loan may cover at most 90% of the price for loans up to ₹30 lakh, 80% up to ₹75 lakh, and 75% above that.
-  - **Processing fee:** 0.5% (minimum ₹2,000).
-  - **Stamp duty and the fee are never financed.**
-  - **How the money moves:** the loan money goes to the seller, and you pay the down payment, duty and fee.
-- **Home-equity loan:**
-  - **What it is:** borrowing against a property you own.
-  - **Limit:** at most 60% of its current value, minus every loan already secured on it. You can't borrow the same equity twice.
-  - **Terms:** base + 1.5%; 3, 5 or 10 years; 1% fee.
-  - **Where the money goes:** into your savings.
-- **Eligibility** (each reason is shown, with a tip):
-  - all your EMIs together, including the new one, must stay within 50% of your salary
-  - you must have the money needed up front
-  - the loan-to-value limits above
-  - your credit tier must not be "Very poor"
-- **Missed EMI:**
-  - Nothing is taken. That month's interest plus a ₹500 late fee are **added to the balance**, and it shows on your credit profile.
-  - Paying the next EMI resets the "in a row" count.
-  - **Three in a row is a default:** the bank sells the property at a 15% discount, repays itself and returns any surplus to you. The default stays on your profile, and if it was your home, you lose it.
-- **Prepayment:** paying extra reduces what you owe. The EMI stays the same, so the loan ends sooner.
-- **Selling a mortgaged property:** the sale repays its loans first. If the sale doesn't cover them, you must pay the difference or you can't sell.
+### Forced sale after default
+- **Trigger:** three missed EMIs in a row on a property loan.
+- **Sale price:** the bank sells at **15% below value** and charges **2% legal and sale costs**.
+- **Order of payment:** costs, then unpaid bills and the tenant's deposit, then the loans (mortgage first, at payoff).
+- **Surplus:** paid to you.
+- **Shortfall:** **stays owed** as a **shortfall debt**, repaid over 24 months at the defaulted loan's rate. It's listed under liabilities and in the property's report, and is **never written off**.
+  - Missing its EMIs adds interest and fees and hurts your credit profile.
+  - There's no collateral left to repossess.
+- **Credit:** the default is recorded once (−200 on your profile).
+- **Your home:** if it was your home, you become homeless (see the agent). You can't enter it, and its furniture goes to storage.
 
-### Credit profile (`src/sim/credit.js`)
-- **Transparent and calculated from your record:** start at 700, then:
+### Tenancies, deposits, vacancy and repairs (`data/properties.js` `TENANCY`, `REPAIRS`)
+- **When you rent:**
+  - **Signing:** 2 months' deposit + the first month's rent. The rent is fixed for your tenancy.
+  - **Unpaid rent** is owed.
+  - **Leaving:** the deposit covers unpaid rent and the rest comes back to you, once. Anything beyond the deposit becomes a 0% debt repaid over 6 months.
+  - **Eviction:** two unpaid rents in a row.
+  - **Older tenancies:** tenancies that began before Round 5, including the starting flat, have a ₹0 deposit.
+- **When you let:**
+  - **Move-in:** the tenant arrives after the neighbourhood's search time. They pay a **2-month deposit** (you hold it: a liability, never income) and rent from that 1st; the agent keeps 5%.
+  - **Who pays:** 80% of tenants always pay on the 1st. The others, each month, pay **late** 20% of the time (by the 15th) or **miss** 10% of the time.
+  - **Missed rent** is owed; two misses in a row and the tenant leaves.
+  - **Lease length:** 11, 22 or 33 months.
+  - **Move-out:** the deposit covers unpaid rent and any damage (30% of move-outs: up to a month's rent) and the rest is refunded. You pay **wear-and-tear repairs** (25% of a month's rent), and the property is re-listed and **empty, with no rent** until the next tenant.
+  - **Deposit you can't return:** if you can't afford a refund, it stays owed, is retried each 1st and comes out of any sale.
+  - **Ending it yourself:** you must be able to refund the deposit.
+- **Deterministic:** every outcome is seeded by the tenant and the month, so it's reproducible and testable.
+- **Repairs:** besides monthly upkeep, each property has a **4% chance each month** of a repair costing 1.5× its monthly upkeep. Repairs are tagged to the property, charged once, and appear in its report.
 
-  | Factor | Points |
-  |---|---|
-  | Each on-time EMI | +2 (up to +60) |
-  | Each missed EMI in the last 12 months | −45 |
-  | Each missed rent in the last 12 months | −20 |
-  | Other unpaid bills | −5 each (up to −40) |
-  | Each default | −200 |
-  | EMIs above 35% / 50% of income | −25 / −60 |
+### Neighbourhood markets (`src/sim/housingMarket.js`, `data/properties.js`)
+- **Shared city cycle:** the city-wide cycle (growth → stable → decline → recovery) is shared.
+- **Neighbourhood index:** each neighbourhood moves every month by its **sensitivity × the city's move + its own local wave** (amplitude, period, offset) + small seeded noise, **capped at ±3% a month**:
 
-- **Tiers:**
+| Neighbourhood | Long-run growth | City sensitivity | Local wave |
+|---|---|---|---|
+| Budget | 2%/yr | × 0.6 | ±0.3%/month, 30-month cycle |
+| Central | 3.5% | × 1.0 | ±0.4%, 26 months |
+| Family | 3% | × 0.9 | ±0.4%, 34 months |
+| Premium | 2.5% | × 1.4 | ±0.6%, 22 months |
 
-  | Tier | Score | Rate offered |
-  |---|---|---|
-  | Excellent | 780+ | −0.25% |
-  | Good | 720+ | base |
-  | Fair | 650+ | +0.75% |
-  | Poor | 550+ | +2% |
-  | Very poor | below 550 | no new loans |
-
-- **Fixed for existing loans:** a loan keeps the rate it was given.
-
-### Housing market (`src/sim/housingMarket.js`, `src/data/properties.js`)
-- **Neighbourhoods:**
-
-  | Neighbourhood | Homes | Long-run growth | Swings with the market | Extra wait for a tenant |
-  |---|---|---|---|---|
-  | Budget residential | Elm Court | 2%/yr | × 0.6 | 0 months |
-  | Well-connected central | Lakeview | 3.5% | × 1.0 | 0 |
-  | Established family | 12 & 18 Elm St | 3% | × 0.9 | 1 |
-  | Premium residential | 24 Elm St, Willowbrook | 2.5% | × 1.4 | 2 |
-
-- **Market index:** a fictional index cycles **growth** (+0.9%/month) → **stable** (+0.1%) → **decline** (−1.4%) → **recovery** (+0.6%), with seeded phase lengths and small noise.
-  - **Deterministic:** the same calendar always gives the same history, so results can be explained and tested.
-  - **No forecasts:** the game only ever shows the past and the current phase.
-- **Value** = day-0 price × (1 + growth)^years × (1 + swing × (index − 1)). It updates on the 1st.
-- **Rent** moves with the market at half the swing.
-- **Asking prices** are the estimate × (1 + phase tilt + a seeded −2.4…+3.6%). That's about 3% dearer in a boom and 3% cheaper in a slump, so you can overpay or find a bargain.
-- **Expensive isn't automatically better:** premium homes have lower growth, bigger swings and longer empty periods.
-
-### Property rules (`src/sim/property.js`)
-- **Starting point:** you rent Elm Court Flat 2B at ₹3,000/month.
-- **Buying:** asking price + 6% stamp duty, in cash or with a home loan.
-- **Selling:** market value − 2% fee − unpaid upkeep; loans on the property are repaid first. You can't sell the place you live in.
-- **Renting a home:** the market rent when you sign, fixed for your tenancy. It's paid then and on every 1st. Two missed rents get you evicted.
-- **Renting yours out:** after the neighbourhood's wait, a tenant pays the current market rent every 1st, minus a 5% agent fee. You pay upkeep on everything you own.
-- **Access:** you can enter only your current home or a vacant property you own. For a tenant-occupied property you get "Manage your tenancy" instead.
-- **Furniture belongs to a property** and is packed into storage when you move out, let the property or sell it.
+- **No permanent winner:** areas peak and slump at different times. Over 15 years, different areas lead in different years and every area has rising and falling years (tested).
+- **Value** = day-0 price × (1 + growth)^years × the neighbourhood index. **Rent** moves with half the index.
+- **History, not forecasts:** the agency shows each area's last-12-month change, never a forecast.
+- **Valuation history:** every owned property's value is **recorded on the 1st** (`valuations`), starting with the estimate at purchase, and never rewritten.
 
 ### Property performance (`src/sim/propertyReport.js`)
-Every purchase gets a deal ID, and every ledger entry it causes is tagged with it: the purchase, loan money, fees, EMIs, upkeep, rent and the sale.
-
-- **Cash invested** = down payment + stamp duty + loan fees + EMIs + prepayments + upkeep.
-- **Cash returned** = rent received + sale proceeds after loans are repaid. For a home you still hold, that's what you'd pocket if you sold today.
-- **Profit** = returned − invested. **Return on cash** = profit ÷ invested.
-- **What drove the result:**
-  - price paid vs the estimate
-  - location (the neighbourhood's growth)
-  - market timing (the index move since you bought × the neighbourhood's swing)
-  - financing (interest, late fees, fees)
-  - renting (rent − upkeep, and months empty)
-  - transaction costs (stamp duty + selling fee)
-- **How the verdict is written:** a short sentence built from the biggest positive and negative drivers. A rising value alone never makes a purchase "good".
+- **Tagging:** every ledger entry a purchase causes is tagged to it: the purchase, loan money, fees, EMIs, prepayments, upkeep, repairs, rent, tenant deposits, the sale and the settlement.
+- **Cash flow ("your pocket"):** all cash in (rent, deposits, loan money, sale) − all cash out (down payment, fees, EMIs, bills, refunds, settlement).
+  - **Held property:** adds an **estimated** exit if sold today (value − fee − bills − deposits − loan payoff).
+  - **Sold property:** subtracts any **debt still owed**.
+- **Economic return:**
+  - **Formula:** appreciation (end value − price) − transaction costs (duty, loan fees, selling or bank costs) − financing cost (interest paid + interest capitalised + interest at payoff + late fees) + net rental income (rent + deposit kept for unpaid rent or damage − upkeep − repairs).
+  - **Not costs:** principal repayments aren't a cost, because they reduce debt. Loan money and tenant deposits are neither income nor cost.
+  - **Labels:** *unrealised estimate* while held, *realised* once sold.
+- **The two agree to the rupee:** cash result = economic return (tested for held, sold, mortgaged + equity-loan, let, and forced-sale-with-shortfall properties).
+- **Return on invested cash** = economic return ÷ your own money put in (down payment + duty + fees + EMIs + prepayments + upkeep + repairs + any cash added at the sale).
+- **Verdict:** written from the figures, including how much of the monthly cost was principal, plus the drivers: price vs estimate, neighbourhood growth, market timing, forced-sale discount, financing, renting, costs.
 
 ### Net worth (`src/sim/networth.js`)
-- **Assets:** cash, savings, FDs (including interest earned so far), the trading desk, property at market value, and cars at buy-back value.
-- **Liabilities:** home loans and other loans.
-- **Net worth = assets − liabilities.** A loan adds the same amount to both sides, and it's shown as "loan money received — a debt, not income".
-- **Flows by type:** salary, rent, interest earned, investment returns, sale proceeds, loan money, interest paid, spending.
+- **Assets:** cash, savings, FDs, investments, property, cars, and your rent deposit (what the landlord owes back).
+- **Liabilities:** home loans; other loans and debts (equity, shortfall, unpaid rent); tenants' deposits you hold; unpaid bills.
+- **Each counted once:** borrowing and deposits never change net worth by themselves.
 
 ### Unchanged systems (still tested)
-- **Cars:** 7 models with real speed differences, insurance and servicing, fuel, buy-back.
-- **Food:** pantry, hunger, health and death.
-- **Clothing**, the furniture showroom, the grocery plan and the tipster.
-- **Trading desk, academy, college and career.**
-
-## Part A changes this round
-
-- **Product art for every catalogue item.** Electronics are original drawings, because no colour CC0 electronics pack was found. Jewellery uses the CC0 Dungeon Crawl Stone Soup set (rings and pendants) plus original drawings of earrings and a watch. The art shows in the shops, the inventory and the ownership lists.
-- **Cars:**
-  - **New art:** the sedan, pickup, SUV/people carrier and executive now drive as **top-down sprites** (gameguy's CC0 set, halved to fit a 16 px lane). Each is **one image rotated to the heading**; these assets have no directional animation.
-  - **Unchanged:** the hatchbacks keep Tiny Cars' 8 real directions.
-  - **Executive:** a black recolour of the sedan, the only body left without its own art.
-  - **Stats unchanged:** the more expensive models stay faster and costlier to run.
-- **Traffic:**
-  - **Lanes:** both directions on both avenues and Main Street, in left-hand lanes (as in India), going straight through junctions. The lanes are `car_lane` objects in the Tiled NPC layer.
-  - **Signals:** a shared cycle at the two Main Street junctions: north–south green, all red, east–west green, all red. Cars queue and wait at red. The lamps on the traffic-light props show the real signal.
-  - **People and parked cars:** traffic stops for people and your car, and eases past after 4 s so nothing is stuck for good.
-- **Map:**
-  - **Nidhi Bank** was built on the lower half of the former North Gate garden plot beside Summit Tower; the garden keeps its upper half. The map size is unchanged.
-  - **Removed:** the parked props that blocked traffic lanes, and the barriers at road ends (the world edge still keeps you in).
-  - **Added:** the banker NPC and the two-way traffic lanes in the NPC layer.
-  - **How it was changed:** `maps/city.tmj` was checked byte-for-byte against `tools/build_city.py` **before** editing, so the generator was updated and the map regenerated; no Tiled edits existed to lose. **If you edit the map in Tiled from now on, don't re-run the generator.**
+- banking, savings and FDs
+- credit profile
+- cars and driving
+- traffic
+- food, health and death
+- clothing
+- furniture placement and storage
+- property access rules
+- trading desk
+- college and career
+- tipster encounters
+- year skip
 
 ## Testing
 
 ```bash
 npm install && npx playwright install chromium   # first time
-npm test            # 79 unit tests + 19 + 15 + 10 browser steps
+npm test            # 158 unit tests + 19 + 15 + 10 + 12 + 12 + 9 + 13 browser steps
 npm run test:unit   # node --test "tests/*.test.mjs"
-npm run test:e2e    # tools/smoke_test.mjs, smoke_round3.mjs, smoke_round4.mjs (headless Chromium)
+npm run test:e2e    # tools/smoke_test.mjs, smoke_round3/4/5/6/7/8.mjs
+npm run ai:check    # optional: is the local model reachable? (not part of npm test)
 ```
 
-### Round 4 unit tests (`tests/round4.test.mjs`)
-- deposits and withdrawals, and paying from cash then savings
-- savings interest, with the exact amount over 91 days, quarterly crediting and compounding
-- FD maturity, paid once even when the date is replayed
-- closing an FD early, and the zero-rate edge case
-- the EMI formula, including zero interest, and the amortisation schedule
-- mortgage eligibility (LTV, the 50% salary limit, money up front, credit) with reasons
-- a mortgage-funded purchase, with EMIs matching the schedule month by month
-- missed EMIs, recovery and default (repossession)
-- selling a mortgaged property, and negative equity
-- the home-equity loan limit, with no double-borrowing
-- net worth, where a loan is not income
-- the credit profile, and the rate it offers
-- market phases, with values falling in declines and rising in recoveries
-- buying in a boom and selling in a slump, which loses money
-- report figures checked against the ledger
-- cash vs mortgage financing costs
-- replaying the 1st twice, which duplicates nothing
-- a year skip with a mortgage, FD, savings, tenant, car and plan (12 of each, 4 savings credits, the summary matches net worth)
-- starving during a skip
-- migrating a real **Round 3 save** (`tests/fixtures/round3_save.json`, made by running the Round 3 code) and a real Round 2 save
+**The automated tests never need the model.** The browser suites run on the game's own server with an offline model stub, and a scripted stub for the AI steps. The real `qwen3:8b` was checked by hand through the same server and validators (see Local AI).
 
-### Round 4 browser test (`tools/smoke_round4.mjs`)
-- the banker NPC, a double-click deposit and a refused withdrawal
-- opening an FD
-- the mortgage UI: the ineligible case explained, then a purchase with a loan (double-click safe)
-- the EMI on the 1st, and reload persistence
-- the report and net-worth screens
-- the home-equity loan
-- shop art for every product
-- the top-down car rotating as it turns
-- two-way traffic stopping at red
-- a year skip (FD matures, 12 EMIs)
-- loading the Round 3 save, with furniture and reports intact
+### Round 8 unit tests (`tests/round8.test.mjs`, 7 tests)
+- **Academy covers:** every manifest file exists with its recorded size (RGB, no transparency); each of the four supplied files is used once, on its own course's overview lesson only.
+- **Summit desk:** it shows the simulation's prices, KPIs and date. Rendering every tab leaves the save byte-for-byte unchanged, and the same frame renders identically twice. The bulletin repeats the latest issue and labels AI wording only when it was stored. Proposals are never shown as active. Past prices stay fixed.
+- **Property agent:** every row shows the live asking price, estimate and rent, never the mock-up prices. Filters, sorting and tabs leave the save unchanged.
+- **Other:** the HUD keeps every action and the supplied classes; the new screens contain no external URLs or `fetch`.
 
-The earlier browser suites and the Round 1–3 unit tests still run. Some expectations were updated for this round's intended rule changes: asking prices, market-driven values, neighbourhood vacancy, the bank entrance and save version 3.
+### Round 8 browser test (`tools/smoke_round8.mjs`, 13 steps)
+- **Main screen:** every button has the supplied font, colours and glass effect, and clicking its centre hits it. Each keeps its action (Retirement opens the existing confirmation). Shortcuts, R and Tab/Enter work, with a visible focus ring. The bar fits at 1920×1080, 1024×768 and 820×600 without covering the side panel. After a life ends, only Life and News are enabled.
+- **Summit desk:** prices match `price()`, and the date is shown. Opening and browsing leaves the save unchanged. Deposit, buy (a double click is one trade), sell and history all work. With the model offline, the bulletin shows the same issue as the newspaper. Past prices are unchanged.
+- **Property agent:** rows match `buyCost` and `marketRent`, and the family filter and price sort work. Browsing is state-free. Rent, two purchases, move in, let, stop letting and sell each happen exactly once (double clicks included). A tenant moves in after the 1st. The home button closes the panel and it reopens.
+- **Academy:** each cover file is served (200), loads at 1254 px on its overview lesson only with the manifest's alt text, and fits a 380 px screen. A 404 cover shows the caption, and marking the lesson read still works.
+- **Whole run:** no broken asset paths, no request outside the game's own server, and no console errors.
 
-## Project layout (new this round)
+### Round 7 unit tests (`tests/round7.test.mjs`, 19 tests)
+- **Characters:** a new character (age 18, retires 1 Jul 2068, starts in Elm Court); upgraded saves (v5, backup, legacy, no onboarding, no invented goals, migrating twice is a no-op); profiles (new, returning, multiple; switching back restores the exact state; no deletion; corrupt index, unsafe names, a full disk).
+- **Goals:** the quiz equals the supplied HTML (every question, label, value, symbol); validation; linked to the run; no duplicate submission; drafts survive reload; the original is frozen and revisions are dated.
+- **Endings:** death finalises once and nothing changes afterwards (incl. after reload); retirement at 60 happens before that day's events, with June closed once; manual retirement is refused with reasons, needs a token, and happens once; qualitative goals need the player's confirmation.
+- **The report:** all criteria; the investment categories equal the trades (realised vs unrealised, no double counting); budgeting equals the ledger; risk uses the actual decisions; every evidence id exists; neglect caps the score and names the trade-off; a constrained income is not penalised; the report never changes when reopened.
+- **AI:** invented ids, amounts, percentages, ratings, events and missing sections are rejected; the fallback always validates; the server refuses bad input before the model.
+- **Achievements:** the supplied catalogue; deterministic rules; no duplicates; untracked ones never unlock.
+- **Newspaper:** one issue a month with the simulation's prices; unchanged after reading or reloading; predictions, commands, wrong directions, invented reasons and invented numbers are rejected.
+
+Three earlier assertions changed because Round 7 legitimately changes them; none were weakened:
+- **the migrated save version** (4 → 5) in `smoke_round3/4/5.mjs`
+- **the list of fixed AI tasks** in `round6.test.mjs` (+ `life_report`, `newspaper`)
+- **the allowed `vanquest.*` storage keys** in `smoke_round6.mjs`: + `vanquest.profiles.v1`, written by the live game when it loads. The test now also checks that the practice leaves it byte-for-byte unchanged.
+
+### Round 7 browser test (`tools/smoke_round7.mjs`, 9 steps)
+1. First launch: title → spawned in the Elm Court flat → introduction (clock paused).
+2. The supplied quiz: questions, options and design; validation; leaving midway keeps the answers; no forced onboarding on return.
+3. Resume from **L**, review, submit once; the guide reopens.
+4. The newspaper's figures equal the simulation; the unread badge; achievement pop-up; reopening is identical.
+5. A second character starts fresh in the flat; the first resumes unchanged.
+6. Manual retirement: Cancel changes nothing; Confirm ends the life once; the full report with the scripted model's checked wording; nothing moves afterwards; a reload neither re-evaluates nor asks the model again.
+7. A new life keeps the retired character's report (read-only).
+8. Automatic retirement at 60 with no birthday-day bills; an invented claim from the model falls back to the game's wording.
+9. A Round 4 save loads as a returning character, and its report notes the unrecorded months.
+
+### Round 6 unit tests (`tests/round6.test.mjs`, 28 tests)
+
+- **Academy content:** the courses are intact (42 lessons / 34 questions / 56 terms). Courses 3–4 keep model answers with self-marking and no invented options. Every lesson has a practice exercise. Reading, practice and the check are recorded separately.
+- **Isolation:**
+  - a static import-graph check of all practice code
+  - every lesson's exercise plus a whole practice life, run against the real Round 4 save in the same storage, leave the save and the state byte-for-byte unchanged
+  - the practice store is versioned, and newer or corrupt data is never overwritten
+  - identical seeds reproduce scenarios, market paths, encounters and whole lives
+- **Exercises:**
+  - budget: impossible allocations are refused, and late payday leads to late fees
+  - saving: accessible vs locked money, and the FD penalty
+  - investing: an all-in bet that got lucky still scores ≤ 40; panic selling scores 0 for the reaction
+- **Vikram:**
+  - all three categories occur, and the configured weights are respected
+  - seeds reproduce, IDs are unique, and facts never change
+  - no evidence can be revealed after a decision, and invalid actions are refused
+  - declining a suitable genuine offer still scores ≥ 60; an affordable checked risk scores ≥ 90; reporting a genuine business scores < 50
+  - scam feedback quotes only real evidence
+  - model wording with invented or re-purposed amounts, promised results, links, false guarantees, a missing provider or a duplicate is rejected; honest "not guaranteed" disclaimers are allowed
+- **Evaluation:**
+  - scores are bounded and the report is deterministic, citing only real months
+  - neglecting needs caps the rating (≤ 55) even with growing wealth
+  - a careful player on ₹12,000 scores ≥ 70 and beats the rich-but-neglectful player
+- **The adapter:**
+  - valid answers come back with the schema sent; the API key never reaches logs
+  - malformed JSON or schema-invalid answers get bounded retries, and the model is told what was wrong
+  - oversize responses, timeouts, a refused connection (no retry) and HTTP 500 are all handled
+  - the queue refuses excess requests
+- **Tasks and server:**
+  - unknown tasks and bad input are refused before the model is called
+  - invented numbers, a different rating and fake quotes are rejected
+  - the HTTP service hides the machine's model list, blocks `server/`, `tests/`, `node_modules/`, the config file and path traversal, and limits input size
+  - the browser client re-validates and falls back
+  - no endpoint, key or `Bearer` string appears anywhere in `src/`
+- **Proposals:** bounds and step limits, approval only on a future month boundary, activation disabled, and `src/sim` never imports it.
+
+### Round 6 browser test (`tools/smoke_round6.mjs`, 12 steps)
+
+1. **Lesson layout:** the lesson fills the panel and scrolls; nothing overflows sideways; the full course text is shown; key-term cards wrap.
+2. **Wide tables** scroll inside the lesson.
+3. **Exercises A–D** through their full cycle, including refusal of over-allocation, RETRY replaying the same seed, and the surprise / market-fall / evidence stages.
+4. **A whole practice life** to the report (10 categories, every report section); the report survives a reload.
+5. **Isolation in Chromium:** after all of that, the live save string and the in-memory game state are identical to before, and only the two `vanquest.*` keys exist.
+6. **MARK AS READ** still records reading progress, separately from practice.
+7. **Narrow screen** (760 px): the columns stack with no sideways overflow.
+8. **Offline:** labelled as offline, built-in content, no request to the model.
+9. **With a scripted model:** AI-written Vikram lines and the coach note appear. Invalid model output (an invented ₹999,999, a link, a wrong score) is rejected and the built-in content stays.
+10. **No console errors** throughout.
+
+### Round 5 unit tests (`tests/round5.test.mjs`, 25 tests)
+- **Eligibility:**
+  - salary only, then with the rent actually received (exact 75%-of-6-month figure)
+  - a vacant property adds nothing
+  - no circularity (loan, deposits)
+  - existing EMIs, LTV, credit tier, no income, essential bills and money up front each refuse with a reason
+- **Sales:**
+  - payoff includes accrued interest and is settled exactly once
+  - a shortfall is refused unless paid
+- **Forced sale:**
+  - with a shortfall: the debt is kept, every rupee of the price is accounted for, the home is lost, access and furniture are updated, nothing is recovered twice, and the cash and economic results agree
+  - with a surplus: the surplus is paid to you
+- **Tenancies:**
+  - your deposit is paid, refunded once, and kept on eviction
+  - a no-deposit eviction leaves the debt owed
+  - the tenant's deposit is a liability
+  - late rent arrives on the 15th, once; missed rent is owed; two misses and the tenant leaves; deposit deductions; no rent while empty
+  - lease-end move-out with damage and wear
+  - ending a tenancy needs the refund; a sale returns the deposit
+  - repairs land in seeded months only, once, tagged and in the report
+- **Market:**
+  - neighbourhoods differ, every area rises and falls, no wild jumps
+  - deterministic and independent of evaluation order
+  - declines reach every area
+  - valuation history is preserved
+- **Accounting:**
+  - cash = economic return with a mortgage + equity loan + tenants + sale
+  - deposits counted once in net worth
+- **Loans:**
+  - 200 random schedules are never negative
+  - zero-rate loans are exact
+  - prepayment and payoff with accrued interest
+  - capitalised interest and term extension on a miss
+  - fixed rate when offers change
+  - equity on top of a mortgage
+  - credit up with on-time EMIs and down on default
+- **Courses:**
+  - every paragraph, list item and table cell of the four .docx files is in the game verbatim (the test reads the .docx files directly)
+  - answer keys and model answers match the documents
+  - progress, completion, open-check rules, persistence and the legacy record
+- **Migration:** a **real Round 4 save** (`tests/fixtures/round4_save.json`, made by running the Round 4 code from git) loads with nothing charged, its tenant and loan kept, and no repeated charges afterwards.
+
+### Round 5 browser test (`tools/smoke_round5.mjs`, 12 steps)
+- every shop is built from the supplied stall components, with real stock order, prices, sprites, balance and font; ✕ returns to the game
+- a double-click purchase is charged once, from cash then savings
+- limits and insufficient funds are refused
+- clothing bought can be worn; furniture bought is placeable
+- the grocery plan via the stall tab is billed once
+- course cards and lecture screens show the real courses, with the advisor, a passed check, completion, an open answer revealed, persistence after reload, and the legacy record
+- the rent deposit and the tenant deposit as a liability
+- the sale calculation and the two-part report
+- the bank's supplied hall and console with real balances, a double-click deposit charged once, and every tab inside it
+- Vikram's supplied screen: answers hidden until asked, a confirmed commit charged once, and closing declines
+- the Round 4 save loads
+- the title screen: supplied parts, logo and background load, the game is blocked behind it, EXIT asks first, Enter continues the save and the controls work
+
+### Earlier tests
+In Round 6 no earlier assertion was changed. The only change under them: `tools/e2e_server.mjs` now serves the game through `server/serve.mjs` (the same code `npm start` runs) with an offline model stub, instead of its own static server.
+
+Rounds 1–4 still run in full. Expectations were updated only where this round deliberately changed a rule:
+- **Saves:** save version 4, and the new deposit/course fields after migration.
+- **Prices:** neighbourhood-index property values.
+- **Renting:** the 2-month deposit at signing.
+- **Reports:** the new report structure, which now asserts more (the cash = economic identity, principal ≠ cost).
+- **Screens:** the stall/lecture markup in place of the old modal.
+- **Academy test:** checks attempts, best score and completion on a supplied course instead of a retired lesson.
+
+## Project layout
+
+**New in Round 7:**
 
 ```
-src/sim/      bank.js · loans.js · credit.js · housingMarket.js · propertyReport.js · networth.js
-              (+ ledger.js accounts & pay(), property.js mortgages/sales/history, clock.js order, state.js save v3)
-src/data/     banking.js · lending.js (+ properties.js neighbourhoods, artIndex.js, vehicles.js art types)
-src/world/    traffic.js (new) · driving.js (body/view split, top-down sprites)
-src/ui/       bankPanel.js · financePanel.js (new) · propertyPanel.js (loans, market, reports) · sprites.js
-tools/        make_round4_art.py · smoke_round4.mjs
-tests/        round4.test.mjs · fixtures/round3_save.json
-art/          vanquest_items32.png · vanquest_topcars.png
-Assets/       cc0-jewelry-icons/ · gameguy-top-view-cars/ (with SOURCE.txt)
+src/sim/              character.js (age rule) · goals.js (quiz records, goal status, eligibility) · profiles.js (local characters)
+                      lifeLog.js (monthly record) · lifeReport.js (final evaluation A–G) · achievements.js · newspaper.js · lifeEnd.js (death / retirement)
+                      state.js (save v5) · clock.js (month close, birthday) · game.js (end-of-life guard, characters)
+src/data/             goalsQuiz.js (generated from the supplied quiz) · achievements.js (generated from the supplied pop-ups)
+src/ai/               narratives.js (facts for the model + deterministic fallback text) · validate.js (+ life report, newspaper)
+src/ui/               journeyPanels.js (characters, introduction, goals quiz, Life, retire) · reportPanels.js (final report, newspaper, pop-ups)
+                      titlePanel.js (+ Characters) · router.js · hud.js (Life, News, age, next step) · skins/journey.css · skins/achievements.css (generated)
+server/tasks.mjs      + life_report, newspaper          tools/   extract_achievements.py · scope_supplied_css.py (+ inline <style>) · smoke_round7.mjs
+Assets/supplied-ui/   journey/ (VanQuest_Financial_Journey_Frontend.zip) · achievements/ (VanQuest_Achievement_Popups_Frontend.zip), unchanged
+tests/                round7.test.mjs
+```
+
+**New in Round 6:**
+
+```
+server/               serve.mjs (game + local AI service; `npm start`) · config.mjs (the only place the endpoint/model live)
+                      llm.mjs (Ollama adapter: timeouts, retries, size limits) · tasks.mjs (the 4 fixed tasks) · check.mjs (`npm run ai:check`)
+src/practice/         store.js (separate, versioned practice save) · rng.js (seeded) · catalog.js (lesson → exercise)
+                      exercises/budget.js · saving.js · investing.js · safety.js · life.js (practice life) · vikram.js · evaluate.js (life report)
+src/ai/               client.js (browser side, fixed tasks only, re-validates) · validate.js (shared validators) · proposals.js (future, inactive)
+src/ui/               practiceLab.js (Practice Lab + Practice Life screens) · academyPanel.js (new lecture layout) · skins/glue.css (layout + lab styles)
+src/sim/              academy.js (+ read-only readRecord) · finmath.js
+tests/                round6.test.mjs           tools/   smoke_round6.mjs · e2e_server.mjs (now the game's own server, offline model stub)
+```
+
+**From Round 5:**
+
+```
+Assets/supplied-ui/   your folder, unchanged      Assets/fonts/   Press Start 2P + Silkscreen (OFL)
+src/ui/skins/         store.css · courses.css · lecture.css · bank.css · scammer.css · title.css (generated, scoped) · glue.css · fonts.css · storeKit.js · bankKit.js · titleKit.js
+src/ui/               shopPanel.js (stall) · academyPanel.js (course cards + lecture) · core.js (full-screen panels)
+                      bankPanel.js (supplied bank design) · encounterPanel.js (supplied Vikram design) · titlePanel.js (supplied title screen)
+                      propertyPanel.js · financePanel.js (deposits, payoff, two-part report)
+src/data/             courses.js (generated) · properties.js (TENANCY, REPAIRS, local market waves) · lending.js (RENT_INCOME)
+src/sim/              academy.js (courses) · property.js (tenancies, deposits, sales, forced sales, valuations)
+                      loans.js (payoff, capitalised interest, debts) · credit.js (eligible income, essentials)
+                      housingMarket.js (neighbourhood indexes) · propertyReport.js (cash vs economic) · networth.js · clock.js · state.js (v4)
+tools/                import_courses.py · scope_supplied_css.py · smoke_round5.mjs
+tests/                round5.test.mjs · fixtures/round4_save.json
+art/ui/advisor.svg, vikram.svg  (from the supplied designs)            removed: src/data/lessons.js
 ```
 
 ## Assets and licences
 
-| Asset | Source | Licence | Used for |
-|---|---|---|---|
-| RPG Urban Pack (Kenney) | kenney.nl, in `Assets/kenney_rpgUrbanKit` | CC0 | city, characters, props, the bank building |
-| Roguelike Indoors (Kenney) | kenney.nl/assets/roguelike-indoors | CC0 | furniture, fixtures |
-| Tiny Cars, Raymond Lobban | opengameart.org/node/94255 → `Assets/tiny-cars-cc0/` | CC0 | the three hatchbacks (8 directions) |
-| isaiah658's Pixel Pack #1 | opengameart.org/content/isaiah658s-pixel-pack-1 | CC0 | produce icons (its cars are no longer used for driving) |
-| **Top View Car Truck Sprites, gameguy**, **new** | opengameart.org/content/top-view-car-truck-sprites → `Assets/gameguy-top-view-cars/` | CC0 | sedan, pickup, SUV/MPV, executive (recolour) and the trucks in traffic |
-| **CC0 Jewelry Icons** (AntumDeluge collection: Dungeon Crawl Stone Soup + HomoHikka), **new** | opengameart.org/content/cc0-jewelry-icons → `Assets/cc0-jewelry-icons/` | CC0 | silver chain, gold ring, diamond pendant |
-| `art/vanquest_items32.png` electronics, earrings, watch | drawn for this project (`tools/make_round4_art.py`) | CC0 (original) | electronics and two jewellery items |
-| `art/vanquest_items.png`, `player_outfits.png`, `vanquest_extra.png`, `vanquest_interior.png` | earlier rounds | CC0 | — |
-| Kenney Mini font · Phaser 3.90 · Playwright | kenney.nl · npm | CC0 · MIT · Apache-2.0 | — |
-
-**Checked but not used:**
-- **Unlucky Studio top-down cars** (CC0): high-resolution, not pixel art.
-- **Nikoichu 1-bit icons:** black and white, with an unverified licence claim.
-- **MinZinn Pixel Vehicles:** CC-BY.
-- **Pixel Art Car Pack:** paid.
-- **Kenney Pixel Vehicle Pack:** side view only.
+| Asset | Source | Licence |
+|---|---|---|
+| Supplied store, course-card, lecture, bank, encounter, title-screen, goals-quiz and achievement-pop-up designs, advisor & Vikram portraits, title art, course documents | your folder (`Assets/supplied-ui/`) | yours |
+| Press Start 2P (The Press Start 2P Project Authors), Silkscreen (The Silkscreen Project Authors) | github.com/google/fonts → `Assets/fonts/` | SIL OFL 1.1 |
+| Kenney RPG Urban Pack & Roguelike Indoors, Tiny Cars, isaiah658 Pixel Pack #1, gameguy top-view cars, CC0 jewellery icons, original drawings | see earlier rounds (`Assets/*/SOURCE.txt`, `credit.txt`, `info.txt`) | CC0 |
+| Phaser 3.90 · Playwright | npm | MIT · Apache-2.0 |
 
 ## Known limitations
 
-- **Car art:** top-down cars are single rotated images, not directional animations. The hatchbacks (Tiny Cars, 3/4 view) and the top-down models mix two perspectives. The executive is a recolour. Traffic doesn't turn at junctions, and only the two Main Street junctions have signals.
-- **Income for loans:** eligibility counts salary only, not rent from tenants. Loans are fixed-rate only, with no refinancing and no part-tenure top-ups.
-- **Defaults:** a shortfall after a forced sale is written off and recorded as a default. There's no debt collection or unsecured debt.
-- **Tenants:** vacancy is a fixed wait per neighbourhood, tenants always pay, and there are no deposits or damages. Rent from an existing tenant follows the market each month.
-- **Market:** one city-wide index. Everyone sees the same seeded history (deterministic by design).
-- **Bank:** savings interest is credited only when the clock passes a quarter date. The bank interior is a menu, not a walkable room.
-- **Earlier limitations still apply:** clothing is shown by recolouring only, there's one save slot, and stray files remain in `Assets/` (`__MACOSX`, the `.rar`, CozyTown), untouched.
+**Round 8:**
+
+- **AI parameter proposals are still switched off.** The desk only shows the active rules and the newspaper. The steps still needed are listed under Round 8 → Summit Financial.
+- **Parts of the property design have no game data or rules behind them,** so they were left out: photos, beds/baths/area, favourites, "+ Add Property" and the "Area" sort.
+- **The academy's course-card screen (Round 5 design) doesn't fit phone widths (~380 px):** its START buttons fall off-screen. The lecture screen and the new covers do fit. Below ~820 px the navigation bar also wraps to several rows over the map.
+
+**Round 7:**
+
+- **No login or onboarding screens were supplied.** The ZIP has only the 10-question goals quiz. The title screen (supplied) gained a *Characters* button, and the character list and introduction use the game's own pixel UI.
+- **Profiles are local**, not accounts: one browser, one device, no password, no sync, deleted with the browser's data.
+- **Storage space:** a full 42-year life is about 1 MB of save data. Browsers allow roughly 5 MB per site, so a few full lives fit. Beyond that, finished lives are kept as their report only, and a new character is refused (with a message) rather than overwriting anything.
+- **The final AI review is slow and sometimes rejected:** 30–80 s on this machine, and the strict validators sometimes reject all three attempts. The report then shows the game's own wording, and that choice is stored. Validators check ids, amounts, percentages, ratings and topics, not every qualitative sentence, so AI text stays labelled and advisory.
+- **One AI request at a time.** During a year skip, only the issues you open are offered to the model; the rest keep the game's wording.
+- **Achievement timing:** month-based achievements unlock on the 1st, after that day's bills; action-based ones immediately. Nine supplied achievements can't be tracked in this version (listed with reasons).
+- **Measuring goals:** "Build long-term wealth", travel, business and family goals need the player's own confirmation, because the quiz gives no amounts and the game has no travel, businesses or family.
+- **No inflation or cost-of-living model**, so the newspaper doesn't report it. Bank rates are fixed.
+- **Upgraded saves** have no month-by-month record before the upgrade, and the report says so.
+- **Emoji icons** in the supplied achievement design need an emoji font. They show as boxes in headless test browsers but render on Windows and macOS.
+
+**Round 6:**
+
+- **No Qwen3.5 on this machine.** The game is configured for the installed `qwen3:8b`; see [Local AI](#local-ai-qwen-via-ollama).
+- **Model text can still be wrong in ways validators can't see.** The validators enforce amounts, ratings, links, guarantees and quotes, not every qualitative claim. In testing, a life-report summary called "three surprise costs" "savings for three major expenses". That's why all model text is labelled as AI-written, is advisory, and never feeds back into scores.
+- **Vikram's AI lines can arrive late.** They arrive in about 5–25 s and are only applied if you haven't started inspecting the offer yet; otherwise the built-in wording stays. Nothing is pre-generated.
+- **Requests are handled one at a time** (a local 8B model). Extra requests beyond 4 waiting are refused and fall back.
+- **The exercises are small, illustrative models.** Fictional asset classes, a 4%-a-month informal-debt rate, simplified health and stress. They teach trade-offs, not real market behaviour.
+- **The practice life is a fixed 12 months** with no pause/rewind (you can abandon it with NEW LIFE). Only the last 20 runs and 20 attempts per lesson are kept.
+- **Written reasoning (rubric feedback) only exists on the investing exercise.** Courses 3–4's knowledge checks stay self-marked, as in the source.
+
+**From Round 5:**
+
+
+- **Every supplied design is now in the game.** The property-agent and finance screens are still the functional versions (no designs supplied).
+- **Course gaps:** Courses 1–2 have no per-question explanations in the source, and Courses 3–4 are self-marked. Both are reported above.
+- **Tenants:** the model is deliberately small. There's no rent negotiation, no rent change within a lease, and no court process for unpaid rent; unpaid rent beyond a tenant's deposit is your loss (recorded as `rentLost`).
+- **Interest in a loan's first month:** a full month is charged at the first EMI, even if the loan started mid-month. A payoff charges daily interest since the last 1st.
+- **Shortfall debts:** they can't be renegotiated, and missing them only hurts your credit (no further enforcement).
+- **One city-wide cycle** drives all areas (with local waves). The market history is the same in every game, by design, for teaching and testing.
+- **Earlier limitations still apply:**
+  - rotated single car sprites; traffic doesn't turn
+  - clothing shown by recolouring
+  - ~~one save slot~~ (Round 7: any number of local characters)
+  - stray files in `Assets/` (`__MACOSX`, the `.rar`, CozyTown)

@@ -1,0 +1,480 @@
+/* =========================================================
+   VANQUEST - SCAMMER ENCOUNTER MODAL (VIKRAM)
+   Sharp Pixel Square Theme, Red Accents, Strict Viewport Bounds
+   Expanded Window, Larger Vikram Avatar, Balanced Font Weights
+   ========================================================= */
+
+:root {
+  /* Fonts - Standard 400 weight for crisp, readable pixel type without heavy stroke boldness */
+  --font-pixel: 'Silkscreen', monospace;
+  --font-pixel-heading: 'Press Start 2P', monospace;
+
+  /* Vibrant Red Accent Palette */
+  --red-main: #d91b2e;
+  --red-light: #f54354;
+  --red-highlight: #ff8591;
+  --red-dark: #8f0d1b;
+  --red-deep: #47040b;
+
+  /* Gold / Yellow Buttons & Text */
+  --gold-main: #f59e0b;
+  --gold-light: #fbbf24;
+  --gold-highlight: #fef08a;
+  --gold-dark: #b45309;
+  --gold-deep: #78350f;
+
+  /* Shady Theme & Panel Colors */
+  --bg-modal: #0d1122;
+  --bg-card: #080b17;
+  --bg-card-active: #131a33;
+  --border-outer: #000000;
+  --border-rim: #22315a;
+  --border-rim-light: #3d5494;
+  
+  /* Text */
+  --text-white: #ffffff;
+  --text-cream: #fae8ca;
+  --text-yellow: #ffd15c;
+  --text-muted: #94a3b8;
+  --text-danger: #ff4d5e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important;
+  font-weight: 400; /* Tones down overly bold font appearance */
+}
+
+/* Overlay Body: Transparent so street game scene shows through */
+html, body.scammer-overlay-body {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background: transparent !important;
+  font-family: var(--font-pixel);
+  color: var(--text-white);
+  user-select: none;
+  -webkit-user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Master Centered Wrapper */
+.scammer-modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(4, 6, 14, 0.65);
+  backdrop-filter: blur(2px);
+}
+
+/* =========================================================
+   PIXEL DIALOGUE MODAL (Made significantly bigger)
+   ========================================================= */
+.pixel-dialogue-modal {
+  width: 95vw;
+  max-width: 980px; /* Increased from 820px to 980px */
+  max-height: 94vh;
+  background: var(--bg-modal);
+  padding: 1.6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  min-height: 0;
+  overflow: hidden;
+
+  /* Sharp 16-Bit RPG Frame */
+  border-top: 4px solid var(--border-rim-light);
+  border-left: 4px solid var(--border-rim-light);
+  border-right: 4px solid var(--border-rim);
+  border-bottom: 5px solid #141c38;
+  outline: 3px solid var(--border-outer);
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 12px 0 0 rgba(0, 0, 0, 0.75);
+}
+
+/* =========================================================
+   HEADER: Vikram Info + Big Corner Avatar + Close Button
+   ========================================================= */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--border-rim);
+  padding-bottom: 1rem;
+  flex-shrink: 0;
+  gap: 1.4rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.encounter-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pixel-bullet-diamond {
+  color: var(--text-yellow);
+  font-size: 1rem;
+}
+
+.encounter-title {
+  font-family: var(--font-pixel-heading);
+  font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+  font-weight: 400;
+  color: var(--text-yellow);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quote-alias {
+  color: #ffd875;
+}
+
+.encounter-subtitle {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem; /* Increased text scaling */
+  color: var(--text-muted);
+}
+
+/* Header Right Group */
+.header-right-group {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Suspicious Vikram Corner Avatar Frame (Made significantly bigger & more visible) */
+.vikram-avatar-frame {
+  width: 96px; /* Increased from 64px to 96px */
+  height: 96px; /* Increased from 64px to 96px */
+  background: #171124;
+  border: 3px solid var(--red-main);
+  outline: 2px solid var(--border-outer);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+.vikram-avatar-img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Close Button */
+.pixel-btn-close {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.85rem;
+  background: var(--red-main);
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-top: 3px solid var(--red-highlight);
+  border-left: 3px solid var(--red-light);
+  border-right: 3px solid var(--red-dark);
+  border-bottom: 4px solid var(--red-deep);
+
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 3px 0 2px var(--border-outer);
+
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-close:hover {
+  background: var(--red-light);
+  transform: translateY(-1px);
+}
+
+.pixel-btn-close:active {
+  transform: translateY(2px);
+  border-top: 3px solid var(--red-deep);
+  border-left: 3px solid var(--red-dark);
+  border-right: 3px solid var(--red-light);
+  border-bottom: 3px solid var(--red-highlight);
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 1px 0 2px var(--border-outer);
+}
+
+/* =========================================================
+   DIALOGUE & INQUIRY LOG (Higher text scale, softer weights)
+   ========================================================= */
+.dialogue-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dialogue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-rim);
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.pitch-card {
+  border-left: 4px solid var(--text-yellow);
+}
+
+.inquiry-card {
+  border-left: 4px solid var(--red-main);
+  opacity: 0.88;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.inquiry-card:hover, .inquiry-card.active {
+  opacity: 1;
+  background: var(--bg-card-active);
+}
+
+.speaker-tag {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.72rem;
+  color: var(--text-yellow);
+}
+
+.tag-inquiry {
+  color: #ff94a2;
+}
+
+.dialogue-text {
+  font-family: var(--font-pixel);
+  font-size: clamp(0.85rem, 1.15vw, 1.0rem); /* Increased text scaling */
+  line-height: 1.5;
+  color: var(--text-cream);
+  font-weight: 400; /* Clean and crisp, not overly thick */
+}
+
+/* =========================================================
+   MIDDLE ACTION BUTTONS (Inquiry Queries)
+   ========================================================= */
+.inquiry-actions-bar {
+  display: flex;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+
+.pixel-btn-query {
+  flex: 1;
+  padding: 0.7rem 0.8rem;
+  font-family: var(--font-pixel);
+  font-size: clamp(0.72rem, 0.95vw, 0.88rem); /* Increased text scaling */
+  background: #141b33;
+  color: var(--text-white);
+  border-top: 2px solid var(--border-rim-light);
+  border-left: 2px solid var(--border-rim-light);
+  border-right: 2px solid #0d1222;
+  border-bottom: 2px solid #0d1222;
+  outline: 1px solid var(--border-outer);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-query:hover {
+  background: #1d274d;
+  color: var(--text-yellow);
+  border-color: var(--red-main);
+  transform: translateY(-1px);
+}
+
+.pixel-btn-query:active {
+  transform: translateY(2px);
+  background: #0d1222;
+}
+
+/* =========================================================
+   BOTTOM OFFER & TRANSACTION DECISION BLOCK
+   ========================================================= */
+.app-offer-block {
+  background: #090d1c;
+  border: 2px solid var(--border-rim);
+  padding: 1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.offer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-brand-name {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.wallet-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.wallet-badge strong {
+  color: #34d399;
+}
+
+.offer-subtext {
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.text-danger {
+  color: var(--text-danger);
+}
+
+/* Decision form row */
+.offer-decision-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.deposit-input-frame {
+  display: flex;
+  align-items: center;
+  background: #04060e;
+  border: 2px solid var(--border-rim);
+  padding: 0 0.8rem;
+  width: 170px;
+  height: 44px;
+}
+
+.currency-prefix {
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  color: var(--text-yellow);
+  margin-right: 0.4rem;
+}
+
+.pixel-num-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+/* Decision Buttons */
+.pixel-btn-decision {
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-pixel-heading);
+  font-size: clamp(0.72rem, 0.95vw, 0.88rem);
+  cursor: pointer;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.08s steps(2);
+}
+
+.btn-commit {
+  flex: 1;
+  background: var(--red-main);
+  color: #ffffff;
+
+  border-top: 3px solid var(--red-highlight);
+  border-left: 3px solid var(--red-light);
+  border-right: 3px solid var(--red-dark);
+  border-bottom: 4px solid var(--red-deep);
+
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 3px 0 2px var(--border-outer);
+
+  text-shadow: 1px 1px 0px #350308;
+}
+
+.btn-commit:hover {
+  background: var(--red-light);
+  transform: translateY(-1px);
+}
+
+.btn-commit:active {
+  transform: translateY(2px);
+  border-top: 3px solid var(--red-deep);
+  border-left: 3px solid var(--red-dark);
+  border-right: 3px solid var(--red-light);
+  border-bottom: 2px solid var(--red-highlight);
+}
+
+.btn-reject {
+  padding: 0.8rem 1.8rem;
+  background: var(--gold-main);
+  color: #1a1403;
+
+  border-top: 3px solid var(--gold-highlight);
+  border-left: 3px solid var(--gold-light);
+  border-right: 3px solid var(--gold-dark);
+  border-bottom: 4px solid var(--gold-deep);
+
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 3px 0 2px var(--border-outer);
+}
+
+.btn-reject:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.btn-reject:active {
+  transform: translateY(2px);
+  border-top: 3px solid var(--gold-deep);
+  border-left: 3px solid var(--gold-dark);
+  border-right: 3px solid var(--gold-light);
+  border-bottom: 2px solid var(--gold-highlight);
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .offer-decision-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .deposit-input-frame {
+    width: 100%;
+  }
+}

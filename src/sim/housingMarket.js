@@ -6,11 +6,15 @@
 //   stable    +0.1%/month (± up to 0.3%)      4–8 months
 //   decline   −1.4%/month (± up to 0.3%)      6–11 months
 //   recovery  +0.6%/month (± up to 0.3%)      6–10 months
-// A property's value = day-0 price × (1 + neighbourhood drift)^(years) × (1 + beta × (index − 1)).
-// Rent = day-0 rent × (1 + drift)^(years) × (1 + beta/2 × (index − 1)), rounded to ₹100.
+// Each neighbourhood has its own index (data/properties.js NEIGHBOURHOODS): every month it moves by
+//   beta × (the city index's move that month) + its local wave (amp × sin(2π(m + offset)/period))
+//   + a little seeded noise, capped at ±3%.  The city cycle is shared; the local waves are not, so
+// areas peak and slump at different times.
+// A property's value = day-0 price × (1 + neighbourhood drift)^(years) × neighbourhood index.
+// Rent = day-0 rent × (1 + drift)^(years) × (1 + ½ × (neighbourhood index − 1)), rounded to ₹100.
 // Sellers' asking prices differ from the estimate: (phase tilt + seeded −2.4%…+3.6%), e.g. buyers
 // overpay in a boom and find bargains in a slump.
-import { PROPERTIES, NEIGHBOURHOODS } from '../data/properties.js';
+import { PROPERTIES, NEIGHBOURHOODS, MARKET_RULES } from '../data/properties.js';
 import { hash01, monthsBetween } from './util.js';
 
 export const PHASES = {
@@ -40,15 +44,37 @@ export function market(day) { const m = Math.max(0, monthOf(day)); extend(m); re
 export const marketIndex = day => market(day).index;
 export const marketPhase = day => market(day).phase;
 
+// Neighbourhood indexes, cached per month like the city index.
+const hoods = Object.fromEntries(Object.keys(NEIGHBOURHOODS).map(h => [h, [1]]));
+export function hoodIndex(hood, day) {
+  const m = Math.max(0, monthOf(day)), arr = hoods[hood], h = NEIGHBOURHOODS[hood];
+  extend(m);
+  while (arr.length <= m) {
+    const k = arr.length, city = months[k].index / months[k - 1].index - 1;
+    const local = h.local.amp * Math.sin(2 * Math.PI * (k + h.local.offset) / h.local.period) + (hash01('hood', hood, k) - 0.5) * 0.003;
+    const move = Math.max(-MARKET_RULES.maxMonthlyMove, Math.min(MARKET_RULES.maxMonthlyMove, h.beta * city + local));
+    arr.push(arr[k - 1] * (1 + move));
+  }
+  return arr[m];
+}
+
 export function propertyValue(id, day) {
   const p = PROPERTIES[id], h = NEIGHBOURHOODS[p.hood], m = Math.max(0, monthOf(day));
-  return Math.round(p.price * Math.pow(1 + h.drift, m / 12) * (1 + h.beta * (marketIndex(day) - 1)));
+  return Math.round(p.price * Math.pow(1 + h.drift, m / 12) * hoodIndex(p.hood, day));
 }
 
 export function marketRent(id, day) {
   const p = PROPERTIES[id], h = NEIGHBOURHOODS[p.hood], m = Math.max(0, monthOf(day));
-  return Math.round(p.rent * Math.pow(1 + h.drift, m / 12) * (1 + h.beta / 2 * (marketIndex(day) - 1)) / 100) * 100;
+  return Math.round(p.rent * Math.pow(1 + h.drift, m / 12) * (1 + MARKET_RULES.rentSensitivity * (hoodIndex(p.hood, day) - 1)) / 100) * 100;
 }
+
+// A neighbourhood's price change over the last n months (history only, never a forecast).
+export function hoodChange(hood, day, n = 12) {
+  const m = Math.max(0, monthOf(day)), from = Math.max(0, m - n), drift = NEIGHBOURHOODS[hood].drift;
+  const v = k => Math.pow(1 + drift, k / 12) * hoodIndex(hood, dayOfMonth(k));
+  return { months: m - from, change: v(m) / v(from) - 1 };
+}
+const dayOfMonth = k => { let d = 0; while (monthOf(d) < k) d += 28; while (monthOf(d) > k) d--; return d; };
 
 export function askingPrice(id, day) {
   const m = Math.max(0, monthOf(day));

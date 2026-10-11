@@ -1,6 +1,7 @@
 // Minimal DOM UI kit: one modal at a time, toasts, and HTML escaping.
 // A panel is an object with { title, sub?, narrow?, render(): html, onAction(name, el, ev),
-// onInput?(el) }. Elements with data-a="name" trigger onAction; the panel re-renders
+// onInput?(el), frame?(): html }. A panel with frame() draws its own full-screen layout (the supplied
+// store / course designs) instead of the standard modal box. Elements with data-a="name" trigger onAction; the panel re-renders
 // after each action and whenever the game state changes.
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 export const newToken = () => 'tok-' + (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2) + Date.now());
@@ -33,8 +34,10 @@ export class UI {
     this.panel = panel;
     const bd = this.backdrop = document.createElement('div');
     bd.className = 'backdrop';
-    bd.innerHTML = `<div class="modal${panel.narrow ? ' narrow' : ''}" role="dialog" aria-modal="true"></div>`;
+    if (panel.frame) bd.classList.add('full');
+    bd.innerHTML = panel.frame ? '<div class="frame-root"></div>' : `<div class="modal${panel.narrow ? ' narrow' : ''}" role="dialog" aria-modal="true"></div>`;
     bd.addEventListener('mousedown', e => { if (e.target === bd && !panel.locked) this.close(); });
+    if (panel.hover) bd.addEventListener('mouseover', e => { const b = e.target.closest('button'); if (b && !b.contains(e.relatedTarget)) panel.hover(b); });
     bd.addEventListener('click', e => {
       const el = e.target.closest('[data-a]');
       if (!el || el.disabled) return;
@@ -42,7 +45,9 @@ export class UI {
       panel.onAction?.(el.dataset.a, el, e);
       if (this.panel === panel) this.render();
     });
-    bd.addEventListener('change', e => { if (panel.onInput?.(e.target) !== false && this.panel === panel) this.render(); });
+    // A text field fires 'change' while it is losing focus (e.g. when a button is clicked). Re-rendering
+    // right then would remove the element mid-blur, so the redraw waits one tick (state updates now).
+    bd.addEventListener('change', e => { if (panel.onInput?.(e.target) !== false) setTimeout(() => { if (this.panel === panel) this.render(); }); });
     root().append(bd);
     this.render();
     bd.querySelector('button, input')?.focus({ preventScroll: true });
@@ -51,6 +56,14 @@ export class UI {
 
   render() {
     const p = this.panel;
+    if (p.frame) {
+      // keep the scroll position of every scrolling area across re-renders
+      const fr = this.backdrop.querySelector('.frame-root');
+      const keep = [...fr.querySelectorAll('[data-scroll]')].map(el => [el.dataset.scroll, el.scrollTop]);
+      fr.innerHTML = p.frame();
+      for (const [k, top] of keep) { const el = fr.querySelector(`[data-scroll="${k}"]`); if (el) el.scrollTop = top; }
+      return;
+    }
     const modal = this.backdrop.querySelector('.modal');
     const scroll = modal.querySelector('.m-body')?.scrollTop ?? 0;
     modal.innerHTML = `
@@ -80,7 +93,7 @@ export class UI {
 }
 
 export const REASONS = {
-  insufficient_funds: 'Not enough money in your wallet.',
+  insufficient_funds: 'Not enough cash + savings.',
   duplicate: 'That confirmation was already processed — you were not charged twice.',
   limit: 'You already own the maximum of that item.',
   invalid_quantity: 'Quantities must be whole numbers above zero.',
@@ -107,5 +120,10 @@ export const REASONS = {
   no_access: 'You don\'t own or rent this property.',
   tenant_occupied: 'A tenant lives here (or is moving in). Manage it from outside, or stop renting it out first.',
   not_your_home: 'You can only place furniture in your own home or a vacant property you own.',
+  deposit_refund: 'You need enough cash + savings to return your tenant\'s deposit before ending their tenancy.',
+  pay_full_payoff: 'That would clear the balance but not the interest since the last EMI — pay the full payoff amount to close the loan.',
+  not_active: 'That loan is already closed.',
+  unknown_lesson: 'That lesson doesn\'t exist.',
+  incomplete: 'Answer every question first.',
 };
 export const why = r => REASONS[r?.reason] ?? 'That didn\'t work.';

@@ -41,8 +41,8 @@ try {
     const b = await G(() => { const h = game.scene.getScene('City').helpers.find(h => h.zone.kind === 'banker'); return [h.sprite.x, h.sprite.y]; });
     await placePlayer(b[0], b[1] + 14); await page.waitForTimeout(150);
     await page.keyboard.press('KeyE');
-    await page.waitForSelector('.backdrop .modal');
-    assert.match(await page.textContent('.backdrop .m-head h2'), /Nidhi Bank/);
+    await page.waitForSelector('.backdrop .vq-bank .bank-console-window');          // Round 5: the supplied bank design
+    assert.match(await page.textContent('.vq-bank .bank-name-heading'), /NIDHI BANK/);
     const cash0 = await bal('wallet');
     await setInput('[data-in="amount"]', 100000);
     await page.click('[data-a="deposit"]');
@@ -51,7 +51,7 @@ try {
     assert.equal(await bal('wallet'), cash0 - 100000, 'moved, not created');
     await setInput('[data-in="amount"]', 999999);
     await page.click('[data-a="withdraw"]'); await page.click('[data-a="confirm"]');
-    assert.match(await page.textContent('.backdrop .msg.error'), /Not enough/);
+    assert.match(await page.textContent('[data-testid=bank-msg]'), /Not enough/);
     assert.equal(await bal('bank'), 100000);
   });
 
@@ -62,7 +62,7 @@ try {
     await page.click('[data-a="fd-open"]'); await page.click('[data-a="confirm"]');
     assert.equal(await bal('bank'), 60000);
     assert.equal(await bal('fd'), 40000);
-    assert.match(await page.textContent('.backdrop table'), /ACTIVE/);
+    assert.match(await page.textContent('.vq-bank .bank-tab-body table'), /ACTIVE/);
     await closeUi();
   });
 
@@ -96,7 +96,7 @@ try {
   await step('property report and net worth agree with the ledger; loan is a liability, not income', async () => {
     await G(() => vq.router.property({ tab: 'reports' }));
     await page.click('[data-a="tab"][data-t="reports"]');
-    const text = await page.textContent('.backdrop .m-body');
+    const text = await page.textContent('.backdrop .vq-agent .properties-container');
     assert.match(text, /Loan interest/);
     assert.match(text, /home loan/);
     await closeUi();
@@ -131,8 +131,8 @@ try {
   await step('electronics and jewellery show product art for every item', async () => {
     for (const shop of ['market_electronics', 'market_jewellery']) {
       await G(s => vq.router.location(s), shop);
-      const cards = await page.locator('.backdrop .card').count();
-      const art = await page.locator('.backdrop .card .thumb .spr').count();
+      const cards = await page.locator('.vq-store .shelf-compartment').count();          // Round 5: stall design
+      const art = await page.locator('.vq-store .shelf-compartment .pixel-item-graphic .spr').count();
       assert.ok(cards > 0 && art === cards, `${shop}: ${art}/${cards} cards have art`);
       await closeUi();
     }
@@ -208,7 +208,7 @@ try {
     await G(r => localStorage.setItem('vanquest.save.v1', r), raw);
     await page.reload(); await boot();
     const s = await G(() => ({ v: vq.game.state.version, props: Object.keys(vq.game.state.properties).sort(), top: vq.game.state.wardrobe.top, car: vq.game.state.vehicles[0]?.model, fdns: vq.game.state.bank.fds.length }));
-    assert.deepEqual(s, { v: 3, props: ['home_apartment_plus', 'home_starter'], top: 'kurta', car: 'hatch', fdns: 0 });
+    assert.deepEqual(s, { v: 5, props: ['home_apartment_plus', 'home_starter'], top: 'kurta', car: 'hatch', fdns: 0 });
     await G(() => vq.router.location('home_starter'));
     await page.waitForFunction(() => game.scene.isActive('Home'));
     assert.equal(await G(() => game.scene.getScene('Home').placed.length), 1, 'Round 3 furniture still placed');

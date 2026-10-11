@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANQUEST - Finance School Courses</title>
+  <!-- Pure Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="course-overlay-body">
+  <main class="course-screen-container" id="courseScreen">
+    
+    <!-- Top Header: Title Left, Close Button Right -->
+    <header class="course-page-header">
+      <div class="header-title-group">
+        <div class="header-icon-badge">
+          <span class="pixel-mini-dot"></span>
+        </div>
+        <div class="header-text-block">
+          <span class="header-kicker">[ACADEMY_ZONE: FINANCE SCHOOL]</span>
+          <h1 class="header-heading">AVAILABLE COURSES</h1>
+        </div>
+      </div>
+
+      <!-- Close Button Inline with Heading -->
+      <button class="pixel-btn-close" id="closeScreenBtn" title="Close Page" aria-label="Close Courses">
+        <span class="close-icon">✖</span>
+        <span class="close-text">CLOSE</span>
+      </button>
+    </header>
+
+    <!-- 4 Course Cards Grid (2x2 layout) -->
+    <section class="course-cards-grid" aria-label="Course Selection Grid">
+      
+      <!-- Card 01 -->
+      <article class="course-card pixel-panel">
+        <div class="card-left-thumbnail">
+          <div class="pixel-thumb-canvas thumb-1">
+            <span class="thumb-label">[COURSE_1_THUMBNAIL]</span>
+          </div>
+        </div>
+
+        <div class="card-right-content">
+          <div class="card-title-row">
+            <div class="course-num-badge">01</div>
+            <h2 class="course-title">COURSE 1</h2>
+          </div>
+
+          <p class="course-description">
+            [COURSE_1_DESCRIPTION: Overview and key learning objectives for this module will be displayed here.]
+          </p>
+
+          <div class="course-meta-row">
+            <ul class="course-topics-list">
+              <li><span class="pixel-bullet">◆</span> [COURSE_1_TOPIC_A]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_1_TOPIC_B]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_1_TOPIC_C]</li>
+            </ul>
+
+            <div class="course-progress-block">
+              <span class="progress-label">[PROGRESS_STATUS]</span>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="pixel-btn-start" data-course="1">
+            <span class="btn-text">START COURSE</span>
+            <span class="btn-arrow">▶</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 02 -->
+      <article class="course-card pixel-panel">
+        <div class="card-left-thumbnail">
+          <div class="pixel-thumb-canvas thumb-2">
+            <span class="thumb-label">[COURSE_2_THUMBNAIL]</span>
+          </div>
+        </div>
+
+        <div class="card-right-content">
+          <div class="card-title-row">
+            <div class="course-num-badge">02</div>
+            <h2 class="course-title">COURSE 2</h2>
+          </div>
+
+          <p class="course-description">
+            [COURSE_2_DESCRIPTION: Overview and key learning objectives for this module will be displayed here.]
+          </p>
+
+          <div class="course-meta-row">
+            <ul class="course-topics-list">
+              <li><span class="pixel-bullet">◆</span> [COURSE_2_TOPIC_A]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_2_TOPIC_B]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_2_TOPIC_C]</li>
+            </ul>
+
+            <div class="course-progress-block">
+              <span class="progress-label">[PROGRESS_STATUS]</span>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 25%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="pixel-btn-start" data-course="2">
+            <span class="btn-text">START COURSE</span>
+            <span class="btn-arrow">▶</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 03 -->
+      <article class="course-card pixel-panel">
+        <div class="card-left-thumbnail">
+          <div class="pixel-thumb-canvas thumb-3">
+            <span class="thumb-label">[COURSE_3_THUMBNAIL]</span>
+          </div>
+        </div>
+
+        <div class="card-right-content">
+          <div class="card-title-row">
+            <div class="course-num-badge">03</div>
+            <h2 class="course-title">COURSE 3</h2>
+          </div>
+
+          <p class="course-description">
+            [COURSE_3_DESCRIPTION: Overview and key learning objectives for this module will be displayed here.]
+          </p>
+
+          <div class="course-meta-row">
+            <ul class="course-topics-list">
+              <li><span class="pixel-bullet">◆</span> [COURSE_3_TOPIC_A]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_3_TOPIC_B]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_3_TOPIC_C]</li>
+            </ul>
+
+            <div class="course-progress-block">
+              <span class="progress-label">[PROGRESS_STATUS]</span>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="pixel-btn-start" data-course="3">
+            <span class="btn-text">START COURSE</span>
+            <span class="btn-arrow">▶</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 04 -->
+      <article class="course-card pixel-panel">
+        <div class="card-left-thumbnail">
+          <div class="pixel-thumb-canvas thumb-4">
+            <span class="thumb-label">[COURSE_4_THUMBNAIL]</span>
+          </div>
+        </div>
+
+        <div class="card-right-content">
+          <div class="card-title-row">
+            <div class="course-num-badge">04</div>
+            <h2 class="course-title">COURSE 4</h2>
+          </div>
+
+          <p class="course-description">
+            [COURSE_4_DESCRIPTION: Overview and key learning objectives for this module will be displayed here.]
+          </p>
+
+          <div class="course-meta-row">
+            <ul class="course-topics-list">
+              <li><span class="pixel-bullet">◆</span> [COURSE_4_TOPIC_A]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_4_TOPIC_B]</li>
+              <li><span class="pixel-bullet">◆</span> [COURSE_4_TOPIC_C]</li>
+            </ul>
+
+            <div class="course-progress-block">
+              <span class="progress-label">[PROGRESS_STATUS]</span>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="pixel-btn-start" data-course="4">
+            <span class="btn-text">START COURSE</span>
+            <span class="btn-arrow">▶</span>
+          </button>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <script src="courses.js"></script>
+</body>
+</html>

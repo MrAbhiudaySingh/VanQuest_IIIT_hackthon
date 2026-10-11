@@ -204,8 +204,8 @@ try {
     await placePlayer(agent[0], agent[1] + 14);
     await page.waitForTimeout(150);
     await page.keyboard.press('KeyE');
-    await page.waitForSelector('.backdrop .modal');
-    assert.match(await page.textContent('.backdrop .m-head h2'), /Lakshmi/);
+    await page.waitForSelector('.backdrop .vq-agent');               // Round 8: the supplied agent design
+    assert.match(await page.textContent('.backdrop .vq-agent h1'), /Lakshmi/);
     await page.click('[data-a="rent"][data-id="home_apartment_plus"]');
     await page.click('[data-a="rent-confirm"]');
     assert.equal(await G(() => vq.game.state.housing.propertyId), 'home_apartment_plus');
@@ -232,7 +232,7 @@ try {
     await placePlayer(x, y); await page.waitForTimeout(150);
     assert.match(await page.textContent('.prompt-btn'), /Manage your tenancy/);
     await page.keyboard.press('KeyE');
-    await page.waitForSelector('.backdrop .modal');
+    await page.waitForSelector('.backdrop .vq-agent');
     assert.match(await page.textContent('.backdrop'), /Let to a tenant/);
     await closeUi();
     // Lakeview (the rental we left) is closed to us now
@@ -245,8 +245,8 @@ try {
     await G(() => { const h = game.scene.getScene('Home'); h.player.setPosition(h.talkZone.centerX, h.talkZone.centerY); });
     await page.waitForTimeout(150);
     await page.keyboard.press('KeyE');
-    await page.waitForSelector('.backdrop .modal');
-    assert.ok(await page.locator('.backdrop .card .thumb .spr').count() > 10, 'furniture cards show sprites');
+    await page.waitForSelector('.backdrop .vq-store');
+    assert.ok(await page.locator('.vq-store .shelf-compartment .pixel-item-graphic .spr').count() > 10, 'furniture shelves show sprites');
     await page.click('[data-a="c-inc"][data-id="plant"]');
     await page.click('[data-a="review"]'); await page.click('[data-a="buy-confirm"]');
     await closeUi();
@@ -271,7 +271,7 @@ try {
 
   await step('clothing: shop shows art, equip only what you own, the sprite changes, persists', async () => {
     await G(() => vq.router.location('market_clothing'));
-    assert.ok(await page.locator('.backdrop .card .thumb .spr').count() >= 7);
+    assert.ok(await page.locator('.vq-store .shelf-compartment .pixel-item-graphic .spr').count() >= 7);
     await page.click('[data-a="c-inc"][data-id="kurta"]'); await page.click('[data-a="review"]'); await page.click('[data-a="buy-confirm"]');
     await closeUi();
     assert.equal(await G(async () => (await import('./src/sim/wardrobe.js')).equip(vq.game.state, 'blazer').reason), 'not_owned');
@@ -330,7 +330,7 @@ try {
     await G(r => localStorage.setItem('vanquest.save.v1', r), raw);
     await page.reload(); await boot();
     const s = await G(() => ({ v: vq.game.state.version, h: vq.game.state.housing.kind, f: vq.game.state.furniture.length, l: Object.keys(vq.game.state.academy.lessons) }));
-    assert.deepEqual(s, { v: 3, h: 'rent', f: 2, l: ['budgeting'] });   // migrated through to save v3 (Round 4)
+    assert.deepEqual(s, { v: 5, h: 'rent', f: 2, l: ['budgeting'] });   // migrated through to save v5 (Round 7)
     await G(() => vq.router.location('home_apartment'));
     await page.waitForFunction(() => game.scene.isActive('Home'));
     assert.equal(await G(() => game.scene.getScene('Home').placed.length), 1, 'the Round 2 plant is still placed in the flat');

@@ -9,8 +9,8 @@ import { advanceDays } from '../src/sim/clock.js';
 import { enrol } from '../src/sim/career.js';
 import { price, trade, portfolio, quoteTrade } from '../src/sim/market.js';
 import { startEncounter, ask, invest, decline, canTrigger } from '../src/sim/encounters.js';
-import { submitLesson } from '../src/sim/academy.js';
-import { LESSONS } from '../src/data/lessons.js';
+import { submitCheck, courseRecord } from '../src/sim/academy.js';
+import { COURSES } from '../src/data/courses.js';
 import { ITEMS } from '../src/data/catalog.js';
 import { MAJORS } from '../src/data/majors.js';
 import { HOMES } from '../src/data/homes.js';
@@ -261,17 +261,18 @@ test('asset-linked encounter pays out exactly per the simulated price; declining
 });
 
 test('academy records attempts, best score and completion separately from the portfolio', () => {
+  // Round 5: the academy runs the supplied courses; the same guarantees apply to a course's check
   const s = newGame();
-  const L = LESSONS[0];
-  const wrong = submitLesson(s, L.id, L.questions.map(q => (q.answer + 1) % q.options.length));
+  const C = COURSES[0], qs = C.check.questions;
+  const wrong = submitCheck(s, C.id, qs.map(q => q.options.find(o => o.key !== q.answer).key));
   assert.equal(wrong.passed, false);
-  const right = submitLesson(s, L.id, L.questions.map(q => q.answer));
-  assert.equal(right.correct, L.questions.length);
-  const rec = s.academy.lessons[L.id];
+  const right = submitCheck(s, C.id, qs.map(q => q.answer));
+  assert.equal(right.correct, qs.length);
+  const rec = courseRecord(s, C.id).check;
   assert.equal(rec.attempts, 2);
   assert.equal(rec.passed, true);
   assert.equal(rec.bestScore, 1);
-  assert.equal(submitLesson(s, L.id, [0]).reason, 'incomplete');
+  assert.equal(submitCheck(s, C.id, ['A']).reason, 'incomplete');
   assert.deepEqual(s.brokerage, { holdings: {}, trades: [] });
 });
 

@@ -1,0 +1,5 @@
+/* Local copies of the pixel fonts the supplied designs load from Google Fonts (SIL OFL 1.1,
+   licences in Assets/fonts/). Served locally so the game needs no network. */
+@font-face { font-family: 'Press Start 2P'; src: url('../../../Assets/fonts/PressStart2P-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/Silkscreen-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Silkscreen'; src: url('../../../Assets/fonts/Silkscreen-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }

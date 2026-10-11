@@ -1,8 +1,8 @@
-// Wardrobe, pantry, one-year skip and end-of-run panels (functional; UI can be redesigned later).
+// Wardrobe, pantry and one-year skip panels (functional; UI can be redesigned later).
 import { ITEMS } from '../data/catalog.js';
 import { equip, unequip, equipped, SLOTS } from '../sim/wardrobe.js';
 import { pantryReport, KCAL_NEED, RESERVE_DAYS } from '../sim/health.js';
-import { CATEGORY_LABELS, lifeSummary } from '../sim/summary.js';
+import { CATEGORY_LABELS } from '../sim/summary.js';
 import { daysInNextYear } from '../sim/clock.js';
 import { spendable } from '../sim/ledger.js';
 import { planCost } from '../sim/groceryPlan.js';
@@ -99,23 +99,4 @@ export function renderYearSummary(r) {
     <table class="t"><tr><th>Spending</th><th class="n">${inr(r.totalExpenses)}</th></tr>${list(r.expenses)}</table></div>
     <div class="row" style="margin-top:10px"><button class="btn primary" data-a="close">Continue</button></div>`;
 }
-
-// ------------------------------------------------------------------ end of the run
-export class GameOverPanel {
-  constructor(game, onRestart) { this.game = game; this.onRestart = onRestart; this.title = 'This life has ended'; this.locked = true; }
-  render() {
-    const s = this.game.state, L = lifeSummary(s);
-    const big = Object.entries(L.spent).filter(([k]) => !['grocery_plan', 'rent'].includes(k)).sort((a, b) => b[1] - a[1]).slice(0, 4)
-      .map(([k, v]) => `<li>${esc(CATEGORY_LABELS[k] ?? k)}: ${inr(v)}</li>`).join('');
-    return `<div class="gameover"><p>On ${fmtDate(s.death.day)}, after a long period without enough food, your character became seriously ill and did not recover.</p>
-      <h3>What led here</h3><ul>
-        <li>Days without enough food: <b>${L.stats.daysUnfed}</b> (very hungry on ${L.stats.daysHungry}).</li>
-        <li>Total spent on food: <b>${inr(L.foodSpend)}</b>${L.lastFoodDay !== null ? `, last food bought ${fmtDate(L.lastFoodDay)}` : ', no food bought'}.</li>
-        <li>Monthly grocery plan: <b>${esc(L.planStatus)}</b>.</li>
-        <li>Failed payments: ${L.failedPayments}. Wallet at the end: ${inr(L.wallet)}.</li></ul>
-      ${big ? `<h3>Other spending</h3><ul>${big}</ul>` : ''}
-      <h3>It could have gone differently</h3><p>Food is a need that comes first. An active grocery plan, a week's reserve in the pantry, and keeping enough money aside for essentials before buying wants would have prevented this. The pantry panel (P) warns you when stock runs low.</p>
-      <div class="row"><button class="btn primary" data-a="restart">Start a new life</button></div></div>`;
-  }
-  onAction(a) { if (a === 'restart') this.onRestart(); }
-}
+// (The end-of-run screen became the final life report in Round 7: src/ui/reportPanels.js.)

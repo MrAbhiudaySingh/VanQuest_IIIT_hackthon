@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VanQuest — Financial Journey Setup</title>
+<style>
+:root{
+  --navy:#101a2b;--navy2:#17253b;--panel:#19283d;--panel2:#20324a;
+  --red:#a6192e;--red2:#c32b42;--cream:#f7f4ee;--muted:#aeb9c8;
+  --line:rgba(255,255,255,.12);--white:#fff;--green:#77c6a2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 80% 0%,#27364a 0,transparent 32%),var(--navy);color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.shell{max-width:1120px;margin:0 auto;padding:26px 22px 42px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:34px}
+.wordmark{font-size:25px;font-weight:850;letter-spacing:-1.2px;color:#fff}.wordmark span{color:#e34a5f}
+.top-meta{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:24px;align-items:start}
+.sidebar{position:sticky;top:20px;background:rgba(23,37,59,.82);border:1px solid var(--line);border-radius:22px;padding:23px}
+.eyebrow{color:#f06b7c;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:800}
+.sidebar h1{font-size:30px;line-height:1.06;letter-spacing:-1.2px;margin:12px 0}
+.sidebar p{font-size:14px;line-height:1.65;color:var(--muted)}
+.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:25px 0 9px}
+.progress{height:6px;border-radius:99px;background:#35445a;overflow:hidden}.progress span{display:block;height:100%;width:10%;background:linear-gradient(90deg,var(--red),#f06b7c);transition:width .25s}
+.steps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.steps li{display:flex;align-items:center;gap:11px;color:#8e9bae;font-size:13px}
+.step-dot{width:27px;height:27px;border:1px solid #506077;border-radius:50%;display:grid;place-items:center;font-size:11px;flex-shrink:0}
+.steps li.active{color:#fff}.steps li.active .step-dot{background:var(--red);border-color:var(--red);color:white}
+.steps li.done .step-dot{background:#284e45;border-color:#4b9a7c;color:#c9ffe8}
+.privacy{margin-top:25px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.55}
+.content{background:rgba(23,37,59,.82);border:1px solid var(--line);border-radius:24px;min-height:620px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+.content-head{padding:26px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;align-items:start}
+.content-head h2{margin:8px 0 6px;font-size:27px;letter-spacing:-.8px}.content-head p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.pill{white-space:nowrap;border:1px solid rgba(240,107,124,.35);color:#ffb7c0;background:rgba(166,25,46,.16);padding:7px 10px;border-radius:99px;font-size:11px}
+.form-area{padding:27px 30px 30px}
+.question{display:none;animation:fade .22s ease}.question.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.q-num{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#f06b7c;font-weight:800}
+.question h3{font-size:23px;line-height:1.25;margin:10px 0 8px;letter-spacing:-.5px}
+.subtext{color:var(--muted);font-size:14px;line-height:1.55;margin:0 0 22px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.option{display:flex;align-items:center;gap:11px;text-align:left;color:#edf1f7;background:#17253a;border:1px solid #35465d;border-radius:13px;padding:14px;min-height:58px;transition:.15s}
+.option:hover{border-color:#9a5360;background:#1c2c43}.option.selected{border-color:#f06b7c;background:rgba(166,25,46,.18);box-shadow:inset 0 0 0 1px rgba(240,107,124,.22)}
+.option .symbol{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#293a52;color:#ffb2bd;font-weight:800;flex-shrink:0}
+.option.selected .symbol{background:var(--red);color:white}
+.field{margin:18px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}
+select{width:100%;background:#142136;color:#fff;border:1px solid #3b4b61;border-radius:12px;padding:13px}
+.slider-wrap{background:#142136;border:1px solid #34465e;border-radius:17px;padding:20px}
+.age-display{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:20px}
+.age-number{font-size:44px;font-weight:850;letter-spacing:-2px}.age-number small{font-size:15px;color:var(--muted);letter-spacing:0;font-weight:500}
+input[type=range]{width:100%;accent-color:#df4058;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
+.note{margin-top:15px;background:rgba(255,255,255,.04);border-left:3px solid #e34a5f;padding:12px 14px;border-radius:0 10px 10px 0;font-size:13px;line-height:1.55;color:#d7deea}
+.checkline{display:flex;align-items:flex-start;gap:10px;color:var(--muted);font-size:13px;line-height:1.5;margin-top:14px}
+.checkline input{margin-top:3px;accent-color:var(--red)}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-top:1px solid var(--line);background:rgba(7,14,25,.14)}
+.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:750}.btn-primary{background:var(--red);color:white;box-shadow:0 7px 20px rgba(166,25,46,.25)}.btn-primary:hover{background:var(--red2)}.btn-secondary{background:transparent;color:#d9e0ea;border:1px solid #42536a}.btn:disabled{opacity:.35;cursor:not-allowed}
+.action-right{display:flex;gap:10px}
+.small-muted{font-size:12px;color:var(--muted)}
+.summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.summary-card{padding:15px;border-radius:14px;background:#142136;border:1px solid #34465e}.summary-card span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}.summary-card strong{font-size:15px}
+.hidden{display:none!important}
+footer{color:#8290a4;font-size:11px;text-align:center;margin-top:22px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{position:static}.sidebar h1{font-size:25px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.privacy{margin-top:18px}.content{min-height:unset}}
+@media(max-width:560px){.shell{padding:17px 12px 28px}.topbar{margin-bottom:18px}.top-meta{display:none}.sidebar,.content{border-radius:18px}.sidebar{padding:18px}.content-head{padding:22px 19px 16px}.content-head h2{font-size:23px}.form-area{padding:23px 19px}.options{grid-template-columns:1fr}.actions{padding:16px 19px}.age-number{font-size:38px}.steps{gap:10px}.summary-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="wordmark">Van<span>Quest</span></div>
+    <div class="top-meta">Financial literacy · Your journey starts here</div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="eyebrow">Character setup · 01</div>
+      <h1>Every goal starts with a plan.</h1>
+      <p>Tell us what you want to achieve. We’ll shape your learning quests around your goals, experience, and preferred way to learn.</p>
+      <div class="progress-label"><span>Journey setup</span><span id="progressText">1 of 10</span></div>
+      <div class="progress"><span id="progressBar"></span></div>
+      <ul class="steps" id="stepsList">
+        <li class="active"><span class="step-dot">1</span> Your goal</li>
+        <li><span class="step-dot">2</span> Target age</li>
+        <li><span class="step-dot">3</span> Priorities</li>
+        <li><span class="step-dot">4</span> Income context</li>
+        <li><span class="step-dot">5</span> Saving habits</li>
+        <li><span class="step-dot">6</span> Investing basics</li>
+        <li><span class="step-dot">7</span> Risk concepts</li>
+        <li><span class="step-dot">8</span> Milestone timing</li>
+        <li><span class="step-dot">9</span> Learning style</li>
+        <li><span class="step-dot">10</span> Currency</li>
+      </ul>
+      <div class="privacy"><strong>Privacy first.</strong><br>Use broad answers only. VanQuest never needs your passwords, bank details, OTPs, account balances, or private family financial information.</div>
+    </aside>
+
+    <main class="content">
+      <div class="content-head">
+        <div><div class="eyebrow">Financial journey setup</div><h2 id="panelTitle">What are you working towards?</h2><p id="panelDesc">Choose the goal that matters most to you right now.</p></div>
+        <div class="pill">2–3 MINUTES</div>
+      </div>
+      <div class="form-area">
+        <section class="question active" data-q="0" data-title="What are you working towards?" data-desc="Choose the goal that matters most to you right now.">
+          <div class="q-num">Question 01 / 10</div><h3>What is your biggest financial goal?</h3><p class="subtext">You can change this later. Pick the destination that feels most important today.</p>
+          <div class="options" data-name="goal">
+            <button class="option" data-value="Save for higher education"><span class="symbol">✦</span>Save for higher education</button>
+            <button class="option" data-value="Own a car or vehicle"><span class="symbol">↗</span>Own a car or vehicle</button>
+            <button class="option" data-value="Travel the world"><span class="symbol">◎</span>Travel the world</button>
+            <button class="option" data-value="Start a business"><span class="symbol">⌘</span>Start a business</button>
+            <button class="option" data-value="Become financially independent"><span class="symbol">◈</span>Become financially independent</button>
+            <button class="option" data-value="Build long-term wealth"><span class="symbol">▥</span>Build long-term wealth</button>
+            <button class="option" data-value="Support my family"><span class="symbol">♡</span>Support my family</button>
+            <button class="option" data-value="Something else"><span class="symbol">＋</span>Something else</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="1" data-title="Choose your target age" data-desc="Use the slider to choose any age from 18 to 70.">
+          <div class="q-num">Question 02 / 10</div><h3>At what age would you like to achieve this goal?</h3><p class="subtext">There’s no universally correct age. We’ll help you explore the cost, timeline, and resources your goal may require.</p>
+          <div class="slider-wrap">
+            <div class="age-display"><div><div class="small-muted">Your target age</div><div class="age-number"><span id="ageValue">30</span><small> years old</small></div></div><div class="pill" id="ageBand">Planning horizon</div></div>
+            <input id="ageSlider" type="range" min="18" max="70" step="1" value="30" aria-label="Target age">
+            <div class="range-labels"><span>18 years</span><span>44 years</span><span>70 years</span></div>
+          </div>
+          <label class="checkline"><input type="checkbox" id="ageUnsure"> I’m not sure yet — help me work out a realistic timeline.</label>
+          <div class="note" id="ageNote">Your timeline will be explored alongside your goal and expected resources, rather than judged by age alone.</div>
+        </section>
+
+        <section class="question" data-q="2" data-title="Where should we begin?" data-desc="Choose the topic you’d most like to strengthen first.">
+          <div class="q-num">Question 03 / 10</div><h3>What would you like to work on first?</h3><p class="subtext">VanQuest will still give you access to all four core courses.</p>
+          <div class="options" data-name="priority">
+            <button class="option" data-value="Build savings"><span class="symbol">₊</span>Build savings</button>
+            <button class="option" data-value="Control spending and budgeting"><span class="symbol">≋</span>Control spending and budgeting</button>
+            <button class="option" data-value="Learn investing"><span class="symbol">↗</span>Learn investing</button>
+            <button class="option" data-value="Avoid scams and protect my money"><span class="symbol">◇</span>Avoid scams and protect my money</button>
+            <button class="option" data-value="Understand all of these"><span class="symbol">✧</span>Understand all of these</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="3" data-title="Your income context" data-desc="This helps us choose relatable examples, not judge your finances.">
+          <div class="q-num">Question 04 / 10</div><h3>What best describes your current income?</h3><p class="subtext">You do not need to enter any amounts.</p>
+          <div class="options" data-name="income">
+            <button class="option" data-value="Not earning yet"><span class="symbol">○</span>Not earning yet</button>
+            <button class="option" data-value="Occasional pocket money or allowance"><span class="symbol">◌</span>Occasional pocket money or allowance</button>
+            <button class="option" data-value="Part-time or freelance income"><span class="symbol">↗</span>Part-time or freelance income</button>
+            <button class="option" data-value="Regular salary or business income"><span class="symbol">▤</span>Regular salary or business income</button>
+            <button class="option" data-value="Prefer not to say"><span class="symbol">—</span>Prefer not to say</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="4" data-title="Your saving habits" data-desc="Tell us what you find most challenging about saving.">
+          <div class="q-num">Question 05 / 10</div><h3>What is your biggest challenge with saving money?</h3>
+          <div class="options" data-name="saving">
+            <button class="option" data-value="Learn how to save"><span class="symbol">＋</span>Learn how to save</button>
+            <button class="option" data-value="I spend before I can save"><span class="symbol">↘</span>I spend before I can save</button>
+            <button class="option" data-value="My income is limited or irregular"><span class="symbol">≈</span>My income is limited or irregular</button>
+            <button class="option" data-value="I do not know how much I need"><span class="symbol">?</span>I do not know how much I need</button>
+            <button class="option" data-value="I already save consistently"><span class="symbol">✓</span>I already save consistently</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="5" data-title="Your investing experience" data-desc="We’ll use this to set the learning difficulty.">
+          <div class="q-num">Question 06 / 10</div><h3>How familiar are you with investing?</h3>
+          <div class="options" data-name="knowledge">
+            <button class="option" data-value="Beginner"><span class="symbol">01</span>Beginner</button>
+            <button class="option" data-value="I know the basics"><span class="symbol">02</span>I know the basics</button>
+            <button class="option" data-value="I understand stocks and mutual funds"><span class="symbol">03</span>I understand stocks and mutual funds</button>
+            <button class="option" data-value="I have practised with simulations"><span class="symbol">04</span>I have practised with simulations</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="6" data-title="Explore uncertainty" data-desc="This is about learning preferences, not a real-world investment profile.">
+          <div class="q-num">Question 07 / 10</div><h3>How would you like to explore investment uncertainty?</h3>
+          <div class="options" data-name="risk">
+            <button class="option" data-value="Prefer safer choices"><span class="symbol">◇</span>Start with safer examples</button>
+            <button class="option" data-value="Willing to compare different levels of risk"><span class="symbol">⇄</span>Compare different risk levels</button>
+            <button class="option" data-value="Comfortable exploring high-risk scenarios in a simulation"><span class="symbol">⚑</span>Explore high-risk scenarios in simulations</button>
+            <button class="option" data-value="Not sure yet"><span class="symbol">?</span>Not sure yet</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="7" data-title="Your first milestone" data-desc="Choose the timeline that best fits your first major milestone.">
+          <div class="q-num">Question 08 / 10</div><h3>When would you like to reach your first major financial milestone?</h3>
+          <div class="options" data-name="time">
+            <button class="option" data-value="Within 1 year"><span class="symbol">01</span>Within 1 year</button>
+            <button class="option" data-value="Within 1–3 years"><span class="symbol">03</span>Within 1–3 years</button>
+            <button class="option" data-value="Within 4–10 years"><span class="symbol">10</span>Within 4–10 years</button>
+            <button class="option" data-value="More than 10 years away"><span class="symbol">↗</span>More than 10 years away</button>
+            <button class="option" data-value="I have not decided"><span class="symbol">?</span>I have not decided</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="8" data-title="Choose your learning style" data-desc="We’ll shape the presentation of your quests around this preference.">
+          <div class="q-num">Question 09 / 10</div><h3>How would you like to learn?</h3>
+          <div class="options" data-name="style">
+            <button class="option" data-value="Short quests and rewards"><span class="symbol">⚔</span>Short quests and rewards</button>
+            <button class="option" data-value="Stories and real-life scenarios"><span class="symbol">▤</span>Stories and real-life scenarios</button>
+            <button class="option" data-value="Challenges, calculations and puzzles"><span class="symbol">∑</span>Challenges, calculations and puzzles</button>
+            <button class="option" data-value="A mix of everything"><span class="symbol">✧</span>A mix of everything</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="9" data-title="Set your currency" data-desc="This changes the currency shown in supported learning examples.">
+          <div class="q-num">Question 10 / 10</div><h3>Which currency should your game use?</h3>
+          <div class="options" data-name="currency">
+            <button class="option selected" data-value="INR (₹)"><span class="symbol">₹</span>INR — Indian rupee</button>
+            <button class="option" data-value="USD ($)"><span class="symbol">$</span>USD — US dollar</button>
+            <button class="option" data-value="Let me choose later"><span class="symbol">↔</span>Let me choose later</button>
+          </div>
+        </section>
+
+        <section class="question" data-q="10" data-title="Your journey is ready" data-desc="Here’s a preview of the learning path we’ll build from your answers.">
+          <div class="q-num">JOURNEY PROFILE</div><h3>Your financial journey starts here.</h3><p class="subtext">Review your choices. You can go back and change any answer.</p>
+          <div class="summary-grid" id="summaryGrid"></div>
+          <div class="note" id="summaryNote">Your answers personalise learning content only. They do not determine which real-world investments are right for you.</div>
+          <div class="field hidden" id="incomeFollowup"><label for="expectedIncome">Do you expect to have income by your target age?</label><select id="expectedIncome"><option>No income expected yet</option><option>Part-time or irregular income</option><option>Regular income</option><option>Not sure</option></select><p class="small-muted">This optional answer helps the game explore a goal timeline. Do not enter an amount.</p></div>
+        </section>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" id="backBtn" disabled>← Back</button>
+        <div class="action-right"><button class="btn btn-secondary" id="skipBtn">Skip for now</button><button class="btn btn-primary" id="nextBtn">Continue →</button></div>
+      </div>
+    </main>
+  </div>
+  <footer>VanQuest · Financial education, not investment advice · Your answers stay in this demo session.</footer>
+</div>
+<script>
+const questions=[...document.querySelectorAll('.question')];
+const titles=questions.map(q=>q.dataset.title),descs=questions.map(q=>q.dataset.desc);
+const answers={goal:null,age:30,ageUnsure:false,priority:null,income:null,saving:null,knowledge:null,risk:null,time:null,style:null,currency:'INR (₹)',expectedIncome:'Not sure'};
+let current=0;
+const $=id=>document.getElementById(id);
+function showQuestion(index){
+ current=Math.max(0,Math.min(index,questions.length-1));
+ questions.forEach((q,i)=>q.classList.toggle('active',i===current));
+ $('panelTitle').textContent=titles[current];$('panelDesc').textContent=descs[current];
+ const stepCount=Math.min(current+1,10);
+ $('progressText').textContent=current===10?'Complete':`${stepCount} of 10`;
+ $('progressBar').style.width=(current===10?100:stepCount*10)+'%';
+ document.querySelectorAll('#stepsList li').forEach((li,i)=>{li.classList.toggle('active',i===current);li.classList.toggle('done',i<current);});
+ $('backBtn').disabled=current===0;
+ $('skipBtn').textContent=current===10?'Start over':'Skip for now';
+ $('nextBtn').textContent=current===10?'Finish setup ✓':(current===9?'Review journey →':'Continue →');
+ if(current===10)renderSummary();
+}
+document.querySelectorAll('.options').forEach(group=>{
+ group.addEventListener('click',e=>{
+  const btn=e.target.closest('.option');if(!btn)return;
+  group.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');
+  const key=group.dataset.name;answers[key]=btn.dataset.value;
+  if(key==='currency')answers.currency=btn.dataset.value;
+ });
+});
+$('ageSlider').addEventListener('input',e=>{
+ answers.age=Number(e.target.value);$('ageValue').textContent=answers.age;
+ const age=answers.age;
+ $('ageBand').textContent=age<=24?'Early target':age<=34?'Near-term plan':age<=49?'Longer-term plan':'Long horizon';
+ $('ageNote').textContent=age<=24
+ ?'An early target can be possible depending on the goal, cost, and expected resources. We’ll explore the plan rather than judge the age alone.'
+ :age<=34
+ ?'We’ll compare your target with the goal’s estimated cost, time available, and expected resources.'
+ :'A longer timeline can create more time to plan, but costs and circumstances can change. We’ll explore assumptions together.';
+});
+$('ageUnsure').addEventListener('change',e=>{answers.ageUnsure=e.target.checked;$('ageSlider').disabled=e.target.checked;$('ageValue').textContent=e.target.checked?'—':answers.age;$('ageBand').textContent=e.target.checked?'Timeline TBD':($('ageSlider').value<=24?'Early target':'Planning horizon');});
+$('expectedIncome').addEventListener('change',e=>answers.expectedIncome=e.target.value);
+$('backBtn').addEventListener('click',()=>showQuestion(current-1));
+$('nextBtn').addEventListener('click',()=>{
+ if(current===10){finish();return;}
+ if(current===9){showQuestion(10);return;}
+ showQuestion(current+1);
+});
+$('skipBtn').addEventListener('click',()=>{
+ if(current===10){location.reload();return;}
+ const keyByIndex=['goal',null,'priority','income','saving','knowledge','risk','time','style','currency'];
+ const key=keyByIndex[current];if(key && !answers[key])answers[key]='Skipped';
+ if(current===1){answers.ageUnsure=true;$('ageUnsure').checked=true;$('ageSlider').disabled=true;}
+ showQuestion(current+1);
+});
+function renderSummary(){
+ const entries=[
+ ['Main goal',answers.goal||'Not selected'],
+ ['Target age',answers.ageUnsure?'Not sure yet':`Age ${answers.age}`],
+ ['First priority',answers.priority||'Not selected'],
+ ['Income context',answers.income||'Not selected'],
+ ['Saving challenge',answers.saving||'Not selected'],
+ ['Investing experience',answers.knowledge||'Not selected'],
+ ['Learning preference',answers.style||'Not selected'],
+ ['Currency',answers.currency||'Not selected']
+ ];
+ $('summaryGrid').innerHTML=entries.map(([k,v])=>`<div class="summary-card"><span>${escapeHtml(k)}</span><strong>${escapeHtml(v)}</strong></div>`).join('');
+ const early=!answers.ageUnsure&&answers.age<=24;
+ $('summaryNote').textContent=early
+ ?'Your target age is early. That does not make it unrealistic by itself. VanQuest can help you estimate the goal cost, time available, and expected income or resources, then explore what plan may be needed.'
+ :'VanQuest will use your goal and timeline to shape relevant learning quests. The game will help you test assumptions, not promise a result.';
+ $('incomeFollowup').classList.toggle('hidden',!early);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function finish(){
+ const profile={...answers};
+ $('summaryNote').textContent='Setup complete. In a connected product, this profile would be passed to the quest-personalisation system. This standalone demo does not send or save data.';
+ const blob=new Blob([JSON.stringify(profile,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='vanquest-journey-profile.json';a.click();URL.revokeObjectURL(url);
+ $('nextBtn').textContent='Profile downloaded ✓';$('nextBtn').disabled=true;
+}
+showQuestion(0);
+</script>
+</body>
+</html>

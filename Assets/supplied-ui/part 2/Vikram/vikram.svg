@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="100%" height="100%" shape-rendering="crispEdges">
+  <!-- Suspicious background shadow aura -->
+  <rect x="20" y="10" width="80" height="110" fill="#150a1b" opacity="0.4"/>
+
+  <!-- Slick Back / Greasy Dark Hair with Purple sheen -->
+  <rect x="30" y="14" width="60" height="26" fill="#1a1423"/>
+  <rect x="24" y="24" width="12" height="34" fill="#140f1c"/>
+  <rect x="84" y="24" width="12" height="34" fill="#140f1c"/>
+  <rect x="36" y="10" width="48" height="8" fill="#2d1e3d"/>
+  <rect x="42" y="18" width="36" height="4" fill="#4d3266"/>
+
+  <!-- Face Base (slightly pale/olive yellowish tone) -->
+  <rect x="36" y="28" width="48" height="48" fill="#e2b98f"/>
+  <rect x="40" y="74" width="40" height="10" fill="#caa076"/>
+  <rect x="44" y="80" width="32" height="8" fill="#b0865e"/>
+
+  <!-- Shifty Eyes Behind Dark Tinted Sunglasses (Classic Shady Investor) -->
+  <!-- Sunglasses Frame -->
+  <rect x="36" y="40" width="22" height="14" fill="#0b0b10"/>
+  <rect x="62" y="40" width="22" height="14" fill="#0b0b10"/>
+  <rect x="56" y="42" width="8" height="4" fill="#1a1a24"/>
+  <!-- Sunglasses Tinted Lens reflection (suspicious gold/red shine) -->
+  <rect x="38" y="42" width="18" height="10" fill="#2d1318"/>
+  <rect x="40" y="43" width="8" height="4" fill="#e62235"/>
+  <rect x="42" y="44" width="4" height="2" fill="#ff8591"/>
+  
+  <rect x="64" y="42" width="18" height="10" fill="#2d1318"/>
+  <rect x="66" y="43" width="8" height="4" fill="#e62235"/>
+  <rect x="68" y="44" width="4" height="2" fill="#ff8591"/>
+
+  <!-- Thin Suspicious Mustache -->
+  <rect x="48" y="66" width="24" height="3" fill="#1a1423"/>
+  <rect x="46" y="68" width="6" height="2" fill="#1a1423"/>
+  <rect x="68" y="68" width="6" height="2" fill="#1a1423"/>
+
+  <!-- Smug / Crooked Grin with a Gold Tooth -->
+  <rect x="48" y="71" width="24" height="4" fill="#471419"/>
+  <rect x="52" y="72" width="16" height="2" fill="#ffffff"/>
+  <rect x="58" y="72" width="4" height="2" fill="#fbbf24"/> <!-- Gold tooth -->
+
+  <!-- 5 o'clock shadow / stubble -->
+  <rect x="42" y="72" width="4" height="2" fill="#b89069"/>
+  <rect x="74" y="72" width="4" height="2" fill="#b89069"/>
+  <rect x="46" y="76" width="4" height="2" fill="#b89069"/>
+  <rect x="70" y="76" width="4" height="2" fill="#b89069"/>
+
+  <!-- Neck & Gold Chain -->
+  <rect x="52" y="86" width="16" height="10" fill="#caa076"/>
+  <rect x="48" y="92" width="24" height="3" fill="#f59e0b"/>
+  <rect x="50" y="94" width="20" height="2" fill="#fbbf24"/>
+  <rect x="58" y="96" width="4" height="4" fill="#f59e0b"/> <!-- Pendant -->
+
+  <!-- Flashy Burgundy / Red Velvet Suit with Dark Lapels -->
+  <rect x="20" y="96" width="80" height="34" fill="#7a0f1d"/>
+  <!-- Lapels -->
+  <polygon points="40,96 50,116 34,124 24,96" fill="#4a0811"/>
+  <polygon points="80,96 70,116 86,124 96,96" fill="#4a0811"/>
+  <rect x="36" y="96" width="8" height="28" fill="#5c0a15"/>
+  <rect x="76" y="96" width="8" height="28" fill="#5c0a15"/>
+
+  <!-- Silk Shirt unbuttoned slightly -->
+  <rect x="52" y="96" width="16" height="24" fill="#1c1c24"/>
+  <rect x="56" y="104" width="8" height="8" fill="#e2b98f"/> <!-- Exposed chest -->
+</svg>

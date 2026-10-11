@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANQUEST - Street Encounter: NPC Dialogue</title>
+  <!-- Pure Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="scammer-overlay-body">
+  <main class="scammer-modal-wrapper">
+    
+    <!-- Encounter Modal Box Template -->
+    <section class="pixel-dialogue-modal" id="scammerModal">
+      
+      <!-- Top Header Row: Name & Subtitle + NPC Corner Avatar + Close Button -->
+      <header class="modal-header">
+        <div class="header-left">
+          <div class="encounter-title-row">
+            <span class="pixel-bullet-diamond">◆</span>
+            <h1 class="encounter-title">
+              [NPC_NAME] — <span class="quote-alias">"[NPC_TITLE_OR_ALIAS]"</span>
+            </h1>
+          </div>
+          <p class="encounter-subtitle">
+            [ENCOUNTER_CONTEXT_SUBTITLE: Description of location, situation or premise]
+          </p>
+        </div>
+
+        <!-- Right Header Group: NPC Corner Avatar & Close Button -->
+        <div class="header-right-group">
+          <!-- NPC Corner Avatar Frame -->
+          <div class="vikram-avatar-frame" title="[NPC_PORTRAIT_TOOLTIP]">
+            <img src="vikram.svg" alt="[NPC_PORTRAIT_ALT_TEXT]" class="vikram-avatar-img" />
+          </div>
+
+          <!-- Close Modal Button -->
+          <button class="pixel-btn-close" id="closeBtn" title="[CLOSE_BUTTON_TOOLTIP]" aria-label="Close Encounter">
+            ✖
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Encounter Dialogue & Inquiry Log Rows -->
+      <section class="dialogue-log-list">
+        
+        <!-- Pitch Box (Initial NPC Dialogue / Offer) -->
+        <article class="dialogue-card pitch-card">
+          <span class="speaker-tag">[SPEAKER_1_NAME]:</span>
+          <p class="dialogue-text">
+            "[INITIAL_NPC_DIALOGUE_OR_OFFER: The opening dialogue line, scam pitch, or quest proposition.]"
+          </p>
+        </article>
+
+        <!-- Response 1: Inquiry A -->
+        <article class="dialogue-card inquiry-card" id="cardEvidence">
+          <span class="speaker-tag tag-inquiry">[INQUIRY_ACTION_01_LABEL]:</span>
+          <p class="dialogue-text">
+            [INQUIRY_ACTION_01_OUTCOME: Dialogue or narrative result when player questions or examines aspect A.]
+          </p>
+        </article>
+
+        <!-- Response 2: Inquiry B -->
+        <article class="dialogue-card inquiry-card" id="cardInvestigate">
+          <span class="speaker-tag tag-inquiry">[INQUIRY_ACTION_02_LABEL]:</span>
+          <p class="dialogue-text">
+            [INQUIRY_ACTION_02_OUTCOME: Dialogue or narrative result when player investigates deeper.]
+          </p>
+        </article>
+
+        <!-- Response 3: Inquiry C -->
+        <article class="dialogue-card inquiry-card" id="cardRisks">
+          <span class="speaker-tag tag-inquiry">[INQUIRY_ACTION_03_LABEL]:</span>
+          <p class="dialogue-text">
+            [INQUIRY_ACTION_03_OUTCOME: Dialogue or narrative result explaining risks, flaws, or hidden details.]
+          </p>
+        </article>
+
+      </section>
+
+      <!-- Middle Action: Inquiry Navigation Query Buttons Row -->
+      <nav class="inquiry-actions-bar" aria-label="Investigation Queries">
+        <button class="pixel-btn-query" id="btnAskEvidence">
+          [ [INQUIRY_BUTTON_01_LABEL] ]
+        </button>
+        <button class="pixel-btn-query" id="btnInvestigate">
+          [ [INQUIRY_BUTTON_02_LABEL] ]
+        </button>
+        <button class="pixel-btn-query" id="btnAskRisks">
+          [ [INQUIRY_BUTTON_03_LABEL] ]
+        </button>
+      </nav>
+
+      <!-- Bottom Pitch & Transaction Decision Block -->
+      <footer class="app-offer-block">
+        <div class="offer-header">
+          <span class="app-brand-name">[TRANSACTION_OR_ITEM_TITLE]</span>
+          <span class="wallet-badge">[CURRENCY_WALLET_LABEL]: <strong id="walletAmount">[PLAYER_WALLET_BALANCE]</strong></span>
+        </div>
+
+        <p class="offer-subtext">
+          [TRANSACTION_RANGE_OR_STAKES_TEXT]. [RISK_LEVEL_TAG]: <span class="text-danger">[RISK_STATUS_LABEL]</span>
+        </p>
+
+        <!-- Form Decision Row -->
+        <div class="offer-decision-row">
+          <div class="deposit-input-frame">
+            <span class="currency-prefix">[CURRENCY_SYMBOL]</span>
+            <input 
+              type="number" 
+              id="depositInput" 
+              class="pixel-num-input" 
+              value="2000" 
+              min="0" 
+              max="100000" 
+              step="500" 
+            />
+          </div>
+
+          <!-- Primary Accept / Commit Button -->
+          <button class="pixel-btn-decision btn-commit" id="commitBtn">
+            <span class="btn-text">[ACCEPT_OR_COMMIT_ACTION_BUTTON]</span>
+          </button>
+
+          <!-- Secondary Reject / Walk Away Button -->
+          <button class="pixel-btn-decision btn-reject" id="rejectBtn">
+            <span class="btn-text">[DECLINE_OR_REJECT_ACTION_BUTTON]</span>
+          </button>
+        </div>
+      </footer>
+
+    </section>
+
+  </main>
+
+  <script src="scammer.js"></script>
+</body>
+</html>

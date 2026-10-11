@@ -42,7 +42,8 @@ export function creditSavingsInterest(state) {
 
 // ------------------------------------------------------------------ fixed deposits
 const quarters = months => months / 3;
-export const fdMaturityValue = (principal, rate, months) => Math.round(principal * Math.pow(1 + rate / 4, quarters(months)));
+export { fdMaturityValue } from './finmath.js';   // pure formula, shared with the practice simulator
+import { fdMaturityValue } from './finmath.js';
 
 // Value if closed early on `day`: (rate − 1%) quarterly for completed quarters + simple for the rest; ≥ principal.
 export function fdEarlyValue(fd, day) {

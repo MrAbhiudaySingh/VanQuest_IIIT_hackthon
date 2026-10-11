@@ -57,12 +57,12 @@ export class HomeScene extends Phaser.Scene {
       this.talkZone = new Phaser.Geom.Rectangle(d.talk.x * T - 8, d.talk.y * T - 4, 32, 22);
     }
     this.physics.world.setBounds(0, 0, W * T, H * T);
-    this.keys = this.input.keyboard.addKeys('W,A,S,D,UP,LEFT,DOWN,RIGHT,E,F,I,H,P,C', false);
+    this.keys = this.input.keyboard.addKeys('W,A,S,D,UP,LEFT,DOWN,RIGHT,E,F,I,H,P,C,O,L,N,R', false);
     this.physics.add.collider(this.player, this.solidGroup);
     this.ctrl = new PlayerController(this, this.player, this.nav, this.keys);
     this.keys.E.on('down', () => !ui.isOpen && this.interact());
     this.keys.F.on('down', () => !ui.isOpen && this.toggleEditor());
-    for (const [k, fn] of [['I', 'inventory'], ['H', 'history'], ['P', 'pantry'], ['C', 'wardrobe']]) this.keys[k].on('down', () => !ui.isOpen && router[fn]());
+    for (const [k, fn] of [['I', 'inventory'], ['H', 'history'], ['P', 'pantry'], ['C', 'wardrobe'], ['O', 'finances'], ['L', 'life'], ['N', 'news'], ['R', 'retire']]) this.keys[k].on('down', () => !ui.isOpen && router[fn]());
     this.input.on('pointerdown', p => this.onClick(p));
     this.input.on('pointermove', p => this.onMove(p));
 

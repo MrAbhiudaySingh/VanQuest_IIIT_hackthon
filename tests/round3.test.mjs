@@ -9,7 +9,7 @@ import { purchase, placeFurniture, furnitureIn } from '../src/sim/inventory.js';
 import { savePlan, consumeDay } from '../src/sim/groceryPlan.js';
 import { enrol } from '../src/sim/career.js';
 import { buyProperty, sellProperty, rentHome, moveIn, listForRent, stopRentingOut, propertyValue, buyCost, canFurnish, askingPrice, marketRent } from '../src/sim/property.js';
-import { marketIndex } from '../src/sim/housingMarket.js';
+import { hoodIndex } from '../src/sim/housingMarket.js';
 import { buyVehicle, sellVehicle, vehicleValue, setActiveVehicle, canDrive, chargeFuel, tripFuelCost } from '../src/sim/vehicles.js';
 import { equip, unequip, equipped } from '../src/sim/wardrobe.js';
 import { nutritionDay, pantryReport, forecastFedDays, caloriesAvailable, KCAL_NEED } from '../src/sim/health.js';
@@ -75,14 +75,16 @@ test('values follow neighbourhood growth × the market cycle, only changing on t
   assert.equal(propertyValue('home_family', 0), 3200000);
   assert.equal(propertyValue('home_family', 20), 3200000, 'unchanged mid-month');
   const d = 365, h = NEIGHBOURHOODS.family;
-  assert.equal(propertyValue('home_family', d), Math.round(3200000 * Math.pow(1 + h.drift, 1) * (1 + h.beta * (marketIndex(d) - 1))));
+  // Round 5: the neighbourhood's own index (city cycle × beta + its local wave) replaces (1 + beta × (city − 1))
+  assert.equal(propertyValue('home_family', d), Math.round(3200000 * Math.pow(1 + h.drift, 1) * hoodIndex('family', d)));
 });
 
 test('renting a home: first month at signing, then each 1st, never twice in a month', () => {
   const s = stock(give(newGame(), 50000));
   const w = balance(s);
   assert.ok(rentHome(s, 'home_starter', 'r1').ok);
-  assert.equal(balance(s), w - 8500);
+  assert.equal(balance(s), w - 8500 - 17000, 'first month + a 2-month deposit (Round 5)');
+  assert.equal(s.housing.deposit, 17000);
   assert.equal(s.housing.propertyId, 'home_starter');
   toFirst(s);                                   // 1 Aug: 8,500 again (no Elm Court rent any more)
   const rents = s.ledger.filter(e => e.category === 'rent' && e.status === 'ok');
@@ -341,7 +343,7 @@ test('a real Round 2 save migrates without losing progress', () => {
   assert.equal(balance(s), old.ledger.filter(e => e.account === 'wallet' && e.status === 'ok').reduce((a, e) => a + e.amount, 0), 'same money');
   assert.deepEqual(s.owned, old.owned, 'possessions kept (even two T-shirts)');
   assert.deepEqual(s.furniture, old.furniture, 'furniture and its placement kept');
-  assert.deepEqual(s.academy, old.academy);
+  assert.deepEqual(s.academy, { ...old.academy, courses: {} }, 'old lesson record kept untouched; course progress added (Round 5)');
   assert.deepEqual(s.brokerage, old.brokerage);
   assert.equal(s.housing.kind, 'rent');
   assert.equal(s.housing.paidMonth, monthKey(old.day), 'current month treated as paid');

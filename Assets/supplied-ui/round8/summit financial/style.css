@@ -1,0 +1,866 @@
+/* =========================================================
+   VANQUEST - SUMMIT PRACTICE TRADING DESK
+   Pixel-Perfect Square Theme, Red/Gold Accents, 100vw/100vh Bounds
+   Zero Glassmorphism, Sharp 16-Bit RPG Terminal Frames
+   ========================================================= */
+
+:root {
+  /* Pure Pixel Fonts */
+  --font-pixel: 'Silkscreen', monospace;
+  --font-pixel-heading: 'Press Start 2P', monospace;
+
+  /* Red Palette (Signature Vanguard Accent) */
+  --red-main: #d91b2e;
+  --red-light: #f54354;
+  --red-highlight: #ff8591;
+  --red-dark: #8f0d1b;
+  --red-deep: #47040b;
+
+  /* Gold / Yellow Palette (Trading Terminal Accents) */
+  --gold-main: #eab308;
+  --gold-light: #facc15;
+  --gold-highlight: #fef08a;
+  --gold-dark: #a16207;
+  --gold-deep: #713f12;
+
+  /* Terminal Backgrounds & Borders */
+  --bg-desk-modal: #0b0f20;
+  --bg-desk-card: #070914;
+  --bg-desk-inner: #05060e;
+  --border-outer: #000000;
+  --border-rim: #1e294b;
+  --border-rim-light: #36487e;
+
+  /* Text & Trend Indicators */
+  --text-white: #ffffff;
+  --text-cream: #fae8ca;
+  --text-muted: #8b99bd;
+  --text-yellow: #ffd15c;
+  --text-green: #34d399;
+  --text-red: #f87171;
+  --text-blue: #60a5fa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Strict Pixel Square Rule */
+  font-weight: 400;
+}
+
+/* Strictly bound overlay to 100vw/100vh without page bleed */
+html, body.desk-overlay-body {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background: transparent !important;
+  font-family: var(--font-pixel);
+  color: var(--text-white);
+  user-select: none;
+  -webkit-user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Master Overlay Wrapper */
+.desk-modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background: rgba(4, 7, 18, 0.65); /* Subtle dark overlay for game street/room */
+  backdrop-filter: blur(2px);
+}
+
+/* =========================================================
+   PIXEL DESK MODAL (Primary Frame)
+   ========================================================= */
+.pixel-desk-modal {
+  width: 98vw;
+  max-width: 1180px;
+  max-height: 94vh;
+  background: var(--bg-desk-modal);
+  padding: 1.2rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 0;
+  overflow: hidden;
+
+  /* Sharp 16-Bit RPG Terminal Frame */
+  border-top: 4px solid var(--border-rim-light);
+  border-left: 4px solid var(--border-rim-light);
+  border-right: 4px solid var(--border-rim);
+  border-bottom: 5px solid #141c38;
+  outline: 3px solid var(--border-outer);
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 10px 0 0 rgba(0, 0, 0, 0.75);
+}
+
+/* =========================================================
+   HEADER ROW: Title, Tabs, Close Button
+   ========================================================= */
+.desk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--border-rim);
+  padding-bottom: 0.75rem;
+  flex-shrink: 0;
+  gap: 1.2rem;
+}
+
+.header-branding {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.desk-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pixel-bullet-gold {
+  color: var(--gold-light);
+  font-size: 0.9rem;
+}
+
+.desk-title {
+  font-family: var(--font-pixel-heading);
+  font-size: clamp(0.82rem, 1.2vw, 1.05rem);
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.desk-subtitle {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav Group: Tabs + Close Button */
+.header-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+
+.desk-tabs-bar {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Retro Tab Buttons */
+.pixel-tab-btn {
+  font-family: var(--font-pixel);
+  font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+  padding: 0.45rem 0.8rem;
+  background: var(--bg-desk-card);
+  color: var(--text-muted);
+  cursor: pointer;
+  outline: none;
+  border-top: 2px solid var(--border-rim-light);
+  border-left: 2px solid var(--border-rim-light);
+  border-right: 2px solid var(--border-outer);
+  border-bottom: 2px solid var(--border-outer);
+  outline: 1px solid var(--border-outer);
+  transition: all 0.08s steps(2);
+}
+
+.pixel-tab-btn:hover {
+  background: #151d38;
+  color: var(--text-white);
+  border-color: var(--gold-main);
+}
+
+.pixel-tab-btn.active {
+  background: #1a2345;
+  color: var(--gold-light);
+  border-top: 2px solid var(--gold-light);
+  border-left: 2px solid var(--gold-light);
+  border-right: 2px solid var(--gold-dark);
+  border-bottom: 2px solid var(--gold-dark);
+}
+
+/* Close Button (Red Themed) */
+.pixel-btn-close {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.78rem;
+  background: var(--red-main);
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-top: 2px solid var(--red-highlight);
+  border-left: 2px solid var(--red-light);
+  border-right: 2px solid var(--red-dark);
+  border-bottom: 3px solid var(--red-deep);
+
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 2px 0 2px var(--border-outer);
+
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-close:hover {
+  background: var(--red-light);
+  transform: translateY(-1px);
+}
+
+.pixel-btn-close:active {
+  transform: translateY(2px);
+  border-top: 2px solid var(--red-deep);
+  border-left: 2px solid var(--red-dark);
+  border-right: 2px solid var(--red-light);
+  border-bottom: 2px solid var(--red-highlight);
+}
+
+/* =========================================================
+   PERSISTENT TOP NOTICE BANNER (SIMULATION NOTICE)
+   ========================================================= */
+.simulation-notice-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--bg-desk-inner);
+  border: 1px solid var(--border-rim);
+  padding: 0.45rem 0.8rem;
+  flex-shrink: 0;
+}
+
+.pixel-badge-warn {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.55rem;
+  background: var(--gold-main);
+  color: #1a1403;
+  padding: 0.2rem 0.4rem;
+  border-top: 1px solid var(--gold-highlight);
+  border-left: 1px solid var(--gold-highlight);
+  border-right: 1px solid var(--gold-dark);
+  border-bottom: 1px solid var(--gold-dark);
+  outline: 1px solid var(--border-outer);
+  flex-shrink: 0;
+}
+
+.simulation-notice-text {
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+  color: var(--text-cream);
+  line-height: 1.35;
+}
+
+/* =========================================================
+   PERSISTENT KPI METRICS ROW (5 Cards)
+   ========================================================= */
+.kpi-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.kpi-card {
+  background: var(--bg-desk-card);
+  border-top: 2px solid var(--border-rim-light);
+  border-left: 2px solid var(--border-rim-light);
+  border-right: 2px solid var(--border-rim);
+  border-bottom: 2px solid var(--border-rim);
+  outline: 1px solid var(--border-outer);
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.kpi-label {
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kpi-value {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.88rem;
+  color: var(--text-white);
+}
+
+.kpi-neutral {
+  color: var(--text-white);
+}
+
+/* =========================================================
+   DYNAMIC TAB VIEWS VIEWPORT
+   ========================================================= */
+.desk-views-viewport {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-view {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-view.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   VIEW 1: MARKET VIEW (Left Assets Table + Right Order Pane)
+   ========================================================= */
+.market-split-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Left Assets Table */
+.market-assets-pane {
+  background: var(--bg-desk-card);
+  border: 2px solid var(--border-rim);
+  outline: 1px solid var(--border-outer);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.assets-table-header {
+  display: grid;
+  grid-template-columns: 2fr 0.9fr 0.8fr 0.9fr 1.1fr 1fr;
+  align-items: center;
+  background: #10162c;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 2px solid var(--border-rim);
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.assets-rows-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.asset-row {
+  display: grid;
+  grid-template-columns: 2fr 0.9fr 0.8fr 0.9fr 1.1fr 1fr;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #141c38;
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.08s steps(2);
+}
+
+.asset-row:hover {
+  background: #141b36;
+}
+
+.asset-row.active {
+  background: #192348;
+  border-left: 3px solid var(--gold-light);
+}
+
+.col-asset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.asset-title {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--text-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.asset-meta {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-price {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--text-white);
+}
+
+.text-pos { color: var(--text-green); }
+.text-neg { color: var(--text-red); }
+
+.sparkline-svg {
+  width: 70px;
+  height: 20px;
+}
+
+.pixel-btn-action-small {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  background: #1e2b54;
+  color: var(--text-white);
+  padding: 0.35rem 0.6rem;
+  border-top: 2px solid #3b508f;
+  border-left: 2px solid #3b508f;
+  border-right: 2px solid var(--border-outer);
+  border-bottom: 2px solid var(--border-outer);
+  cursor: pointer;
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-action-small:hover {
+  background: var(--red-main);
+  border-color: var(--red-highlight);
+}
+
+/* Right Order & Transfer Pane */
+.market-order-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 0;
+}
+
+/* Order Box Card */
+.order-box-card {
+  background: var(--bg-desk-card);
+  border: 2px solid var(--border-rim);
+  outline: 1px solid var(--border-outer);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+  min-height: 0;
+  justify-content: space-between;
+}
+
+.order-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.order-title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-asset-title {
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  color: var(--text-white);
+}
+
+.ticker-pill {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  background: #172554;
+  color: #93c5fd;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid #3b82f6;
+}
+
+/* Real-Time Live Price Badge */
+.live-price-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #0d1326;
+  border: 1px solid var(--border-rim);
+  padding: 0.25rem 0.5rem;
+}
+
+.live-dot-pulse {
+  color: var(--text-green);
+  font-size: 0.65rem;
+  animation: pulseDot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.live-price-val {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.76rem;
+  color: var(--text-white);
+}
+
+.live-price-change {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+}
+
+/* Real-Time Live Mini Chart / Trend Canvas Box */
+.order-realtime-chart-box {
+  background: var(--bg-desk-inner);
+  border: 1px solid var(--border-rim);
+  padding: 0.5rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.chart-stats-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}
+
+.chart-stats-row strong {
+  color: var(--text-white);
+}
+
+.realtime-svg-wrapper {
+  width: 100%;
+  height: 52px;
+}
+
+.order-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.order-asset-desc {
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* Buy / Sell Toggle */
+.order-action-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-buttons-group {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.pixel-toggle-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  padding: 0.4rem 0.8rem;
+  background: #10162c;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-top: 2px solid var(--border-rim-light);
+  border-left: 2px solid var(--border-rim-light);
+  border-right: 2px solid var(--border-outer);
+  border-bottom: 2px solid var(--border-outer);
+}
+
+.pixel-toggle-btn.active {
+  background: var(--gold-main);
+  color: #1a1403;
+  border-top-color: var(--gold-highlight);
+  border-left-color: var(--gold-highlight);
+  border-right-color: var(--gold-dark);
+  border-bottom-color: var(--gold-dark);
+}
+
+.holding-status-text {
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+  color: var(--text-white);
+}
+
+/* Quantity Input */
+.order-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.order-input-label {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  color: var(--text-white);
+}
+
+.pixel-input-box {
+  background: var(--bg-desk-inner);
+  border: 2px solid var(--border-rim);
+  color: #ffffff;
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  padding: 0.35rem 0.6rem;
+  width: 90px;
+  outline: none;
+}
+
+.order-feedback-msg {
+  font-family: var(--font-pixel);
+  font-size: 0.64rem;
+  color: var(--red-light);
+  line-height: 1.35;
+}
+
+/* Submit Review Order Button (Signature Vanguard Red Bevel / Emboss) */
+.pixel-btn-primary-desk {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-pixel-heading);
+  font-size: clamp(0.68rem, 0.85vw, 0.82rem);
+  color: #ffffff;
+  background: var(--red-main);
+  cursor: pointer;
+  outline: none;
+  border-top: 3px solid var(--red-highlight);
+  border-left: 3px solid var(--red-light);
+  border-right: 3px solid var(--red-dark);
+  border-bottom: 4px solid var(--red-deep);
+  box-shadow: 
+    0 0 0 2px var(--border-outer),
+    0 3px 0 2px var(--border-outer);
+  text-shadow: 1px 1px 0px #350308;
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-primary-desk:hover {
+  background: var(--red-light);
+  transform: translateY(-1px);
+}
+
+.pixel-btn-primary-desk:active {
+  transform: translateY(2px);
+  border-top: 3px solid var(--red-deep);
+  border-left: 3px solid var(--red-dark);
+  border-right: 3px solid var(--red-light);
+  border-bottom: 2px solid var(--red-highlight);
+}
+
+/* Move Money / Wallet Transfer Card */
+.transfer-box-card {
+  background: var(--bg-desk-card);
+  border: 2px solid var(--border-rim);
+  outline: 1px solid var(--border-outer);
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.transfer-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transfer-heading {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--text-white);
+}
+
+.transfer-balances {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.transfer-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.transfer-input-frame .pixel-input-box {
+  width: 100px;
+}
+
+.pixel-btn-secondary-desk {
+  flex: 1;
+  padding: 0.55rem 0.6rem;
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  background: #141c38;
+  color: var(--text-white);
+  cursor: pointer;
+  border-top: 2px solid var(--border-rim-light);
+  border-left: 2px solid var(--border-rim-light);
+  border-right: 2px solid var(--border-outer);
+  border-bottom: 2px solid var(--border-outer);
+  outline: 1px solid var(--border-outer);
+  transition: all 0.08s steps(2);
+}
+
+.pixel-btn-secondary-desk:hover {
+  background: #202c58;
+  color: var(--gold-light);
+  border-color: var(--gold-main);
+}
+
+/* =========================================================
+   VIEWS 2 & 3: EMPTY CANVAS STATES (Portfolio & History)
+   ========================================================= */
+.empty-state-canvas {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-dashed-box {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed var(--border-rim-light);
+  background: var(--bg-desk-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.pixel-empty-icon {
+  font-size: 2rem;
+}
+
+.empty-state-headline {
+  font-family: var(--font-pixel-heading);
+  font-size: 0.82rem;
+  color: var(--text-white);
+}
+
+.empty-state-subtext {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   VIEW 4: RISK GUIDE (Disclaimer Template Canvas)
+   ========================================================= */
+.risk-guide-canvas {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.risk-disclaimer-card {
+  width: 100%;
+  background: var(--bg-desk-card);
+  border: 2px solid var(--border-rim);
+  outline: 1px solid var(--border-outer);
+  padding: 1.2rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.risk-disclaimer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 2px solid var(--border-rim);
+  padding-bottom: 0.7rem;
+  flex-shrink: 0;
+}
+
+.pixel-bullet-red {
+  color: var(--red-main);
+  font-size: 0.9rem;
+}
+
+.risk-heading {
+  font-family: var(--font-pixel-heading);
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  color: var(--red-light);
+}
+
+.risk-text-scrollbox {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-right: 0.6rem;
+}
+
+.pixel-disclaimer-p {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-cream);
+  background: var(--bg-desk-inner);
+  border-left: 3px solid var(--red-main);
+  border-top: 1px solid var(--border-rim);
+  border-right: 1px solid var(--border-rim);
+  border-bottom: 1px solid var(--border-rim);
+  padding: 0.8rem 1rem;
+}
+
+.pixel-disclaimer-p strong {
+  color: var(--text-yellow);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .market-split-grid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .kpi-metrics-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

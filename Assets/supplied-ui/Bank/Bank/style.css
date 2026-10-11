@@ -1,0 +1,846 @@
+/* =========================================================
+   VANQUEST - NIDHI BANK OVERLAY INTERFACE
+   Grand Classical Banking Hall, Gold Filigree Rim Borders,
+   5 Arch Metric Counters, Pure Pixel-Art Aesthetics
+   ========================================================= */
+
+:root {
+  /* Pixel Fonts */
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-pixel-sub: 'Silkscreen', monospace;
+
+  /* Ornate Bank Gold Palette */
+  --gold-highlight: #ffec85;
+  --gold-bright: #facc15;
+  --gold-warm: #eab308;
+  --gold-mid: #ca8a04;
+  --gold-dark: #854d0e;
+  --gold-deep: #422006;
+
+  /* Rich Bank Console Panels */
+  --bank-console-bg: #090e1a;
+  --bank-counter-bg: #111728;
+  --bank-arch-stage-bg: #151d32;
+  --bank-input-bg: #060912;
+  --bank-banner-red: #7f1d1d;
+  --bank-banner-border: #b91c1c;
+
+  /* Frame Borders & Metal Rims */
+  --border-rim-gold: #c69214;
+  --border-rim-dark: #3a2205;
+  --border-outer: #000000;
+  --border-arch-frame: #33446b;
+  --border-arch-gold: #b48a28;
+  --border-arch-dark: #1b253d;
+
+  /* Text Colors */
+  --text-white: #ffffff;
+  --text-gold: #facc15;
+  --text-gold-light: #fef08a;
+  --text-sub: #8294ba;
+  --text-muted: #536284;
+  --text-cream: #fae8ca;
+
+  /* Status Colors */
+  --text-green: #34d399;
+  --text-cyan: #38bdf8;
+  --btn-deposit-bg: #facc15;
+  --btn-deposit-hover: #fde047;
+  --btn-withdraw-bg: #132238;
+  --btn-withdraw-border: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Strict Pixel Square Rule */
+}
+
+/* Base Body Viewport */
+html,
+body.bank-overlay-body {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: #0b101d;
+  font-family: var(--font-pixel-sub);
+  color: var(--text-white);
+  user-select: none;
+  -webkit-user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Grand Marble Bank Hall Background & Vignette */
+.ambient-hall-backdrop {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 25%, rgba(42, 60, 102, 0.45) 0%, rgba(5, 8, 16, 0.95) 100%),
+    linear-gradient(to bottom, #111a2e 0%, #060912 100%);
+  z-index: 1;
+}
+
+/* Red Velvet Carpet leading into vault */
+.ambient-hall-backdrop::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 120px;
+  background: repeating-linear-gradient(to bottom, #7f1d1d, #5c1414 8px);
+  border-left: 6px solid #b45309;
+  border-right: 6px solid #b45309;
+  opacity: 0.8;
+}
+
+.ambient-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Vertical Hall Banners (Left & Right) */
+.hall-banner {
+  position: absolute;
+  top: 15px;
+  width: 82px;
+  height: 220px;
+  background: var(--bank-banner-red);
+  border-top: 4px solid #b91c1c;
+  border-left: 4px solid #b91c1c;
+  border-right: 4px solid #450a0a;
+  border-bottom: 4px solid #450a0a;
+  outline: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.8rem 0.4rem;
+  gap: 0.8rem;
+  z-index: 5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+}
+
+.banner-left { left: 18px; }
+.banner-right { right: 18px; }
+
+.banner-pillar-icon {
+  width: 36px;
+  height: 36px;
+  background: #450a0a;
+  border: 2px solid #b45309;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-motto {
+  font-family: var(--font-pixel);
+  font-size: 0.42rem;
+  color: #fef08a;
+  line-height: 1.5;
+  text-align: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 1px;
+}
+
+/* Left Clerk Booth */
+.bank-clerk-booth {
+  position: absolute;
+  bottom: 50px;
+  left: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+}
+
+.clerk-desk-counter {
+  width: 90px;
+  height: 60px;
+  background: #3e2415;
+  border-top: 4px solid #78472a;
+  border-left: 4px solid #78472a;
+  border-right: 4px solid #1a0f08;
+  border-bottom: 4px solid #1a0f08;
+  outline: 2px solid #000;
+}
+
+/* Right A-Frame Signboard */
+.bank-aframe-sign {
+  position: absolute;
+  bottom: 40px;
+  right: 32px;
+  width: 85px;
+  height: 135px;
+  z-index: 6;
+}
+
+.bank-sign-inner {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 110px;
+  background: #1e130c;
+  border: 4px solid #854d0e;
+  outline: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+}
+
+.sign-inst-name {
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  color: #fef08a;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.sign-leg {
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 28px;
+  background: #583318;
+  outline: 1px solid #000;
+}
+.leg-l { left: 10px; }
+.leg-r { right: 10px; }
+
+/* Grand Entrance Plaque Arch Above Console */
+.grand-entrance-plaque {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+}
+
+.plaque-gold-rim {
+  background: var(--gold-mid);
+  border-top: 4px solid var(--gold-highlight);
+  border-left: 4px solid var(--gold-highlight);
+  border-right: 4px solid var(--gold-dark);
+  border-bottom: 4px solid var(--gold-deep);
+  outline: 3px solid #000000;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+}
+
+.plaque-inner {
+  background: #090e1a;
+  border: 2px solid #233152;
+  padding: 0.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.plaque-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.plaque-title {
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.plaque-slogan {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #cad5ee;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   MAIN BANK CONSOLE WINDOW
+   ========================================================= */
+.bank-console-window {
+  position: relative;
+  z-index: 20;
+  width: 95vw;
+  max-width: 1140px;
+  height: 84vh;
+  max-height: 680px;
+  margin-top: 50px;
+  background: var(--bank-console-bg);
+  display: flex;
+  flex-direction: column;
+
+  /* Double Gold Filigree Border */
+  border-top: 4px solid var(--gold-bright);
+  border-left: 4px solid var(--gold-bright);
+  border-right: 4px solid var(--gold-dark);
+  border-bottom: 4px solid var(--gold-deep);
+  outline: 3px solid #000000;
+
+  box-shadow: 
+    0 16px 48px rgba(0, 0, 0, 0.95),
+    inset 0 0 16px rgba(0, 0, 0, 0.6);
+}
+
+/* Gold Corner Accents */
+.bank-console-window::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-top: 3px solid #ffec85;
+  border-left: 3px solid #ffec85;
+  pointer-events: none;
+}
+
+.bank-console-window::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-top: 3px solid #ffec85;
+  border-right: 3px solid #ffec85;
+  pointer-events: none;
+}
+
+/* =========================================================
+   CONSOLE HEADER & NAVIGATION TABS
+   ========================================================= */
+.bank-console-header {
+  padding: 0.9rem 1.4rem 0.7rem 1.4rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2px solid #1a233a;
+  flex-shrink: 0;
+}
+
+.bank-header-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.bank-name-heading {
+  font-family: var(--font-pixel);
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.bank-officer-quote-line {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.officer-sep, .officer-dash {
+  opacity: 0.6;
+}
+
+.officer-quote {
+  color: #fae8ca;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Top-Right Navigation cluster & Close Button */
+.bank-header-right-nav {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.bank-nav-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-end;
+}
+
+.nav-row-top, .nav-row-bottom {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.pixel-bank-tab {
+  background: #111829;
+  border-top: 2px solid #2d3b5d;
+  border-left: 2px solid #2d3b5d;
+  border-right: 2px solid #0a0f1d;
+  border-bottom: 2px solid #0a0f1d;
+  outline: 1px solid #000;
+  color: var(--text-sub);
+  font-family: var(--font-pixel-sub);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.32rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.pixel-bank-tab:hover {
+  background: #1a2540;
+  color: var(--text-white);
+}
+
+.pixel-bank-tab.active {
+  background: #141c30;
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  outline: 1px solid var(--gold-dark);
+}
+
+/* Close Button */
+.pixel-bank-close-btn {
+  width: 36px;
+  height: 36px;
+  background: #111829;
+  border-top: 2px solid #33446b;
+  border-left: 2px solid #33446b;
+  border-right: 2px solid #0a0f1d;
+  border-bottom: 2px solid #0a0f1d;
+  outline: 2px solid #000;
+  color: var(--text-white);
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.pixel-bank-close-btn:hover {
+  background: #b91c1c;
+}
+
+.pixel-bank-close-btn:active {
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   5 PILLARS / ARCH METRIC COUNTERS (5 COLUMNS)
+   ========================================================= */
+.bank-pillars-grid {
+  padding: 0.8rem 1.4rem 0.5rem 1.4rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Individual Arch Pillar Card */
+.pillar-arch-card {
+  background: var(--bank-counter-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  /* Carved Classical Pillar Border */
+  border-top: 3px solid var(--border-arch-gold);
+  border-left: 3px solid var(--border-arch-gold);
+  border-right: 3px solid var(--border-rim-dark);
+  border-bottom: 3px solid var(--border-rim-dark);
+  outline: 2px solid #000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.pillar-arch-card:hover {
+  border-top-color: var(--gold-highlight);
+  border-left-color: var(--gold-highlight);
+}
+
+/* Top Arch Capital Header */
+.pillar-arch-header {
+  background: #161e33;
+  padding: 0.4rem 0.3rem;
+  border-bottom: 2px solid #0d1222;
+  text-align: center;
+  position: relative;
+}
+
+.arch-flourish {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold-bright);
+  font-size: 0.55rem;
+  line-height: 1;
+}
+
+.pillar-arch-title {
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  color: #fae8ca;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+}
+
+/* Showcase Arch Niche / Stage */
+.pillar-arch-stage {
+  height: 82px;
+  background: 
+    radial-gradient(circle at 50% 30%, rgba(250, 204, 21, 0.08) 0%, transparent 70%),
+    linear-gradient(to bottom, #11182c 0%, #0c1020 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid #0b0f1a;
+}
+
+.pillar-arch-stage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 90%;
+  height: 20px;
+  border-top: 2px solid rgba(250, 204, 21, 0.25);
+  border-radius: 50% 50% 0 0 !important;
+}
+
+.arch-prop-sprite {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.7));
+}
+
+/* Bottom Metric Value Plaque */
+.pillar-arch-plaque {
+  background: #0d1220;
+  padding: 0.55rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.arch-val-currency {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+
+.arch-val-num {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--text-gold);
+}
+
+.pillar-arch-card.highlight-green .arch-val-num {
+  color: var(--text-green);
+}
+.pillar-arch-card.highlight-green .arch-val-currency {
+  color: var(--text-green);
+}
+
+/* =========================================================
+   NOTICE / RULES RIBBON
+   ========================================================= */
+.bank-info-ribbon {
+  margin: 0.4rem 1.4rem;
+  padding: 0.55rem 0.9rem;
+  background: #090e1c;
+  border: 1px solid #1a2542;
+  outline: 1px solid #000;
+  flex-shrink: 0;
+}
+
+.ribbon-text {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.72rem;
+  color: #9ab0d8;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+}
+
+/* =========================================================
+   TRANSACTION ACTION BAR (INPUT + DEPOSIT + WITHDRAW)
+   ========================================================= */
+.bank-action-controls-bar {
+  margin: 0.4rem 1.4rem 0.6rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+
+.action-amount-input-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--bank-input-bg);
+  border-top: 2px solid #1e2b4d;
+  border-left: 2px solid #1e2b4d;
+  border-right: 2px solid #0a0f1d;
+  border-bottom: 2px solid #0a0f1d;
+  outline: 2px solid #000;
+  padding: 0 0.8rem;
+  height: 42px;
+}
+
+.cash-stack-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 0.6rem;
+}
+
+.pixel-amount-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+}
+
+.pixel-amount-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Deposit Button (Gold Pillared Button) */
+.pixel-btn-bank-deposit {
+  background: var(--btn-deposit-bg);
+  border-top: 3px solid #ffec85;
+  border-left: 3px solid #ffec85;
+  border-right: 3px solid #854d0e;
+  border-bottom: 3px solid #854d0e;
+  outline: 2px solid #000;
+  color: #1a120b;
+  font-family: var(--font-pixel-sub);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0 1.4rem;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.05s;
+}
+
+.pixel-btn-bank-deposit:hover {
+  background: var(--btn-deposit-hover);
+}
+
+.pixel-btn-bank-deposit:active {
+  transform: translateY(1px);
+}
+
+/* Withdraw Button (Steel Blue Pillared Button) */
+.pixel-btn-bank-withdraw {
+  background: var(--btn-withdraw-bg);
+  border-top: 3px solid #2563eb;
+  border-left: 3px solid #2563eb;
+  border-right: 3px solid #091322;
+  border-bottom: 3px solid #091322;
+  outline: 2px solid #000;
+  color: #93c5fd;
+  font-family: var(--font-pixel-sub);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0 1.4rem;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.05s;
+}
+
+.pixel-btn-bank-withdraw:hover {
+  background: #1b3052;
+  color: #ffffff;
+}
+
+.pixel-btn-bank-withdraw:active {
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   ACTIVITY LEDGER LOG VIEWPORT
+   ========================================================= */
+.bank-ledger-viewport {
+  margin: 0 1.4rem 0.6rem 1.4rem;
+  flex: 1;
+  min-height: 60px;
+  max-height: 110px;
+  background: #070b16;
+  border: 1px dashed #233152;
+  outline: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+  overflow-y: auto;
+}
+
+.ledger-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #54658a;
+  font-family: var(--font-pixel-sub);
+  font-size: 0.78rem;
+}
+
+.empty-state-text {
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.ledger-history-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ledger-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.4rem;
+  background: #0f1526;
+  border: 1px solid #1a2542;
+}
+
+/* =========================================================
+   CONSOLE FOOTER: CASH WALLET & SAVINGS
+   ========================================================= */
+.bank-console-footer {
+  padding: 0.75rem 1.4rem;
+  background: #0c1120;
+  border-top: 2px solid #1a233a;
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  flex-shrink: 0;
+}
+
+.footer-balance-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.chip-label {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cad5ee;
+}
+
+.chip-currency {
+  font-family: var(--font-pixel-sub);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+
+.chip-value {
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  color: var(--text-gold);
+}
+
+.chip-savings .chip-currency,
+.chip-savings .chip-value {
+  color: #f472b6;
+}
+
+/* =========================================================
+   PIXEL TOAST NOTIFICATION
+   ========================================================= */
+.pixel-toast {
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: #0f1526;
+  border: 2px solid var(--gold-bright);
+  outline: 2px solid #000000;
+  color: var(--gold-highlight);
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.65rem 1.3rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9);
+}
+
+.pixel-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .hall-banner, .bank-clerk-booth, .bank-aframe-sign {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .bank-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .bank-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+  .bank-console-header {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .bank-action-controls-bar {
+    flex-direction: column;
+  }
+}
