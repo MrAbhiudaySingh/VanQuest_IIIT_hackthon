@@ -1,4 +1,4 @@
-# VanQuest — financial-life simulator (Round 8)
+# VanQuest — financial-life simulator 
 
 A compact top-down Indian city (68×50 tiles, 16 px) for Grade 11–12 students. You work, bank, rent or buy a home (with or without a home loan), let property to tenants, shop, eat, dress, drive, study the four VanQuest Core Courses, invest virtual money, meet scammers, and live with the consequences.
 
